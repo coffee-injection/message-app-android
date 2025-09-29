@@ -1,4 +1,4 @@
-package com.coffeeInjection.message
+package com.coffeeinjection.message
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package com.coffeeInjection.message
+package com.coffeeinjection.message
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

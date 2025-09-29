@@ -144,8 +144,10 @@ proguard/
 # Log Files
 
 # Android Studio
+/*/build/
 /*/local.properties
 /*/out
+/*/*/build
 /*/*/production
 .navigation/
 *.ipr
@@ -229,4 +231,3 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/android,androidstudio,kotlin,java,macos
-
