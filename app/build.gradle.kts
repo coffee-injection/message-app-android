@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.coffeeInjection.messageapp"
+    namespace = "com.coffeeInjection.message"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.coffeeInjection.messageapp"
+        applicationId = "com.coffeeInjection.message"
         minSdk = 26
         targetSdk = 35
         versionCode = 1

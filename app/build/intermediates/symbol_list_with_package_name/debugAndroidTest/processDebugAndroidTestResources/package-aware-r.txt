@@ -1,0 +1,3 @@
+com.coffeeInjection.messageapp.test
+style WhiteBackgroundDialogTheme
+style WhiteBackgroundTheme

@@ -1,0 +1,6 @@
+com.coffeeInjection.messageapp.test.app-annotation-experimental-1.4.0-0 /Users/gim-yeonghyeon/.gradle/caches/8.11.1/transforms/bf8f2c1331e75e6d4971ac0b15b05829/transformed/annotation-experimental-1.4.0/res
+com.coffeeInjection.messageapp.test.app-core-1.5.0-1 /Users/gim-yeonghyeon/.gradle/caches/8.11.1/transforms/e1182860e3169974b93dda5bc4bd8dc5/transformed/core-1.5.0/res
+com.coffeeInjection.messageapp.test.app-androidTest-2 /Users/gim-yeonghyeon/Documents/GitHub/message-app-android/app/build/generated/res/resValues/androidTest/debug
+com.coffeeInjection.messageapp.test.app-mergeDebugAndroidTestResources-3 /Users/gim-yeonghyeon/Documents/GitHub/message-app-android/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/merged.dir
+com.coffeeInjection.messageapp.test.app-mergeDebugAndroidTestResources-4 /Users/gim-yeonghyeon/Documents/GitHub/message-app-android/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/stripped.dir
+com.coffeeInjection.messageapp.test.app-debugAndroidTest-5 /Users/gim-yeonghyeon/Documents/GitHub/message-app-android/app/build/intermediates/merged_res/debugAndroidTest/mergeDebugAndroidTestResources
