@@ -230,4 +230,13 @@ fabric.properties
 
 !/gradle/wrapper/gradle-wrapper.jar
 
+/local.properties
+.jar
+.war
+.nar
+.ear
+.zip
+.tar.gz
+.rar
+
 # End of https://www.toptal.com/developers/gitignore/api/android,androidstudio,kotlin,java,macos

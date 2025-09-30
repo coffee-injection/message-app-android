@@ -1,2 +1,0 @@
-com.coffeeInjection.messageapp.test:style/WhiteBackgroundTheme = 0x7f010001
-com.coffeeInjection.messageapp.test:style/WhiteBackgroundDialogTheme = 0x7f010000
