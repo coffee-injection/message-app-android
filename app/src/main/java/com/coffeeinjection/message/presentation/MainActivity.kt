@@ -1,16 +1,16 @@
-package com.coffeeinjection.message
+package com.coffeeinjection.message.presentation
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.coffeeinjection.message.databinding.ActivityMainBinding
 import com.coffeeinjection.message.util.Logger
 
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val viewModel : MainViewModel by viewModels()
 
     companion object {
         private const val TAG = "MainActivity"

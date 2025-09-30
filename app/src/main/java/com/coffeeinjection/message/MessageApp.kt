@@ -2,6 +2,7 @@ package com.coffeeinjection.message
 
 import android.app.Application
 import com.coffeeinjection.message.util.ReleaseTree
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
 /**
@@ -11,6 +12,7 @@ import timber.log.Timber
  *
  * AndroidManifest.xml 의 <application android:name=".MessageApp" /> 로 등록 필수.
  */
+@HiltAndroidApp
 class MessageApp:Application() {
     override fun onCreate() {
         super.onCreate()
