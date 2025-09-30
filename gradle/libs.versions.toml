@@ -14,12 +14,18 @@ junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 
+# 새로 추가한 라이브러리
+timber = "5.0.1" #25.09.30 기준 최신 버전
+
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-activity   = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-appcompat  = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material            = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+
 
 junit           = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit  = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
