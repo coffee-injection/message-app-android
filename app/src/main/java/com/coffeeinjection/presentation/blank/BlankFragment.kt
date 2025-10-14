@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 //import androidx.fragment.app.viewModels
 import com.coffeeinjection.message.util.Logger
 import com.coffeeinjection.message.databinding.FragmentBlankBinding
@@ -13,7 +14,7 @@ class BlankFragment : Fragment() {
     private var _binding: FragmentBlankBinding? = null
     private val binding get() = _binding!!
 
-//    private val viewModel : BlankViewModel by viewModels()
+    private val viewModel : BlankViewModel by viewModels()
     companion object {
     }
 
