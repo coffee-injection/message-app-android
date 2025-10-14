@@ -1,10 +1,8 @@
-package com.coffeeinjection.message
+package com.coffeeinjection.presentation
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.coffeeinjection.message.databinding.ActivityMainBinding
 import com.coffeeinjection.message.util.Logger
 
