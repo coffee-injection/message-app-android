@@ -1,20 +1,20 @@
-package com.coffeeinjection.presentation.blank
+package com.coffeeinjection.presentation.sign_in
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-//import androidx.fragment.app.viewModels
+import com.coffeeinjection.message.databinding.FragmentSignInBinding
 import com.coffeeinjection.message.util.Logger
-import com.coffeeinjection.message.databinding.FragmentBlankBinding
+import kotlin.getValue
 
-class BlankFragment : Fragment() {
-    private var _binding: FragmentBlankBinding? = null
+class SignInFragment : Fragment() {
+    private var _binding: FragmentSignInBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel : BlankViewModel by viewModels()
+    private val viewModel : SignInViewModel by viewModels()
     companion object {
     }
 
@@ -27,7 +27,7 @@ class BlankFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         Logger.d("onCreateView")
-        _binding = FragmentBlankBinding.inflate(inflater, container, false)
+        _binding = FragmentSignInBinding.inflate(inflater, container, false)
         return binding.root
     }
 
