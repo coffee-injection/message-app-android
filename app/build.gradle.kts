@@ -62,4 +62,13 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-compiler:2.51.1")
 
+    // Kakao SDK (user 모듈만으로도 로그인/프로필 가능)
+    implementation("com.kakao.sdk:v2-user:<latest>") // ex) 2.20.x
+
+    // Kotlin + Coroutines + Flow
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
+
+    // DataStore for token persistence
+    implementation("androidx.datastore:datastore-preferences:1.1.7")
+
 }
