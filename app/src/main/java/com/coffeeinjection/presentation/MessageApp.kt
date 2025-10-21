@@ -3,6 +3,7 @@ package com.coffeeinjection.presentation
 import android.app.Application
 import com.coffeeinjection.message.BuildConfig
 import com.coffeeinjection.message.util.ReleaseTree
+import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -29,6 +30,8 @@ class MessageApp: Application() {
                     )
                 }
             })
+            // Kakao SDK 초기화
+            KakaoSdk.init(this, "@string/kakao_native_app_key")
         } else {
             // 릴리스 빌드: 릴리스 정책(민감정보/과도한 로그 차단)
             Timber.Forest.plant(ReleaseTree())
