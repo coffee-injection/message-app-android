@@ -1,8 +1,10 @@
-package com.coffeeinjection.presentation
+package com.coffeeinjection.presentation.activity
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.NavHostFragment
+import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.ActivityMainBinding
 import com.coffeeinjection.message.util.Logger
 
@@ -19,11 +21,10 @@ class MainActivity : AppCompatActivity() {
         Logger.d("onCreate")
         enableEdgeToEdge()
         setContentView(binding.root)
-
     }
     override fun onStart() {
         super.onStart()
-        Logger.d( "onStart")
+        Logger.d( TAG,"onStart")
     }
 
     override fun onResume() {

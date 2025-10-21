@@ -1,25 +1,23 @@
-package com.coffeeinjection.presentation.sign_in
+package com.coffeeinjection.presentation.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.coffeeinjection.message.databinding.FragmentSignInBinding
+import com.coffeeinjection.message.databinding.FragmentHomeBinding
 import com.coffeeinjection.message.util.Logger
-import com.coffeeinjection.presentation.home.HomeFragmentDirections
-import kotlin.getValue
 
-class SignInFragment : Fragment() {
-    private var _binding: FragmentSignInBinding? = null
+class HomeFragment : Fragment() {
+    private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel : SignInViewModel by viewModels()
+    private val viewModel : BlankViewModel by viewModels()
 
     companion object {
-        private const val TAG = "SignInFragment"
+        private const val TAG = "HomeFragment"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +29,7 @@ class SignInFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         Logger.d(TAG,"onCreateView")
-        _binding = FragmentSignInBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -42,9 +40,10 @@ class SignInFragment : Fragment() {
     }
 
     private fun initViews() = with(binding) {
-        binding.btnA.setOnClickListener {
-            this@SignInFragment.findNavController().navigate(
-                SignInFragmentDirections.actionSignInFragmentToHomeFragment()
+        // 화면이동
+        binding.moveNext.setOnClickListener {
+            this@HomeFragment.findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragmentToMyPageFragment()
             )
         }
     }

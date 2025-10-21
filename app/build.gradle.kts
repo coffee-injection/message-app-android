@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     kotlin("kapt")
+    kotlin("plugin.serialization")
+    id("androidx.navigation.safeargs.kotlin")
     id("com.google.dagger.hilt.android")
 }
 val kakaoKey: String = providers.gradleProperty("KAKAO_NATIVE_APP_KEY").orNull ?: error("KAKAO_NATIVE_APP_KEY is not set in gradle.properties")
@@ -21,6 +23,14 @@ android {
     }
 
     buildTypes {
+        debug {
+            // 디버그 전용 식별자/버전 꼬리표
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
+
+            // 난독화/리소스 축소 비활성화(기본값이지만 명시해두면 좋습니다)
+            isMinifyEnabled = false
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -68,6 +78,12 @@ dependencies {
 
     // DataStore for token persistence
     implementation("androidx.datastore:datastore-preferences:1.1.7")
+
+    // Jetpack navigation
+    val nav_version = "2.9.5"
+    // Views/Fragments integration
+    implementation("androidx.navigation:navigation-fragment:$nav_version")
+    implementation("androidx.navigation:navigation-ui:$nav_version")
 
     // kakao login
     implementation("com.kakao.sdk:v2-all:2.20.1")    // 전체 모듈 설치, 2.11.0 버전부터 지원
