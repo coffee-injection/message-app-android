@@ -6,7 +6,6 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.dagger.hilt.android")
 }
-val kakaoKey: String = providers.gradleProperty("KAKAO_NATIVE_APP_KEY").orNull ?: error("KAKAO_NATIVE_APP_KEY is not set in gradle.properties")
 android {
     namespace = "com.coffeeinjection.message"
     compileSdk = 35
@@ -19,7 +18,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        resValue("string", "kakao_native_app_key", kakaoKey)
     }
 
     buildTypes {
