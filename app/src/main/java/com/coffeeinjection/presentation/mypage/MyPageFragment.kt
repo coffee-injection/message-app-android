@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.coffeeinjection.message.util.Logger
 import com.coffeeinjection.message.databinding.FragmentMypageBinding
-import com.coffeeinjection.presentation.home.HomeFragmentDirections
+import com.coffeeinjection.message.util.Logger
 
+/**
+ * 마이페이지 화면
+ */
 class MyPageFragment : Fragment() {
     private var _binding: FragmentMypageBinding? = null
     private val binding get() = _binding!!
@@ -42,6 +44,10 @@ class MyPageFragment : Fragment() {
 
     private fun initViews() = with(binding) {
 
+        // 뒤로가기
+        btnBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     override fun onDestroyView() {

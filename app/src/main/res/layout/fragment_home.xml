@@ -5,30 +5,39 @@
     android:layout_height="match_parent"
     tools:context="com.coffeeinjection.presentation.home.HomeFragment">
 
-    <View
+    <ImageView
         android:id="@+id/bg_home"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bg_home_img"
-        />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_home_img"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/move_next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="프로필"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_profile_img"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="50dp"
+        app:cardCornerRadius="25dp"
+        android:elevation="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/tv_user_name"
+        style="@style/black_small_bold14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="HomeFragment"
-        android:background="@drawable/bg_home_img"
-        app:layout_constraintBottom_toTopOf="@+id/move_next"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="아보카도섬"
+        app:layout_constraintStart_toEndOf="@+id/cv_profile_img"
+        app:layout_constraintTop_toTopOf="@+id/cv_profile_img" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

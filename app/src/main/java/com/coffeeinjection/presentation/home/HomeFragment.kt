@@ -10,6 +10,9 @@ import androidx.navigation.fragment.findNavController
 import com.coffeeinjection.message.databinding.FragmentHomeBinding
 import com.coffeeinjection.message.util.Logger
 
+/**
+ * 홈 화면
+ */
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -40,8 +43,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun initViews() = with(binding) {
-        // 화면이동
-        binding.moveNext.setOnClickListener {
+
+        // MyPage화면이동
+        binding.cvProfileImg.setOnClickListener {
             this@HomeFragment.findNavController().navigate(
                 HomeFragmentDirections.actionHomeFragmentToMyPageFragment()
             )
