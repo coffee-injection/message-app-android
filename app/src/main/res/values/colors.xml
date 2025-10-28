@@ -3,5 +3,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="main_navy">#050F33</color>
+    <color name="transparent">#00ff0000</color>
+
+    <!--  text  -->
+    <color name="text_grey">#F1F1F1</color>
+
 
 </resources>

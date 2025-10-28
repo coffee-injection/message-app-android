@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.MessageApp.Splash" parent="Theme.SplashScreen">
+        <!-- 12+에서 사용되는 스플래시 속성들 -->
+        <item name="android:windowSplashScreenBackground">@color/main_navy</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/logo_transparent</item>
+        <!-- 필요 시 아이콘 뒤 원형 배경색 -->
+        <!-- <item name="android:windowSplashScreenIconBackgroundColor">@color/black</item> -->
+        <!-- 필요 시 하단 브랜딩 이미지(권장X) -->
+        <!-- <item name="android:windowSplashScreenBrandingImage">@drawable/ic_branding</item> -->
+
+        <!-- 스플래시 종료 후 적용할 실제 앱 테마 -->
+        <item name="postSplashScreenTheme">@style/Theme.MessageApp</item>
+    </style>
+</resources>
