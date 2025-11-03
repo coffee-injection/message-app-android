@@ -2,4 +2,12 @@
     <string name="app_name">MessageApp</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="SAILBOAT">SAILBOAT</string>
+
+    <!--  SignIn  -->
+    <string name="sign_in_hint">email@example.com</string>
+    <string name="sign_in_or">또는</string>
+    <string name="sign_in_next">계속</string>
+    <string name="sign_in_description">계속을 클릭하면 당사의 서비스 이용 약관 및 개인정보 처리방침에 동의하는 것으로 간주됩니다.</string>
+
+
 </resources>

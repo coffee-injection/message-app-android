@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="GradientTextButton">
+        <attr name="gtb_text" format="string" />
+        <attr name="gtb_textColor" format="color" />
+        <attr name="gtb_textSize" format="dimension" />
+        <attr name="gtb_background" format="reference|color" />
+        <attr name="gtb_allCaps" format="boolean" />
+        <attr name="gtb_textStyle" format="enum">
+            <enum name="normal" value="0"/>
+            <enum name="bold" value="1"/>
+            <enum name="italic" value="2"/>
+        </attr>
+        <attr name="gtb_paddingHorizontal" format="dimension" />
+        <attr name="gtb_minHeight" format="dimension" />
+    </declare-styleable>
+</resources>
