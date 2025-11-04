@@ -17,9 +17,14 @@ import kotlin.getValue
 
 class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding::inflate) {
 
-    private val viewModel : SignInViewModel by viewModels()
+    private val viewModel: SignInViewModel by viewModels()
 
     override fun setupViews() = with(binding) {
+
+    }
+
+    override fun setupListeners() = with(binding) {
+        super.setupListeners()
         btnA.setOnClickListener {
             this@SignInFragment.findNavController().navigate(
                 SignInFragmentDirections.actionSignInFragmentToHomeFragment()
