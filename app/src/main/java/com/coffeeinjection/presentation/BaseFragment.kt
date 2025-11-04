@@ -31,7 +31,7 @@ abstract class BaseFragment<VB : ViewBinding>(
     protected val binding: VB get() = _binding ?: error("Binding is only valid between onCreateView and onDestroyView.")
 
     /** 로그 태그: 클래스명 + 해시 (인스턴스 구분 용이) */
-    protected val TAG: String by lazy { "${javaClass.simpleName}@${hashCode().toString(16)}" }
+    protected val TAG: String by lazy { "${javaClass.simpleName}" }
 
     // ---------- 생명주기 로그 ----------
     override fun onCreateView(
@@ -39,7 +39,7 @@ abstract class BaseFragment<VB : ViewBinding>(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Timber.tag(TAG).d("onCreateView() - inflating binding")
+        Timber.tag(TAG).d("[$TAG] onCreateView() ================================================================================================================")
         _binding = inflate(inflater, container, false)
         return binding.root
     }
@@ -47,7 +47,7 @@ abstract class BaseFragment<VB : ViewBinding>(
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Timber.tag(TAG).d("onViewCreated(savedInstanceState=$savedInstanceState)")
+        Timber.tag(TAG).d("[$TAG] onViewCreated() ================================================================================================================")
 
         setupViews()
         setupListeners()
@@ -56,11 +56,11 @@ abstract class BaseFragment<VB : ViewBinding>(
 
     override fun onResume() {
         super.onResume()
-        Timber.tag(TAG).d("onResume()")
+        Timber.tag(TAG).d("[$TAG] onResume() ================================================================================================================")
     }
 
     override fun onDestroyView() {
-        Timber.tag(TAG).d("onDestroyView() - clearing binding")
+        Timber.tag(TAG).d("[$TAG] onDestroyView() ================================================================================================================")
         _binding = null
         super.onDestroyView()
     }
