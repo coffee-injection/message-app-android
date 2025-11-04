@@ -8,54 +8,28 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.coffeeinjection.message.R
+import com.coffeeinjection.message.databinding.FragmentHomeBinding
 import com.coffeeinjection.message.databinding.FragmentMypageBinding
 import com.coffeeinjection.message.util.Logger
+import com.coffeeinjection.presentation.BaseFragment
+import com.coffeeinjection.presentation.home.HomeFragmentDirections
 
 /**
  * 마이페이지 화면
  */
-class MyPageFragment : Fragment() {
-    private var _binding: FragmentMypageBinding? = null
-    private val binding get() = _binding!!
+class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding::inflate) {
 
-    private val viewModel : BlankViewModel by viewModels()
+    override fun setupViews() = with(binding) {
 
-    companion object {
-        private const val TAG = "MyPageFragment"
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        Logger.d(TAG,"onCreateView")
-        _binding = FragmentMypageBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        Logger.d(TAG,"onViewCreated")
-        initViews()
-    }
-
-    private fun initViews() = with(binding) {
+    override fun setupListeners()= with(binding) {
+        super.setupListeners()
 
         // 뒤로가기
         btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
-
-
     }
 
-    override fun onDestroyView() {
-        Logger.d("onDestroyView")
-        super.onDestroyView()
-        _binding = null
-    }
 }

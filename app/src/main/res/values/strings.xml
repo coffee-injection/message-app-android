@@ -7,7 +7,7 @@
     <string name="sign_in_hint">email@example.com</string>
     <string name="sign_in_or">또는</string>
     <string name="sign_in_next">로그인</string>
-    <string name="sign_in_description">계속을 클릭하면 당사의 서비스 이용 약관 및 개인정보 처리방침에 동의하는 것으로 간주됩니다.</string>
+    <string name="sign_in_description">로그인을 클릭하면 당사의 서비스 이용 약관 및 개인정보 처리방침에 동의하는 것으로 간주됩니다.</string>
 
     <string name="fragment_mypage_bookmarks">Bookmarks</string>
     <string name="fragment_mypage_settings">Settings</string>
