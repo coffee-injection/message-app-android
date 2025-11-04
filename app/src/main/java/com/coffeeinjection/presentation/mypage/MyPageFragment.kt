@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.FragmentMypageBinding
 import com.coffeeinjection.message.util.Logger
 
@@ -48,6 +49,8 @@ class MyPageFragment : Fragment() {
         btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
+
+
     }
 
     override fun onDestroyView() {

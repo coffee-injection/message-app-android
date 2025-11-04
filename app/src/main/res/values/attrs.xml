@@ -13,5 +13,16 @@
         </attr>
         <attr name="gtb_paddingHorizontal" format="dimension" />
         <attr name="gtb_minHeight" format="dimension" />
+
+        <!-- 시작(왼쪽) 아이콘 -->
+        <attr name="ciIcon" format="reference"/>
+        <!-- 아이콘 색 -->
+        <attr name="ciIconTint" format="color|reference"/>
+        <!-- 아이콘 크기(px/dp) - 지정 안 하면 intrinsic 크기 사용 -->
+        <attr name="ciIconSize" format="dimension"/>
+        <!-- 텍스트와 아이콘 사이 간격 -->
+        <attr name="ciIconPadding" format="dimension"/>
     </declare-styleable>
+
 </resources>
+

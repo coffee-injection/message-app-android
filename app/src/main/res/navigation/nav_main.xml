@@ -32,4 +32,5 @@
         android:name="com.coffeeinjection.presentation.mypage.MyPageFragment"
         android:label="fragment_mypage"
         tools:layout="@layout/fragment_mypage" />
+
 </navigation>
