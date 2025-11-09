@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.coffeeinjection.message"
-        minSdk = 26
+        minSdk = 21
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -31,6 +31,8 @@ android {
         }
         release {
             isMinifyEnabled = false
+            applicationIdSuffix = ".release"
+            versionNameSuffix = "-release"
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

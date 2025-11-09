@@ -2,6 +2,8 @@
 <resources>
 
     <style name="Theme.MessageApp.Splash" parent="Theme.SplashScreen">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@color/main_navy</item>
         <!-- 12+에서 사용되는 스플래시 속성들 -->
         <item name="android:windowSplashScreenBackground">@color/main_navy</item>
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/logo_transparent</item>

@@ -20,6 +20,7 @@
 
     <!-- 앱 실제 테마 -->
     <style name="Theme.MessageApp" parent="Base.Theme.MessageApp">
+
         <!-- ... 기존 앱 테마 설정 ... -->
     </style>
 
