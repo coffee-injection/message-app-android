@@ -4,14 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_navy"
-    tools:context="com.coffeeinjection.presentation.mypage.MyPageFragment">
+    tools:context=".presentation.mypage.MyPageFragment">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_profile_img"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="100dp"
         app:cardCornerRadius="50dp"
+        app:strokeWidth="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,9 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-
             />
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/btn_edit_profile"
@@ -106,6 +106,7 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:text="@string/fragment_mypage_bookmarks"
+                android:alpha="0.5"
                 android:textAlignment="viewStart"
                 app:ciIconPadding="16dp" />
 
@@ -125,21 +126,42 @@
                 android:paddingEnd="16dp"
                 android:text="@string/fragment_mypage_settings"
                 android:textAlignment="viewStart"
+                android:alpha="0.5"
                 app:ciIconPadding="16dp" />
 
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="bottom|center_horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom|center_horizontal"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_version"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="Version 1.0.0" />
+                <com.coffeeinjection.message.util.GradientTextButton
+                    android:id="@+id/btn_logout"
+                    style="@style/white_medium_normal14"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="24dp"
+                    android:background="@drawable/btn_gradient_blue"
+                    android:drawableStart="@drawable/ic_log_out"
+                    android:gravity="start|center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="@string/fragment_mypage_logout"
+                    android:textAlignment="viewStart"
+                    android:alpha="0.5"
+                    app:ciIconPadding="16dp" />
+
+                <TextView
+                    android:id="@+id/tv_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="Version 1.0.0" />
+            </LinearLayout>
+
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

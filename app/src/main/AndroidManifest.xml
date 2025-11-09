@@ -14,7 +14,7 @@
         android:theme="@style/Theme.MessageApp"
         tools:targetApi="31">
         <activity
-            android:name="com.coffeeinjection.presentation.activity.MainActivity"
+            android:name=".presentation.activity.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.MessageApp.Splash">
             <intent-filter>

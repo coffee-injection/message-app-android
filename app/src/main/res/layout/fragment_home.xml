@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.coffeeinjection.presentation.home.HomeFragment">
+    tools:context=".presentation.home.HomeFragment">
 
     <ImageView
         android:id="@+id/bg_home"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_profile_img"
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -26,8 +26,17 @@
         android:layout_marginTop="50dp"
         app:cardCornerRadius="25dp"
         android:elevation="8dp"
+        app:strokeWidth="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <ImageView
+            android:id="@+id/iv_profile_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            />
+    </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/tv_user_name"

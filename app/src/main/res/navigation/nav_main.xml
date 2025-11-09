@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.coffeeinjection.presentation.home.HomeFragment"
+        android:name="com.coffeeinjection.message.presentation.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -29,8 +29,23 @@
     </fragment>
     <fragment
         android:id="@+id/myPageFragment"
-        android:name="com.coffeeinjection.presentation.mypage.MyPageFragment"
+        android:name="com.coffeeinjection.message.presentation.mypage.MyPageFragment"
         android:label="fragment_mypage"
-        tools:layout="@layout/fragment_mypage" />
+        tools:layout="@layout/fragment_mypage" >
+        <action
+            android:id="@+id/action_myPageFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_bookmarkFragment"
+            app:destination="@id/bookmarkFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.coffeeinjection.message.presentation.setting.SettingFragment"
+        android:label="SettingFragment" />
+    <fragment
+        android:id="@+id/bookmarkFragment"
+        android:name="com.coffeeinjection.message.presentation.bookmark.BookmarkFragment"
+        android:label="BookmarkFragment" />
 
 </navigation>

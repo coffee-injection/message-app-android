@@ -1,4 +1,4 @@
-package com.coffeeinjection.presentation.activity
+package com.coffeeinjection.message.presentation.activity
 
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
@@ -6,14 +6,11 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnticipateInterpolator
-import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.fragment.NavHostFragment
-import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.ActivityMainBinding
 import com.coffeeinjection.message.util.Logger
 
