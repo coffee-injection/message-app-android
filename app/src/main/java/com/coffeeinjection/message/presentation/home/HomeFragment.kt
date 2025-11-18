@@ -1,6 +1,7 @@
 package com.coffeeinjection.message.presentation.home
 
 import android.net.Uri
+import android.os.Bundle
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -20,15 +21,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
-
-    override fun setupViews() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            sharedViewModel.profileUri.collect { uri ->
-                uri?.let {
-                    loadIntoProfile(it)
-                }
-            }
-        }
+    override fun setupViews(savedInstanceState: Bundle?) {
     }
 
     override fun setupListeners() = with(binding) {
@@ -42,6 +35,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         }
     }
 
+    override fun setupCollectors() {
+        super.setupCollectors()
+        viewLifecycleOwner.lifecycleScope.launch {
+            sharedViewModel.profileUri.collect { uri ->
+                uri?.let {
+                    loadIntoProfile(it)
+                }
+            }
+        }
+    }
     private fun loadIntoProfile(uri: Uri) = with(binding) {
         // Glide 수명 안전: fragment view의 lifecycle에 묶기
         Glide.with(root)

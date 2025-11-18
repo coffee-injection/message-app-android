@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_signInFragment_to_homeFragment2"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_signInFragment_to_additionalInfoFragment"
+            app:destination="@id/additionalInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -47,5 +50,14 @@
         android:id="@+id/bookmarkFragment"
         android:name="com.coffeeinjection.message.presentation.bookmark.BookmarkFragment"
         android:label="BookmarkFragment" />
+    <fragment
+        android:id="@+id/additionalInfoFragment"
+        android:name="com.coffeeinjection.message.presentation.sign_in.AdditionalInfoFragment"
+        android:label="fragment_additional_info"
+        tools:layout="@layout/fragment_additional_info" >
+        <action
+            android:id="@+id/action_additionalInfoFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
 
 </navigation>

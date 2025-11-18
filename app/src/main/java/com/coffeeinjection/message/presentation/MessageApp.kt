@@ -12,6 +12,9 @@ import timber.log.Timber
  * - Release: WARN 이상만 출력(ReleaseTree)
  *
  * AndroidManifest.xml 의 <application android:name=".MessageApp" /> 로 등록 필수.
+ *
+ * - Hilt 사용을 위한 Application 클래스
+ * - 앱 프로세스 시작 시 Hilt 컨테이너가 초기화돰
  */
 @HiltAndroidApp
 class MessageApp: Application() {

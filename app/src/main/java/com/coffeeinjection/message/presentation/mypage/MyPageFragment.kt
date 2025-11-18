@@ -1,6 +1,7 @@
 package com.coffeeinjection.message.presentation.mypage
 
 import android.net.Uri
+import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -37,7 +38,7 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
         sharedViewModel.setPhoto(uri)
     }
 
-    override fun setupViews() {
+    override fun setupViews(savedInstanceState: Bundle?) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
                 // 화면이 보이는(STARTED) 상태만 블록 실행/수집 시작 STOPPED 로 내려가면 자동으로 수집을 중단
