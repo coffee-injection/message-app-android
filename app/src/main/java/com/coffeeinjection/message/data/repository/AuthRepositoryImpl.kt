@@ -42,11 +42,19 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun exchangeCodeToJwt(code: String): LoginResponse {
-        return api.kakaoLogin(KakaoLoginRequest(code))
+        val env = api.kakaoLogin(KakaoLoginRequest(code))
+        if (env.status != 200 || env.data == null) {
+            throw IllegalStateException("kakao/exchangeCodeToJwt 실패: status=${env.status}, success=${env.success}")
+        }
+        return env.data
     }
 
     override suspend fun completeSignup(tempJwt: String, nickname: String): SignupCompleteResponse {
-        return api.completeSignup("Bearer $tempJwt", SignupCompleteRequest(nickname))
+        val env =  api.completeSignup("Bearer $tempJwt", SignupCompleteRequest(nickname))
+        if (env.status != 200 || env.data == null){
+            throw IllegalStateException("kakao/completeSignup 실패: status=${env.status}, success=${env.success}")
+        }
+        return env.data
     }
 
     override suspend fun saveAccessToken(token: String) {

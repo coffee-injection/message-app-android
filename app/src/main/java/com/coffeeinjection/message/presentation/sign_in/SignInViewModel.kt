@@ -52,8 +52,8 @@ class SignInViewModel @Inject constructor(
                     _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
                 }
             }
-            .onFailure {
-                Logger.error("[kakao] exchangeCode fail")
+            .onFailure { e ->
+                Logger.error("[kakao] exchangeCode fail errorMsg(${e.message}) cause(${e.cause})")
                 _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "카카오 로그인 처리 중 오류가 발생했습니다")
             }
     }
@@ -80,8 +80,8 @@ class SignInViewModel @Inject constructor(
                 repo.saveAccessToken(res.accessToken)
                 _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
             }
-            .onFailure {
-                Logger.error("[kakao] completeSignup fail -> api.completeSignup fail")
+            .onFailure { e ->
+                Logger.error("[kakao] completeSignup fail errorMsg(${e.message}) cause(${e.cause})")
                 _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "회원가입 완료 처리에 실패했습니다")
             }
     }

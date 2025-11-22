@@ -17,12 +17,12 @@ interface AuthApi {
 
     /** 2) 인가 코드 → JWT 교환 */
     @POST("login")
-    suspend fun kakaoLogin(@Body req: KakaoLoginRequest): LoginResponse
+    suspend fun kakaoLogin(@Body req: KakaoLoginRequest): ApiEnvelope<LoginResponse>
 
     /** 3) 신규 회원 닉네임 완료 (Authorization: Bearer {임시_JWT}) */
     @POST("signup/complete")
     suspend fun completeSignup(
         @Header("Authorization") bearerToken: String,
         @Body req: SignupCompleteRequest
-    ): SignupCompleteResponse
+    ): ApiEnvelope<SignupCompleteResponse>
 }

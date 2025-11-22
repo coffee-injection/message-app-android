@@ -10,6 +10,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -70,6 +71,8 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
                 return false
             }
         }
+
+        btnConfirm.isEnabled = false
     }
 
     override fun setupListeners() = with(binding) {
@@ -84,6 +87,14 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
                 Logger.d("[카카오 로그인] Btn Click")
                 viewModel.loadKakaoLoginUrl()
             }
+        }
+        etNickname.addTextChangedListener { text ->
+            val len = (text?.length) ?: 0
+            btnConfirm.isEnabled = len in 2..20
+        }
+        btnConfirm.setOnClickListener {
+            val nickname = etNickname.text?.toString()?.trim().orEmpty()
+            viewModel.completeSignup(nickname)
         }
     }
 
@@ -103,16 +114,30 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
                     if (state.navigateToNickname) {
                         viewModel.consumedNavigation()
                         webView.visibility = View.GONE
-                        findNavController().navigate(
-                            //todo NickName 입력으로 이동
-                            SignInFragmentDirections.actionSignInFragmentToAdditionalInfoFragment()
-                        )
+                        //todo NickName View로 전환하기.
+                        toggleAddInfoView(true)
                     }
                     if (state.navigateToMain) {
                         webView.visibility = View.GONE
                         viewModel.consumedNavigation()
                         findNavController().navigate(
                             //todo Home으로 이동
+                            SignInFragmentDirections.actionSignInFragmentToHomeFragment()
+                        )
+                    }
+                }
+            }
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.uiState.collectLatest { state ->
+                    state.errorMessage?.let {
+                        // Toast 등으로 알림
+                        // Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                        viewModel.clearError()
+                    }
+
+                    if (state.navigateToMain) {
+                        viewModel.consumedNavigation()
+                        findNavController().navigate(
                             SignInFragmentDirections.actionSignInFragmentToHomeFragment()
                         )
                     }
@@ -127,5 +152,10 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
         try {
             binding.webView.saveState(outState)
         } catch (_: Throwable) { /* 필요 시 로그 */ }
+    }
+
+    fun toggleAddInfoView(isAddInfo: Boolean) = with(binding) {
+        addInfoLayout.visibility = if (isAddInfo) View.VISIBLE else View.GONE
+        signInLayout.visibility = if (!isAddInfo) View.VISIBLE else View.GONE
     }
 }
