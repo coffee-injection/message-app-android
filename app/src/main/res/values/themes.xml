@@ -1,22 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.MessageApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+         <item name="colorPrimary">@color/main_navy</item>
     </style>
-
-<!--    <style name="Theme.MessageApp" parent="Base.Theme.MessageApp" />-->
-
-<!--    &lt;!&ndash; 스플래시 포함 테마: AppCompat(=Material3) 파생 + 스플래시 속성 &ndash;&gt;-->
-<!--    <style name="Theme.MessageApp.Splash" parent="Theme.Material3.DayNight.NoActionBar">-->
-<!--        &lt;!&ndash; SplashScreen 속성들 &ndash;&gt;-->
-<!--        <item name="windowSplashScreenBackground">@color/main_navy</item>-->
-<!--        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_transparent</item>-->
-
-<!--        &lt;!&ndash; 스플래시가 끝난 뒤 적용될 테마 &ndash;&gt;-->
-<!--        <item name="postSplashScreenTheme">@style/Theme.MessageApp</item>-->
-<!--    </style>-->
-
 
     <!-- 앱 실제 테마 -->
     <style name="Theme.MessageApp" parent="Base.Theme.MessageApp">

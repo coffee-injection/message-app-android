@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:padding="20dp">
+
+    <!-- bg_letter는 안쪽 컨테이너에 주는 쪽이 안전 -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/letterContainer"
+        android:layout_width="0dp"
+        android:layout_height="510dp"
+        android:background="@drawable/bg_letter"
+        android:padding="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- 닫기 버튼 -->
+        <ImageView
+            android:id="@+id/ivClose"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_close"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- 메시지 입력 -->
+        <EditText
+            android:id="@+id/etMessage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:color/transparent"
+            android:gravity="top|start"
+            android:hint="메시지를 입력하세요 (최대 1000자)"
+            android:inputType="textMultiLine"
+            android:overScrollMode="ifContentScrolls"
+            android:padding="12dp"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintTop_toBottomOf="@id/ivClose"
+            app:layout_constraintBottom_toTopOf="@id/btnSend"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- 글자 수 카운트 -->
+        <TextView
+            android:id="@+id/tvCharCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="8dp"
+            android:text="0 / 1000"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@id/btnSend"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- 전송 버튼 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSend"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/main_navy"
+            android:text="전송"
+            android:textColor="@color/white"
+            app:icon="@drawable/ic_send"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:iconTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

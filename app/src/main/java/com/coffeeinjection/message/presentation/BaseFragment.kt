@@ -24,7 +24,7 @@ import timber.log.Timber
 abstract class BaseFragment<VB : ViewBinding>(
     private val inflate: (LayoutInflater, ViewGroup?, Boolean) -> VB
 ) : Fragment() {
-    // backing field로 관리 (onDestroyView에서 null)
+    // backing filed로 관리 (onDestroyView에서 null)
     private var _binding: VB? = null
     protected val binding: VB get() = _binding ?: error("Binding is only valid between onCreateView and onDestroyView.")
 

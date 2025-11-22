@@ -34,10 +34,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     override fun setupListeners() = with(binding) {
         super.setupListeners()
 
-        // MyPage화면이동
+        // MyPage 화면이동
         cvProfileImg.setOnClickListener {
             this@HomeFragment.findNavController().navigate(
                 HomeFragmentDirections.actionHomeFragmentToMyPageFragment()
+            )
+        }
+
+        // MessageDialogFeamgment  화면 이동
+        btnSendMsg.setOnClickListener {
+            this@HomeFragment.findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragmentToMessageDialogFragment()
             )
         }
     }
