@@ -6,102 +6,153 @@
     android:background="@color/main_navy"
     tools:context="com.coffeeinjection.presentation.sign_in.SignInFragment">
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/et_id"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/sign_in_layout"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginHorizontal="60dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/btn_normal_round_white"
-        android:hint="@string/sign_in_hint"
-        android:paddingHorizontal="16dp"
-        android:textColorHint="@color/text_hint_grey"
-        android:textSize="@dimen/text_size_14"
-        app:layout_constraintBottom_toTopOf="@id/btn_a"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        android:layout_height="match_parent">
 
-    <com.coffeeinjection.message.util.GradientTextButton
-        android:id="@+id/btn_a"
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_id"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="60dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/btn_normal_round_white"
+            android:hint="@string/sign_in_hint"
+            android:paddingHorizontal="16dp"
+            android:textColorHint="@color/text_hint_grey"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintBottom_toTopOf="@id/btn_a"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <com.coffeeinjection.message.util.GradientTextButton
+            android:id="@+id/btn_a"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="60dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/btn_gradient_navy"
+            android:gravity="center"
+            android:text="@string/sign_in_next"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/tv_or"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_id" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginEnd="8dp"
+            android:background="@color/text_deep_grey"
+            app:layout_constraintBottom_toBottomOf="@id/tv_or"
+            app:layout_constraintEnd_toStartOf="@id/tv_or"
+            app:layout_constraintStart_toStartOf="@id/btn_a"
+            app:layout_constraintTop_toTopOf="@id/tv_or" />
+
+        <TextView
+            android:id="@+id/tv_or"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="@string/sign_in_or"
+            android:textColor="@color/text_deep_grey"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintBottom_toTopOf="@id/btn_google"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_a" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="8dp"
+            android:background="@color/text_deep_grey"
+            app:layout_constraintBottom_toBottomOf="@id/tv_or"
+            app:layout_constraintEnd_toEndOf="@id/btn_a"
+            app:layout_constraintStart_toEndOf="@id/tv_or"
+            app:layout_constraintTop_toTopOf="@id/tv_or" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btn_google"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="60dp"
+            android:layout_marginBottom="@dimen/text_size_16"
+            android:background="@drawable/btn_gradient_navy"
+            app:layout_constraintBottom_toTopOf="@id/btn_kakao"
+            app:layout_constraintTop_toBottomOf="@id/tv_or" />
+
+        <com.coffeeinjection.message.util.GradientTextButton
+            android:id="@+id/btn_kakao"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="60dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/btn_gradient_navy"
+            android:gravity="center"
+            android:text="@string/sign_in_kakao"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/tv_description"
+            app:layout_constraintTop_toBottomOf="@id/btn_google" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingHorizontal="15dp"
+            android:text="@string/sign_in_description"
+            android:textColor="@color/text_grey"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_kakao" />
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="2dp"
+            android:visibility="gone" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/add_info_layout"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginHorizontal="60dp"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/btn_gradient_navy"
-        android:text="@string/sign_in_next"
-        android:gravity="center"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@id/tv_or"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_id" />
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginEnd="8dp"
-        android:background="@color/text_deep_grey"
-        app:layout_constraintBottom_toBottomOf="@id/tv_or"
-        app:layout_constraintEnd_toStartOf="@id/tv_or"
-        app:layout_constraintStart_toStartOf="@id/btn_a"
-        app:layout_constraintTop_toTopOf="@id/tv_or" />
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="60dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/btn_normal_round_white"
+            android:hint="닉네임을 입력해주세요 (2~20자)"
+            android:paddingHorizontal="16dp"
+            android:textColorHint="@color/text_hint_grey"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintBottom_toTopOf="@id/btn_confirm"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
-    <TextView
-        android:id="@+id/tv_or"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:text="@string/sign_in_or"
-        android:textColor="@color/text_deep_grey"
-        android:textSize="@dimen/text_size_14"
-        app:layout_constraintBottom_toTopOf="@id/btn_google"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_a" />
+        <com.coffeeinjection.message.util.GradientTextButton
+            android:id="@+id/btn_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="60dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/btn_gradient_navy"
+            android:gravity="center"
+            android:text="완료"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_nickname" />
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginStart="8dp"
-        android:background="@color/text_deep_grey"
-        app:layout_constraintBottom_toBottomOf="@id/tv_or"
-        app:layout_constraintEnd_toEndOf="@id/btn_a"
-        app:layout_constraintStart_toEndOf="@id/tv_or"
-        app:layout_constraintTop_toTopOf="@id/tv_or" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/btn_google"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginHorizontal="60dp"
-        android:layout_marginBottom="@dimen/text_size_16"
-        android:background="@drawable/btn_normal_round_white"
-        app:layout_constraintBottom_toTopOf="@id/btn_apple"
-        app:layout_constraintTop_toBottomOf="@id/tv_or" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/btn_apple"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginHorizontal="60dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/btn_normal_round_white"
-        app:layout_constraintBottom_toTopOf="@id/tv_description"
-        app:layout_constraintTop_toBottomOf="@id/btn_google" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingHorizontal="15dp"
-        android:text="@string/sign_in_description"
-        android:textColor="@color/text_grey"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_apple" />
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

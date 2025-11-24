@@ -54,5 +54,5 @@
         android:id="@+id/messageDialogFragment"
         android:name="com.coffeeinjection.message.presentation.message.MessageDialogFragment"
         android:label="MessageDialogFragment" />
-
+<!--    c4f6483907cb9ebb33a7b2c3f6384e2867ae6692-->
 </navigation>

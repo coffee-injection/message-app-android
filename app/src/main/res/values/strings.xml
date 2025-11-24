@@ -7,6 +7,7 @@
     <string name="sign_in_hint">email@example.com</string>
     <string name="sign_in_or">또는</string>
     <string name="sign_in_next">로그인</string>
+    <string name="sign_in_kakao">카카오 로그인</string>
     <string name="sign_in_description">로그인을 클릭하면 당사의 서비스 이용 약관 및 개인정보 처리방침에 동의하는 것으로 간주됩니다.</string>
 
     <string name="fragment_mypage_bookmarks">Bookmarks</string>
@@ -17,5 +18,5 @@
 
     <!--MessageDialog-->
     <string name="dialog_fragment_message">메세지 띄우기</string>
-
+<!--    c4f6483907cb9ebb33a7b2c3f6384e2867ae6692-->
 </resources>

@@ -47,7 +47,7 @@ abstract class BaseFragment<VB : ViewBinding>(
         super.onViewCreated(view, savedInstanceState)
         Timber.tag(TAG).d("[$TAG] onViewCreated() ================================================================================================================")
 
-        setupViews()
+        setupViews(savedInstanceState)
         setupListeners()
         setupCollectors()
     }
@@ -65,7 +65,7 @@ abstract class BaseFragment<VB : ViewBinding>(
 
     // ---------- 하위 클래스에서 주로 쓰는 훅 ----------
     /** UI 초기화 (findViewById 대체, RecyclerView/Adapter, Toolbar 등) */
-    protected abstract fun setupViews()
+    protected abstract fun setupViews(savedInstanceState: Bundle?)
 
     /** 클릭/제스처/어댑터 리스너 등 이벤트 바인딩 */
     protected open fun setupListeners() {}
