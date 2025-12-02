@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">돛단배</string>
     <!-- TODO: Remove or change this placeholder text -->
+    <!--  Splash  -->
     <string name="SAILBOAT">SAILBOAT</string>
 
     <!--  SignIn  -->

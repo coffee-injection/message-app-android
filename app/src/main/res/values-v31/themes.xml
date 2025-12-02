@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.MessageApp.Splash" parent="Theme.SplashScreen">
+
+    <style name="Theme.MessageApp" parent="Base.Theme.MessageApp">
+        <!-- 스플래시 아이콘/배경/브랜딩 제거 -->
+        <item name="android:windowSplashScreenAnimatedIcon">@null</item>
+        <item name="android:windowSplashScreenBackground">@android:color/transparent</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@null</item>
+        <item name="android:windowSplashScreenBrandingImage">@null</item>
+        <!-- ... 기존 앱 테마 설정 ... -->
+        <item name="postSplashScreenTheme">@style/Theme.MessageApp</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:statusBarColor">@color/main_navy</item>
-        <!-- 12+에서 사용되는 스플래시 속성들 -->
-        <item name="android:windowSplashScreenBackground">@color/main_navy</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/logo_transparent</item>
-        <!-- 필요 시 아이콘 뒤 원형 배경색 -->
-        <!-- <item name="android:windowSplashScreenIconBackgroundColor">@color/black</item> -->
-        <!-- 필요 시 하단 브랜딩 이미지(권장X) -->
-        <!-- <item name="android:windowSplashScreenBrandingImage">@drawable/ic_branding</item> -->
 
-        <!-- 스플래시 종료 후 적용할 실제 앱 테마 -->
-        <item name="postSplashScreenTheme">@style/Theme.MessageApp</item>
     </style>
 </resources>
