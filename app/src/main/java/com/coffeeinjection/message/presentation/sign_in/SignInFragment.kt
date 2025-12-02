@@ -14,6 +14,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.FragmentSignInBinding
 import com.coffeeinjection.message.presentation.BaseFragment
 import com.coffeeinjection.message.util.Logger
@@ -88,13 +89,20 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
                 viewModel.loadKakaoLoginUrl()
             }
         }
-        etNickname.addTextChangedListener { text ->
-            val len = (text?.length) ?: 0
-            btnConfirm.isEnabled = len in 2..20
+        etNickname.setOnClickListener {
+            tvDescriptionNickname.visibility = View.GONE
+            etNickname.setBackgroundResource(R.drawable.btn_normal_round_white)
         }
         btnConfirm.setOnClickListener {
-            val nickname = etNickname.text?.toString()?.trim().orEmpty()
-            viewModel.completeSignup(nickname)
+            if(etNickname.text?.length in 2..12) {
+                Logger.d("nickname check : ${etNickname.text?.length}")
+                val nickname = etNickname.text?.toString()?.trim().orEmpty()
+                viewModel.completeSignup(nickname)
+            } else{
+                Logger.d("nickname check2 : ${etNickname.text?.length}")
+                tvDescriptionNickname.visibility = View.VISIBLE
+                etNickname.setBackgroundResource(R.drawable.btn_normal_round_white_red_border)
+            }
         }
     }
 
