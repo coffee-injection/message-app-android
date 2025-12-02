@@ -27,7 +27,7 @@ object NetworkModule {
 
     @AuthBaseUrl
     @Provides
-    fun provideAuthBaseUrl(): String = "http://10.0.2.2:8080/api/v1/auth/" //"http://localhost:8080/api/v1/auth/"
+    fun provideAuthBaseUrl(): String = "http://15.164.112.136:8080/api/v1/auth/" //"http://localhost:8080/api/v1/auth/"
 
     @Provides
     @Singleton
