@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
+import com.coffeeinjection.message.util.TitleBarView
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -96,4 +98,15 @@ abstract class BaseFragment<VB : ViewBinding>(
             }
         }
     }
+
+    /**
+     * TitleBar 뒤로가기 버튼
+     */
+    protected fun TitleBarView.setupDefault(title: String) {
+        this.title = title
+        this.setOnBackClickListener {
+            findNavController().navigateUp()
+        }
+    }
+
 }

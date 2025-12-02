@@ -15,7 +15,7 @@ android {
         minSdk = 21
         targetSdk = 35
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -24,7 +24,6 @@ android {
         debug {
             // 디버그 전용 식별자/버전 꼬리표
             applicationIdSuffix = ".debug"
-            versionNameSuffix = "-debug"
 
             // 난독화/리소스 축소 비활성화(기본값이지만 명시해두면 좋습니다)
             isMinifyEnabled = false
@@ -32,7 +31,6 @@ android {
         release {
             isMinifyEnabled = false
             applicationIdSuffix = ".release"
-            versionNameSuffix = "-release"
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

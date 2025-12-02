@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<!--    버튼 디자인-->
     <declare-styleable name="GradientTextButton">
         <attr name="gtb_text" format="string" />
         <attr name="gtb_textColor" format="color" />
@@ -22,6 +23,12 @@
         <attr name="ciIconSize" format="dimension"/>
         <!-- 텍스트와 아이콘 사이 간격 -->
         <attr name="ciIconPadding" format="dimension"/>
+    </declare-styleable>
+
+<!--    타이틀 바 -->
+    <declare-styleable name="TitleBarView">
+        <attr name="titleText" format="string" />
+        <attr name="showBack" format="boolean" />
     </declare-styleable>
 
 </resources>

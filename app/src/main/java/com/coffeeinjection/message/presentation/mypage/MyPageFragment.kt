@@ -11,6 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.coffeeinjection.message.BuildConfig
+import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.FragmentMypageBinding
 import com.coffeeinjection.message.presentation.activity.SharedViewModel
 import com.coffeeinjection.message.presentation.BaseFragment
@@ -39,6 +41,16 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
     }
 
     override fun setupViews(savedInstanceState: Bundle?) {
+
+        binding.apply {
+            // TitleBar
+            titleBar.setupDefault(getString(R.string.title_mypage))
+
+            // 현재 앱 버전 표시
+            val versionName = BuildConfig.VERSION_NAME
+            tvVersion.text = getString(R.string.mypage_version, versionName)
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
                 // 화면이 보이는(STARTED) 상태만 블록 실행/수집 시작 STOPPED 로 내려가면 자동으로 수집을 중단
@@ -50,11 +62,6 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
 
     override fun setupListeners() = with(binding) {
         super.setupListeners()
-
-        // 뒤로가기
-        btnBack.setOnClickListener {
-            findNavController().navigateUp()
-        }
 
         // 북마크
         btnBookmark.setOnClickListener {
@@ -86,8 +93,6 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
         Glide.with(root)
             .load(uri)
             .centerCrop()
-//            .placeholder(com.coffeeinjection.message.R.drawable.ic_profile_placeholder) // 선택
-//            .error(com.coffeeinjection.message.R.drawable.ic_profile_placeholder)       // 선택
             .into(ivProfileImg)
     }
 
