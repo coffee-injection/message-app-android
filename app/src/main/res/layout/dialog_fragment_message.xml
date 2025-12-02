@@ -14,10 +14,10 @@
         android:layout_height="510dp"
         android:background="@drawable/bg_letter"
         android:padding="20dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <!-- 닫기 버튼 -->
         <ImageView
@@ -25,6 +25,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_close"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,11 +42,11 @@
             android:inputType="textMultiLine"
             android:overScrollMode="ifContentScrolls"
             android:padding="12dp"
-            android:textSize="@dimen/text_size_14"
-            app:layout_constraintTop_toBottomOf="@id/ivClose"
+            android:textSize="@dimen/text_size_16"
             app:layout_constraintBottom_toTopOf="@id/btnSend"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/ivClose" />
 
         <!-- 글자 수 카운트 -->
         <TextView
@@ -56,25 +57,27 @@
             android:layout_marginBottom="8dp"
             android:text="0 / 1000"
             android:textSize="12sp"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@id/btnSend"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- 전송 버튼 -->
-        <com.google.android.material.button.MaterialButton
+        <com.coffeeinjection.message.util.GradientTextButton
             android:id="@+id/btnSend"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/main_navy"
-            android:text="전송"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/btn_round_navy"
+            android:drawableStart="@drawable/ic_send"
+            android:gravity="center_vertical|center_horizontal"
+            android:paddingStart="@dimen/text_size_16"
+            android:paddingEnd="@dimen/text_size_16"
+            android:text="@string/dialog_fragment_message"
+            android:textAlignment="center"
             android:textColor="@color/white"
-            app:icon="@drawable/ic_send"
-            app:iconGravity="textStart"
-            app:iconPadding="8dp"
-            app:iconTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
