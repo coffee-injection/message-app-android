@@ -61,7 +61,7 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
             }
             private fun handleCallbackUrl(url: String?): Boolean {
                 if (url.isNullOrBlank()) return false
-                if (url.startsWith("http://localhost:8080/auth/kakao/callback")) {
+                if (url.startsWith("http://15.164.112.136/auth/kakao/callback")) {
                     val code = Uri.parse(url).getQueryParameter("code")
                     if (!code.isNullOrBlank()) {
                         viewModel.exchangeCode(code)
