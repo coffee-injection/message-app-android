@@ -1,6 +1,6 @@
 package com.coffeeinjection.message.data.remote.interceptor
 
-import com.coffeeinjection.message.data.local.TokenDataStore
+import com.coffeeinjection.message.data.local.AuthDataStore
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -12,7 +12,7 @@ import javax.inject.Inject
  * - TokenDataStore 에 저장된 액세스 토큰을 사용
  */
 class AuthInterceptor @Inject constructor(
-    private val tokenDataStore: TokenDataStore
+    private val authDataStore: AuthDataStore
 ) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -28,7 +28,7 @@ class AuthInterceptor @Inject constructor(
 
         // 2) 나머지 요청은 DataStore 에서 토큰 읽어서 Bearer 붙이기
         val token = runBlocking {
-            tokenDataStore.accessTokenFlow.firstOrNull()
+            authDataStore.accessTokenFlow.firstOrNull()
         }
 
         val newRequest = if (!token.isNullOrBlank()) {

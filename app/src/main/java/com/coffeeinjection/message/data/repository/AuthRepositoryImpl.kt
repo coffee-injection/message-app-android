@@ -1,6 +1,6 @@
 package com.coffeeinjection.message.data.repository
 
-import com.coffeeinjection.message.data.local.TokenDataStore
+import com.coffeeinjection.message.data.local.AuthDataStore
 import com.coffeeinjection.message.data.remote.api.AuthApi
 import com.coffeeinjection.message.data.remote.requireDataOrThrow
 import com.coffeeinjection.message.data.remote.dto.KakaoLoginRequest
@@ -14,11 +14,11 @@ import javax.inject.Inject
 /**
  * - 인증 관련 API/로컬 저장을 캡슐화한 구현체
  * - WebView → code 추출 이후 서버와 교환, 토큰 저장까지 담당
- * - Hilt로 AuthApi / TokenDataStore가 주입됨
+ * - Hilt로 AuthApi / AuthDataStore 주입됨
  */
 class AuthRepositoryImpl @Inject constructor(
     private val api: AuthApi,
-    private val tokenStore: TokenDataStore
+    private val authStore: AuthDataStore
 ) : AuthRepository {
 
     // 서버 응답이 래핑 구조기 때문에 응답 래퍼를 만들어 url 추출
@@ -39,6 +39,6 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun saveAccessToken(token: String) {
-        tokenStore.saveAccessToken(token)
+        authStore.saveAccessToken(token)
     }
 }
