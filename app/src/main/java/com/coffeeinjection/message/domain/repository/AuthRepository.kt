@@ -1,8 +1,8 @@
 package com.coffeeinjection.message.domain.repository
 
-import com.coffeeinjection.message.data.remote.KakaoLoginUrlResponse
-import com.coffeeinjection.message.data.remote.LoginResponse
-import com.coffeeinjection.message.data.remote.SignupCompleteResponse
+import com.coffeeinjection.message.data.remote.dto.KakaoLoginUrlResponse
+import com.coffeeinjection.message.data.remote.dto.LoginResponse
+import com.coffeeinjection.message.data.remote.dto.SignupCompleteResponse
 
 
 /**
@@ -10,8 +10,7 @@ import com.coffeeinjection.message.data.remote.SignupCompleteResponse
  */
 interface AuthRepository {
     suspend fun getKakaoLoginUrl(): KakaoLoginUrlResponse
-    suspend fun getKakaoLoginUrlForTest(): KakaoLoginUrlResponse
     suspend fun exchangeCodeToJwt(code: String): LoginResponse
-    suspend fun completeSignup(tempJwt: String, nickname: String): SignupCompleteResponse
+    suspend fun completeSignup(nickname: String): SignupCompleteResponse
     suspend fun saveAccessToken(token: String)
 }

@@ -93,6 +93,8 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
         Glide.with(root)
             .load(uri)
             .centerCrop()
+            .placeholder(R.drawable.ic_profile_placeholder) // 선택
+            .error(R.drawable.ic_profile_placeholder)       // 선택
             .into(ivProfileImg)
     }
 

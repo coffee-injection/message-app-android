@@ -25,7 +25,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="45dp"
         android:elevation="8dp"
-        app:cardCornerRadius="25dp"
+        app:cardCornerRadius="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:strokeWidth="0dp">
@@ -34,6 +34,7 @@
             android:id="@+id/iv_profile_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:src="@drawable/ic_profile_placeholder"
             android:scaleType="centerCrop" />
     </com.google.android.material.card.MaterialCardView>
 
@@ -43,8 +44,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:text="아보카도섬"
+        app:layout_constraintBottom_toBottomOf="@+id/cv_profile_img"
         app:layout_constraintStart_toEndOf="@+id/cv_profile_img"
         app:layout_constraintTop_toTopOf="@+id/cv_profile_img" />
 
@@ -53,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="45dp"
+        android:layout_marginBottom="50dp"
         android:src="@drawable/ic_send"
         app:backgroundTint="@color/main_navy"
         app:layout_constraintBottom_toBottomOf="parent"

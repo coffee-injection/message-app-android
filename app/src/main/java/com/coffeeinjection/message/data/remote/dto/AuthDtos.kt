@@ -1,4 +1,4 @@
-package com.coffeeinjection.message.data.remote
+package com.coffeeinjection.message.data.remote.dto
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -54,6 +54,9 @@ data class SignupCompleteResponse(
     @Json(name = "isNewMember") val isNewMember: Boolean
 )
 
+/**
+ * Base Result class (서버 응답을 감싸는 공통 래퍼 클래스)
+ */
 @JsonClass(generateAdapter = true)
 data class ApiEnvelope<T>(
     @Json(name = "status") val status: Int,

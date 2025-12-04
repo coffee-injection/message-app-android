@@ -39,6 +39,10 @@ class SignInViewModel @Inject constructor(
             .onSuccess { res ->
                 if (res.isNewMember && res.memberId == null) {
                     Logger.d("[kakao] exchangeCode success -> new user")
+
+                    // 임시 토큰도 DataStore 에 저장
+                    repo.saveAccessToken(res.accessToken)
+
                     // 신규 회원: 임시 토큰 저장 후 닉네임 입력 화면으로
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
@@ -60,12 +64,6 @@ class SignInViewModel @Inject constructor(
 
     /** 3) 신규회원 닉네임 완료 */
     fun completeSignup(nickname: String) = viewModelScope.launch {
-        val tmp = _uiState.value.tempToken ?: run {
-            Logger.error("[kakao] completeSignup fail -> token is null")
-            _uiState.value = _uiState.value.copy(errorMessage = "임시 토큰이 없습니다. 처음부터 다시 시도해주세요.")
-            return@launch
-        }
-
         if (nickname.length !in 2..20) {
             Logger.error("[kakao] completeSignup fail -> nickname is invalid")
             _uiState.value = _uiState.value.copy(errorMessage = "닉네임은 2자 이상 20자 이하로 입력해주세요")
@@ -73,7 +71,7 @@ class SignInViewModel @Inject constructor(
         }
 
         _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
-        runCatching { repo.completeSignup(tmp, nickname) }
+        runCatching { repo.completeSignup(nickname) }
             .onSuccess { res ->
                 Logger.d("[kakao] completeSignup success")
                 // 서버가 최종 토큰을 내려줌

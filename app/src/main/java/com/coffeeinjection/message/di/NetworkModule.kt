@@ -1,6 +1,8 @@
 package com.coffeeinjection.message.di
 
-import com.coffeeinjection.message.data.remote.AuthApi
+import com.coffeeinjection.message.data.remote.api.AuthApi
+import com.coffeeinjection.message.data.remote.api.MessageApi
+import com.coffeeinjection.message.data.remote.interceptor.AuthInterceptor
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -19,22 +21,36 @@ import javax.inject.Singleton
  */
 
 @Qualifier
-annotation class AuthBaseUrl
+annotation class BaseUrl
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    @AuthBaseUrl
+    @BaseUrl
     @Provides
-    fun provideAuthBaseUrl(): String = "http://15.164.112.136:8080/api/v1/auth/" //"http://localhost:8080/api/v1/auth/"
+    fun provideBaseUrl(): String =
+        "http://15.164.112.136:8080/api/v1/" //"http://localhost:8080/api/v1/auth/"
 
+    /**
+     * 헤더 토큰이 필요한 경우
+     */
     @Provides
     @Singleton
-    fun provideOkHttp(): OkHttpClient =
-        OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
+    fun provideOkHttp(
+        authInterceptor: AuthInterceptor
+    ): OkHttpClient {
+        val logging = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
-        }).build()
+        }
+
+        return OkHttpClient.Builder()
+            // ★ 여기서 토큰 추가
+            .addInterceptor(authInterceptor)
+            // ★ 로그 인터셉터
+            .addInterceptor(logging)
+            .build()
+    }
 
     @Provides
     @Singleton
@@ -47,7 +63,7 @@ object NetworkModule {
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
         moshi: Moshi,
-        @AuthBaseUrl baseUrl: String
+        @BaseUrl baseUrl: String
     ): Retrofit =
         Retrofit.Builder()
             .baseUrl(baseUrl)
@@ -58,4 +74,11 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideAuthApi(retrofit: Retrofit): AuthApi = retrofit.create(AuthApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideMessageApi(
+        retrofit: Retrofit
+    ): MessageApi =
+        retrofit.create(MessageApi::class.java)
 }

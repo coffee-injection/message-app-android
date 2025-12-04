@@ -18,7 +18,7 @@ object Logger {
     fun w(msg: String, vararg args: Any?) = Timber.w(msg, *args)
     fun error(msg: String, vararg args: Any?) = Timber.e(msg, *args)
 
-    fun e(t: Throwable? = null, msg: String, vararg args: Any?) {
+    fun e(t: String = null.toString(), msg: String, vararg args: Any?) {
         val formatted = if (args.isNotEmpty()) msg.format(*args) else msg
         Timber.e(t, Redactor.redactText(formatted))
     }
