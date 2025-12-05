@@ -32,9 +32,7 @@ object NetworkModule {
     fun provideBaseUrl(): String =
         "http://15.164.112.136:8080/api/v1/" //"http://localhost:8080/api/v1/auth/"
 
-    /**
-     * 헤더 토큰이 필요한 경우
-     */
+
     @Provides
     @Singleton
     fun provideOkHttp(

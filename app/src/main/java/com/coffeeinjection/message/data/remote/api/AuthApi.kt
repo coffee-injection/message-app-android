@@ -25,7 +25,7 @@ interface AuthApi {
         @Body req: KakaoLoginRequest
     ): ApiEnvelope<LoginResponse>
 
-    /** 3) 신규 회원 닉네임 완료 (Authorization: Bearer {임시_JWT}) */
+    /** 3) 신규 회원 닉네임 완료 */
     @POST("auth/signup/complete")
     suspend fun completeSignup(
         @Body req: SignupCompleteRequest

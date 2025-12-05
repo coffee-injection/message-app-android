@@ -53,6 +53,26 @@
     <dialog
         android:id="@+id/messageDialogFragment"
         android:name="com.coffeeinjection.message.presentation.message.MessageDialogFragment"
-        android:label="MessageDialogFragment" />
-<!--    c4f6483907cb9ebb33a7b2c3f6384e2867ae6692-->
+        android:label="messageDialogFragment" >
+        <argument
+            android:name="letterId"
+            app:argType="long" />
+
+        <argument
+            android:name="content"
+            app:argType="string" />
+
+        <argument
+            android:name="senderName"
+            app:argType="string" />
+
+        <argument
+            android:name="readOnly"
+            app:argType="boolean"
+            android:defaultValue="false" />
+
+        <argument
+            android:name="receiverNickname"
+            app:argType="string" />
+    </dialog>
 </navigation>

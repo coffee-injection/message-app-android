@@ -16,8 +16,10 @@
         android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <!-- 닫기 버튼 -->
         <ImageView
@@ -29,21 +31,38 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- 메시지 입력 -->
-        <EditText
-            android:id="@+id/etMessage"
-            android:layout_width="0dp"
+        <!-- 읽기 전용-->
+        <TextView
+            android:id="@+id/tv_content"
+            style="@style/black_medium_normal16"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
+            android:background="@android:color/transparent"
+            android:gravity="top|start"
+            android:overScrollMode="ifContentScrolls"
+            android:padding="12dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvCharCount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivClose" />
+
+        <!-- 쓰기 전용 -->
+        <EditText
+            android:id="@+id/etMessage"
+            style="@style/black_medium_normal16"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
             android:background="@android:color/transparent"
             android:gravity="top|start"
             android:hint="메시지를 입력하세요 (최대 1000자)"
-            android:inputType="textMultiLine"
+            android:inputType="textMultiLine|textNoSuggestions"
             android:overScrollMode="ifContentScrolls"
             android:padding="12dp"
-            android:textSize="@dimen/text_size_16"
-            app:layout_constraintBottom_toTopOf="@id/btnSend"
+            android:textColorHint="@color/text_deep_grey"
+            app:layout_constraintBottom_toBottomOf="@+id/tvCharCount"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivClose" />
@@ -51,15 +70,38 @@
         <!-- 글자 수 카운트 -->
         <TextView
             android:id="@+id/tvCharCount"
+            style="@style/grey_medium_normal12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
             android:layout_marginBottom="8dp"
             android:text="0 / 1000"
             android:textSize="12sp"
             android:visibility="visible"
-            app:layout_constraintBottom_toTopOf="@id/btnSend"
+            app:layout_constraintBottom_toTopOf="@+id/tv_sender_name"
+            app:layout_constraintEnd_toEndOf="@+id/tv_sender_name" />
+
+        <TextView
+            android:id="@+id/tv_sender_name"
+            style="@style/black_medium_normal16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/dialog_fragment_message_island_name"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_sender"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_sender"
+            style="@style/black_medium_normal16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/dialog_fragment_message_sender"
+            android:textSize="16sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/btnSend"
+            app:layout_constraintEnd_toStartOf="@+id/tv_sender_name" />
 
         <com.coffeeinjection.message.util.GradientTextButton
             android:id="@+id/btnSend"
@@ -73,6 +115,7 @@
             android:text="@string/dialog_fragment_message"
             android:textAlignment="center"
             android:textColor="@color/white"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

@@ -20,6 +20,8 @@
 
     <!--MessageDialog-->
     <string name="dialog_fragment_message">띄우기</string>
+    <string name="dialog_fragment_message_sender">From.</string>
+    <string name="dialog_fragment_message_island_name">섬이름</string>
 
     <!--Title-->
     <string name="title_mypage">My Page</string>

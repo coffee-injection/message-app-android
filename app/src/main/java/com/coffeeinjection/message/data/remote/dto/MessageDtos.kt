@@ -9,7 +9,7 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class LetterSummaryDto(
-    @Json(name = "letterId") val letterId: Int,
+    @Json(name = "letterId") val letterId: Long,
     @Json(name = "content") val content: String,
     @Json(name = "senderName") val senderName: String,
     @Json(name = "status") val status: String,
