@@ -143,6 +143,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                                 content    = msg.content,
                                 senderName = msg.senderName,
                                 readOnly   = true   , // 읽기 모드
+                                receiverNickname = "도마도"
                             )
                         findNavController().navigate(action)
                     }
