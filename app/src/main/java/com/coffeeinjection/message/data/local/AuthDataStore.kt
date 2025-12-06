@@ -1,6 +1,7 @@
 package com.coffeeinjection.message.data.local
 
 import android.content.Context
+import android.net.Uri
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -9,6 +10,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import androidx.core.net.toUri
 
 /**
  * - 액세스 토큰을 DataStore에 저장/조회
@@ -24,7 +26,7 @@ class AuthDataStore @Inject constructor(
     companion object {
         private val KEY_ACCESS_TOKEN   = stringPreferencesKey("access_token")
         private val KEY_USER_NICKNAME  = stringPreferencesKey("user_nickname")
-        private val KEY_USER_NAME      = stringPreferencesKey("user_name")
+        private val KEY_USER_IMG      = stringPreferencesKey("user_img")
     }
 
     /** 현재 저장된 액세스 토큰 */
@@ -34,26 +36,28 @@ class AuthDataStore @Inject constructor(
 
     /** 유저 정보 Flow (모두 있을 때만 UserInfo 반환, 아니면 null) */
     val userInfoFlow: Flow<UserInfo?> = context.authDataStore.data.map { prefs ->
-        val name = prefs[KEY_USER_NAME]
+        val img = prefs[KEY_USER_IMG]
         val nickname = prefs[KEY_USER_NICKNAME]
 
-        if (name == null || nickname == null) null
-        else UserInfo(userName = name, nickname = nickname)
+        val imgUri = img?.toUri()
+
+        if (img == null || nickname == null) null
+        else UserInfo(nickname = nickname, userImg = imgUri)
     }
 
     /** 액세스 토큰 저장/갱신 */
     suspend fun saveAccessToken(token: String) {
-        Logger.d("[TokenDataStore] saveAccessToken init --> token : $token")
+        Logger.d("[AuthDataStore] saveAccessToken init --> token : $token")
         context.authDataStore.edit { prefs ->
             prefs[KEY_ACCESS_TOKEN] = token
         }
     }
 
     suspend fun saveUserInfo(userinfo: UserInfo) {
-        Logger.d("[TokenDataStore] saveUserInfo init --> userinfo : $userinfo")
+        Logger.d("[AuthDataStore] saveUserInfo init --> userinfo : $userinfo")
         context.authDataStore.edit { prefs ->
             prefs[KEY_USER_NICKNAME] = userinfo.nickname
-            prefs[KEY_USER_NAME] = userinfo.userName
+            prefs[KEY_USER_IMG] = userinfo.userImg.toString()
         }
     }
 
@@ -64,12 +68,12 @@ class AuthDataStore @Inject constructor(
         context.authDataStore.edit { prefs ->
             prefs.remove(KEY_ACCESS_TOKEN)
             prefs.remove(KEY_USER_NICKNAME)
-            prefs.remove(KEY_USER_NAME)
+            prefs.remove(KEY_USER_IMG)
         }
     }
 }
 
 data class UserInfo(
-    val userName : String,
-    val nickname: String
+    val nickname: String,
+    val userImg: Uri?
 )
