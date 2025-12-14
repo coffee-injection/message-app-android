@@ -1,16 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="main_navy">#050F33</color>
-    <color name="ivory">#F3F3F3</color>
-    <color name="transparent">#00ff0000</color>
 
-    <!--  text  -->
-    <color name="text_grey">#F1F1F1</color>
-    <color name="text_deep_grey">#828282</color>
-    <color name="text_hint_grey">#E0E0E0</color>
-    <color name="text_hint_red">#FF2B2B</color>
+    <!-- Base -->
+    <color name="color_black">#FF000000</color>
+    <color name="color_white">#FFFFFFFF</color>
+    <color name="color_navy_primary">#050F33</color>
+    <color name="color_ivory">#F3F3F3</color>
+    <color name="color_transparent">#00000000</color>
 
+    <!-- Text -->
+    <color name="text_primary">#101828</color>
+    <color name="text_secondary">#364153</color>
+    <color name="text_tertiary">#6A7282</color>
+    <color name="text_quaternary">#99A1AF</color>
+    <color name="text_disabled">#DCE3ED</color>
+    <color name="text_hint">#E0E0E0</color>
+    <color name="text_inverse">#F1F1F1</color>
+
+    <!-- Status Text -->
+    <color name="text_error">#FF2B2B</color>
+
+    <!-- Status Colors -->
+    <color name="error_primary">#E7000B</color>
+    <color name="error_secondary">#FB2C36</color>
+    <color name="error_dark">#BC2B32</color>
+
+    <!-- Background -->
+    <color name="bg_primary">#EFF6FF</color>
+    <color name="bg_secondary">#ECFEFF</color>
+    <color name="bg_info">#DBEAFE</color>
+    <color name="bg_success">#DCFCE7</color>
+    <color name="bg_neutral">#F5F1E8</color>
+    <color name="bg_highlight">#FEE500</color>
+
+    <!-- Button Background -->
+    <color name="btn_primary">#2B7FFF</color>
+    <color name="btn_secondary">#00B8DB</color>
+    <color name="btn_warning">#FBBF24</color>
+    <color name="btn_success">#34D399</color>
+    <color name="btn_info">#60A5FA</color>
+    <color name="btn_accent">#A78BFA</color>
+    <color name="btn_light_yellow">#FEF9C2</color>
+    <color name="btn_light_green">#DCFCE7</color>
+    <color name="btn_light_purple">#F3E8FF</color>
+    <color name="btn_light_blue">#DBEAFE</color>
+
+    <!-- Blue Scale -->
+    <color name="blue_400">#3B82F6</color>
+    <color name="blue_500">#2B7FFF</color>
+    <color name="blue_700">#193CB8</color>
+    <color name="blue_600">#155DFC</color>
+    <color name="blue_800">#1447E6</color>
+
+    <!-- Stroke / Divider -->
+    <color name="stroke_light">#E5E7EB</color>
+    <color name="stroke_dark">#4A5565</color>
 
 </resources>

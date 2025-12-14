@@ -39,24 +39,24 @@ class GradientTextButton @JvmOverloads constructor(
 
         // XML에 android:background가 없으면 기본 배경 적용
         if (!hasAndroidAttribute(attrs, android.R.attr.background)) {
-            setBackgroundResource(R.drawable.btn_gradient_navy)
+            setBackgroundResource(R.drawable.btn_white_round)
         }
 
         // 텍스트 정렬
         if (!hasAndroidAttribute(attrs, android.R.attr.gravity)) {
-            gravity = Gravity.START or Gravity.CENTER_VERTICAL
+            gravity = Gravity.START
         }
 
-        // 1) 아이콘 커스텀 속성 우선
-        context.obtainStyledAttributes(attrs, R.styleable.GradientTextButton, defStyleAttr, 0).apply {
-            iconStart = getDrawable(R.styleable.GradientTextButton_ciIcon) //
-            iconTint = getColorStateList(R.styleable.GradientTextButton_ciIconTint) // 아이콘 색
-            iconSizePx = getDimensionPixelSize(R.styleable.GradientTextButton_ciIconSize, 0) // 아이콘 크기
-            iconPaddingPx = getDimensionPixelSize( // 텍스트와 아이콘 간격
-                R.styleable.GradientTextButton_ciIconPadding, iconPaddingPx
-            )
-            recycle()
-        }
+//        // 1) 아이콘 커스텀 속성 우선
+//        context.obtainStyledAttributes(attrs, R.styleable.GradientTextButton, defStyleAttr, 0).apply {
+//            iconStart = getDrawable(R.styleable.GradientTextButton_ciIcon) //
+//            iconTint = getColorStateList(R.styleable.GradientTextButton_ciIconTint) // 아이콘 색
+//            iconSizePx = getDimensionPixelSize(R.styleable.GradientTextButton_ciIconSize, 0) // 아이콘 크기
+//            iconPaddingPx = getDimensionPixelSize( // 텍스트와 아이콘 간격
+//                R.styleable.GradientTextButton_ciIconPadding, iconPaddingPx
+//            )
+//            recycle()
+//        }
 
         // 2) 커스텀 아이콘이 없으면 프레임워크 속성으로 폴백
         if (iconStart == null && attrs != null) {

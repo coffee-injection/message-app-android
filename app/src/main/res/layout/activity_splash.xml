@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_navy"
+    android:background="@drawable/bg_main_gradient"
     tools:context=".presentation.activity.SplashActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="80dp"
         android:text="@string/SAILBOAT"
-        android:textColor="@color/white"
+        android:textColor="@color/color_white"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

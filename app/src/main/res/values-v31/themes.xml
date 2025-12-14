@@ -11,7 +11,7 @@
         <!-- ... 기존 앱 테마 설정 ... -->
         <item name="postSplashScreenTheme">@style/Theme.MessageApp</item>
         <item name="android:windowLightStatusBar">false</item>
-        <item name="android:statusBarColor">@color/main_navy</item>
+        <item name="android:statusBarColor">@color/color_navy_primary</item>
 
     </style>
 </resources>
