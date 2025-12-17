@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- 타이틀 -->
-    <style name="black_title_normal16" parent="TextAppearance.AppCompat.Title">
+    <style name="black_title_normal16" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textSize">@dimen/text_size_16</item>
         <item name="android:textColor">@color/text_black</item>
         <item name="android:textStyle">normal</item>
@@ -28,6 +28,15 @@
         <item name="android:textStyle">normal</item>
     </style>
 
+    <!-- 소 제목 -->
+    <style name="grey_second_title_normal16" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textColor">@color/stroke_dark</item>
+        <item name="android:textStyle">normal</item>
+        <!-- 폰트 쓰면 아래 추가 -->
+        <!-- <item name="fontFamily">@font/pretendard_semibold</item> -->
+    </style>
+
     <style name="grey_body_normal12" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textSize">@dimen/text_size_12</item>
         <item name="android:textColor">@color/text_secondary</item>
@@ -43,6 +52,12 @@
     <style name="tertiary_body_normal12" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textSize">@dimen/text_size_12</item>
         <item name="android:textColor">@color/text_tertiary</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="quaternary_body_normal14" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textColor">@color/text_quaternary</item>
         <item name="android:textStyle">normal</item>
     </style>
 
@@ -76,6 +91,12 @@
         <item name="android:textStyle">normal</item>
     </style>
 
+    <style name="red_body_normal16" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textColor">@color/error_secondary</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
     <!--    카드뷰 white-->
     <style name="cardView_base_white">
         <!-- 배경색 -->
@@ -83,19 +104,12 @@
 
         <!-- 라운드 / 그림자 -->
         <item name="cardCornerRadius">29dp</item>
-<!--        <item name="cardElevation">6dp</item>-->
-<!--        <item name="cardMaxElevation">6dp</item>-->
 
         <!-- 구버전(프리롤리팝)에서 그림자 잘 보이게 -->
         <item name="cardUseCompatPadding">true</item>
 
-<!--        &lt;!&ndash; 내부 마진 공통 &ndash;&gt;-->
-<!--         <item name="android:layout_marginLeft">10dp</item>-->
-<!--         <item name="android:layout_marginRight">10dp</item>-->
-<!--         <item name="android:layout_marginTop">10dp</item>-->
 
     </style>
-
 
     <!-- ui styles.xml -->
     <style name="shape_top_radius">

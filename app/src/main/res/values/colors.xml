@@ -57,4 +57,7 @@
     <color name="stroke_light">#E5E7EB</color>
     <color name="stroke_dark">#4A5565</color>
 
+    <!-- Divider -->
+    <color name="divider_grey">#F3F4F6</color>
+
 </resources>

@@ -37,5 +37,12 @@
     <string name="mypage_login_info_kakao">Kakao로 로그인</string>
     <string name="mypage_edit_profile">프로필 편집</string>
     <string name="mypage_bookmarks">북마크한 메시지</string>
+    <string name="mypage_notification">알림 설정</string>
+    <string name="mypage_privacy">개인정보 처리방침</string>
+    <string name="mypage_terms">이용약관</string>
+    <string name="mypage_settings">설정</string>
+    <string name="mypage_app_version">앱 버전</string>
+    <string name="mypage_new_version">최신 버전입니다</string>
+    <string name="mypage_logout">로그아웃</string>
     <!--    c4f6483907cb9ebb33a7b2c3f6384e2867ae6692-->
 </resources>

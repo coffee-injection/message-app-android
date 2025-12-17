@@ -48,7 +48,7 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
 
             // 현재 앱 버전 표시
             val versionName = BuildConfig.VERSION_NAME
-            tvVersion.text = getString(R.string.mypage_version, versionName)
+            tvVersionNumber.text = getString(R.string.mypage_version, versionName)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -63,29 +63,48 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
     override fun setupListeners() = with(binding) {
         super.setupListeners()
 
-        // 북마크
-        btnBookmark.setOnClickListener {
+        // 프로필 편집
+        layoutChildProfile.setOnClickListener {
             this@MyPageFragment.findNavController().navigate(
                 MyPageFragmentDirections.actionMyPageFragmentToBookmarkFragment()
             )
         }
 
-        // 설정
-        btnSetting.setOnClickListener {
+        // 북마크
+        layoutChildBookmarks.setOnClickListener {
+            this@MyPageFragment.findNavController().navigate(
+                MyPageFragmentDirections.actionMyPageFragmentToBookmarkFragment()
+            )
+        }
+
+        // 알림 설정
+        layoutChildNotification.setOnClickListener {
+            this@MyPageFragment.findNavController().navigate(
+                MyPageFragmentDirections.actionMyPageFragmentToSettingFragment()
+            )
+        }
+        // 개인정보 처리방침
+        layoutChildPrivacy.setOnClickListener {
+            this@MyPageFragment.findNavController().navigate(
+                MyPageFragmentDirections.actionMyPageFragmentToSettingFragment()
+            )
+        }
+        // 이용약관
+        layoutChildTerms.setOnClickListener {
             this@MyPageFragment.findNavController().navigate(
                 MyPageFragmentDirections.actionMyPageFragmentToSettingFragment()
             )
         }
 
         // 로그아웃
-        btnLogout.setOnClickListener {
+        layoutLogout.setOnClickListener {
             Toast.makeText(requireContext(), "정말 로그아웃 하시겠습니까?", Toast.LENGTH_SHORT).show()
         }
 
-        // 프로필 사진
-        btnEditProfile.setOnClickListener {
-            pickPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
+//        // 프로필 사진
+//        btnEditProfile.setOnClickListener {
+//            pickPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+//        }
     }
 
     private fun loadIntoProfile(uri: Uri) = with(binding) {
