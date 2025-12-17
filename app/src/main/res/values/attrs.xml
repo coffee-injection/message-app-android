@@ -25,7 +25,7 @@
         <attr name="ciIconPadding" format="dimension"/>
     </declare-styleable>
 
-<!--    타이틀 바 -->
+    <!--  타이틀 바 -->
     <declare-styleable name="TitleBarView">
         <attr name="titleText" format="string" />
         <attr name="showBack" format="boolean" />

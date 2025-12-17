@@ -7,12 +7,14 @@
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
     android:paddingTop="45dp"
-    android:paddingBottom="8dp">
+    android:background="@color/color_white"
+    android:elevation="3dp"
+    android:paddingBottom="16dp">
 
     <ImageView
         android:id="@+id/btn_back"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:src="@drawable/ic_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,12 +22,12 @@
 
     <TextView
         android:id="@+id/tv_title"
-        style="@style/white_large_bold20"
+        style="@style/black_title_normal16"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:singleLine="true"
-        android:ellipsize="end"
+        android:textColor="@color/text_black"
         android:text="@string/title_mypage"
         app:layout_constraintStart_toEndOf="@id/btn_back"
         app:layout_constraintEnd_toEndOf="parent"

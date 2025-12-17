@@ -34,7 +34,7 @@
         <!-- 읽기 전용-->
         <TextView
             android:id="@+id/tv_content"
-            style="@style/black_medium_normal16"
+            style="@style/black_body_normal14"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
@@ -51,7 +51,7 @@
         <!-- 쓰기 전용 -->
         <EditText
             android:id="@+id/etMessage"
-            style="@style/black_medium_normal16"
+            style="@style/black_body_normal14"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
@@ -70,7 +70,7 @@
         <!-- 글자 수 카운트 -->
         <TextView
             android:id="@+id/tvCharCount"
-            style="@style/grey_medium_normal12"
+            style="@style/grey_body_normal12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -82,7 +82,7 @@
 
         <TextView
             android:id="@+id/tv_sender_name"
-            style="@style/black_medium_normal16"
+            style="@style/black_body_normal14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -92,7 +92,7 @@
 
         <TextView
             android:id="@+id/tv_sender"
-            style="@style/black_medium_normal16"
+            style="@style/black_body_normal14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"

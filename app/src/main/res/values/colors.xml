@@ -10,6 +10,7 @@
 
     <!-- Text -->
     <color name="text_primary">#101828</color>
+    <color name="text_black">#0A0A0A</color>
     <color name="text_secondary">#364153</color>
     <color name="text_tertiary">#6A7282</color>
     <color name="text_quaternary">#99A1AF</color>

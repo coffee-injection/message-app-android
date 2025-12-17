@@ -50,7 +50,7 @@
 
     <TextView
         android:id="@+id/tv_user_name"
-        style="@style/black_small_bold14"
+        style="@style/black_body_normal14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
