@@ -6,21 +6,13 @@
     android:background="@drawable/bg_main_gradient"
     android:clipChildren="false"
     android:clipToPadding="false"
-    tools:context=".presentation.mypage.MyPageFragment">
-
-    <com.coffeeinjection.message.util.TitleBarView
-        android:id="@+id/titleBar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:showBack="true"
-        app:titleText="@string/title_mypage" />
+    tools:context=".presentation.mypage.fragment.MyPageFragment">
 
     <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
+        android:id="@+id/nestedScrollView"
+        android:layout_width="0dp"
         android:layout_height="0dp"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,9 +23,6 @@
             android:id="@+id/layout_parent"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/titleBar">
 
             <androidx.cardview.widget.CardView
@@ -62,8 +51,6 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="32dp"
                         android:background="@drawable/bg_gradient_blue"
-                        android:elevation="0dp"
-                        app:cardCornerRadius="29dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -257,15 +244,14 @@
 
                         <androidx.appcompat.widget.SwitchCompat
                             android:id="@+id/switch_notification"
-                            android:layout_width="56dp"
-                            android:layout_height="30dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginEnd="18dp"
                             android:background="@null"
                             android:thumb="@drawable/selector_thumb"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:switchMinWidth="52dp"
                             app:track="@drawable/selector_switch" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -461,5 +447,14 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <com.coffeeinjection.message.util.TitleBarView
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleText="@string/title_mypage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

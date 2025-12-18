@@ -1,4 +1,4 @@
-package com.coffeeinjection.presentation.mypage
+package com.coffeeinjection.message.presentation.mypage.viewmodel
 
 import androidx.lifecycle.ViewModel
 import javax.inject.Inject

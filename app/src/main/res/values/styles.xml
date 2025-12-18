@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- 타이틀 -->
-    <style name="black_title_normal16" parent="TextAppearance.AppCompat.Body1">
-        <item name="android:textSize">@dimen/text_size_16</item>
+    <style name="black_title_normal18" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/text_size_18</item>
         <item name="android:textColor">@color/text_black</item>
         <item name="android:textStyle">normal</item>
         <!-- 폰트 쓰면 아래 추가 -->
         <!-- <item name="fontFamily">@font/pretendard_semibold</item> -->
+    </style>
+
+    <style name="black_title_normal16" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textColor">@color/text_black</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="black_body_normal14" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textColor">@color/text_black</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="black_body_normal12" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textColor">@color/text_black</item>
+        <item name="android:textStyle">normal</item>
     </style>
 
     <!--  본문  -->
@@ -22,12 +40,6 @@
         <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="black_body_normal12" parent="TextAppearance.AppCompat.Body1">
-        <item name="android:textSize">@dimen/text_size_14</item>
-        <item name="android:textColor">@color/text_black</item>
-        <item name="android:textStyle">normal</item>
-    </style>
-
     <!-- 소 제목 -->
     <style name="grey_second_title_normal16" parent="TextAppearance.AppCompat.Title">
         <item name="android:textSize">@dimen/text_size_16</item>
@@ -35,6 +47,12 @@
         <item name="android:textStyle">normal</item>
         <!-- 폰트 쓰면 아래 추가 -->
         <!-- <item name="fontFamily">@font/pretendard_semibold</item> -->
+    </style>
+
+    <style name="grey_body_normal14" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textStyle">normal</item>
     </style>
 
     <style name="grey_body_normal12" parent="TextAppearance.AppCompat.Body1">
@@ -97,18 +115,28 @@
         <item name="android:textStyle">normal</item>
     </style>
 
-    <!--    카드뷰 white-->
+    <!-- cardView -->
     <style name="cardView_base_white">
         <!-- 배경색 -->
         <item name="cardBackgroundColor">@color/color_white</item>
-
         <!-- 라운드 / 그림자 -->
         <item name="cardCornerRadius">29dp</item>
-
+        <item name="cardElevation">6dp</item>
         <!-- 구버전(프리롤리팝)에서 그림자 잘 보이게 -->
         <item name="cardUseCompatPadding">true</item>
+    </style>
 
+    <style name="cardView_corner_radius">
+        <item name="cardCornerRadius">19dp</item>
+        <item name="cardElevation">1dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardPreventCornerOverlap">false</item>
+    </style>
 
+    <style name="cardView_corner_radius_no_elevation">
+        <item name="cardCornerRadius">19dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardPreventCornerOverlap">false</item>
     </style>
 
     <!-- ui styles.xml -->
@@ -127,5 +155,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
+
+
 
 </resources>

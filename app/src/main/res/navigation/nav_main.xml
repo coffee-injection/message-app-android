@@ -32,7 +32,7 @@
     </fragment>
     <fragment
         android:id="@+id/myPageFragment"
-        android:name="com.coffeeinjection.message.presentation.mypage.MyPageFragment"
+        android:name="com.coffeeinjection.message.presentation.mypage.fragment.MyPageFragment"
         android:label="fragment_mypage"
         tools:layout="@layout/fragment_mypage" >
         <action

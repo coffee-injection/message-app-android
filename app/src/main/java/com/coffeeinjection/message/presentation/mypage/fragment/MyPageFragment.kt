@@ -1,9 +1,8 @@
-package com.coffeeinjection.message.presentation.mypage
+package com.coffeeinjection.message.presentation.mypage.fragment
 
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -16,8 +15,7 @@ import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.FragmentMypageBinding
 import com.coffeeinjection.message.presentation.activity.SharedViewModel
 import com.coffeeinjection.message.presentation.BaseFragment
-import com.coffeeinjection.presentation.mypage.MyPageViewModel
-import kotlinx.coroutines.flow.distinctUntilChanged
+import com.coffeeinjection.message.presentation.mypage.viewmodel.MyPageViewModel
 import kotlinx.coroutines.launch
 
 /**
