@@ -2,6 +2,7 @@ package com.coffeeinjection.presentation.sign_in
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.coffeeinjection.message.data.local.UserInfo
 import com.coffeeinjection.message.domain.repository.AuthRepository
 import com.coffeeinjection.message.presentation.sign_in.model.AuthUiState
 import com.coffeeinjection.message.util.Logger
@@ -75,7 +76,11 @@ class SignInViewModel @Inject constructor(
             .onSuccess { res ->
                 Logger.d("[kakao] completeSignup success")
                 // 서버가 최종 토큰을 내려줌
-                repo.saveAccessToken(res.accessToken)
+                repo.apply {
+                    saveAccessToken(res.accessToken)
+                    saveUserInfo(UserInfo(nickname,null))
+                }
+
                 _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
             }
             .onFailure { e ->

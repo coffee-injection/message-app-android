@@ -1,5 +1,6 @@
 package com.coffeeinjection.message.domain.repository
 
+import com.coffeeinjection.message.data.local.UserInfo
 import com.coffeeinjection.message.data.remote.dto.KakaoLoginUrlResponse
 import com.coffeeinjection.message.data.remote.dto.LoginResponse
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteResponse
@@ -13,4 +14,5 @@ interface AuthRepository {
     suspend fun exchangeCodeToJwt(code: String): LoginResponse
     suspend fun completeSignup(nickname: String): SignupCompleteResponse
     suspend fun saveAccessToken(token: String)
+    suspend fun saveUserInfo(userinfo: UserInfo)
 }
