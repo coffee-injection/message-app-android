@@ -60,4 +60,8 @@
     <!-- Divider -->
     <color name="divider_grey">#F3F4F6</color>
 
+    <!--  indicator  -->
+    <color name="indicator_base_dot">#D1D5DB</color>
+    <color name="indicator_selected_dot">#3B82F6</color>
+
 </resources>

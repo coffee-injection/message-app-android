@@ -5,6 +5,17 @@
     <string name="SAILBOAT">SAILBOAT</string>
     <string name="Tium">Tium</string>
 
+    <!--  Guide  -->
+    <string name="guide_next">다음</string>
+    <string name="guide_start">시작하기</string>
+    <string name="guide_skip">건너뛰기</string>
+    <string name="guide_step1_title">바다 위 누군가로 부터\n편지가 도착했어요</string>
+    <string name="guide_step1_description">떠다니는 유리병 속\n누군가의 이야기가 담겨 있어요</string>
+    <string name="guide_step2_title">마음을 담아\n바다 위로 띄워 보세요</string>
+    <string name="guide_step2_description">알 수 없는 섬으로\n따뜻한 마음을 보내 보세요</string>
+    <string name="guide_step3_title">익명으로 마음을 나누는 공간</string>
+    <string name="guide_step3_description">서로의 프라이버시를 지키며\n진솔한 이야기를 나눌 수 있어요</string>
+
     <!--  SignIn  -->
     <string name="sign_in_hint">email@example.com</string>
     <string name="sign_in_or">또는</string>
