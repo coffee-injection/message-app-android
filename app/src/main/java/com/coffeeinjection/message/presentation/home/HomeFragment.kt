@@ -1,11 +1,15 @@
 package com.coffeeinjection.message.presentation.home
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -17,6 +21,7 @@ import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.FragmentHomeBinding
 import com.coffeeinjection.message.presentation.activity.SharedViewModel
 import com.coffeeinjection.message.presentation.BaseFragment
+import com.coffeeinjection.message.presentation.dialog.PermissionDialogFragment
 import com.coffeeinjection.presentation.home.HomeViewModel
 import com.google.android.material.internal.ViewUtils.dpToPx
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,6 +57,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         )
         // 받은 메세지 불러오기
         homeViewModel.loadReceivedMessages()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                showPermissionDialog()
+            }
+        }
+    }
+
+    private fun showPermissionDialog() {
+        val tag = "PermissionDialog"
+        if (parentFragmentManager.findFragmentByTag(tag) != null) return
+        PermissionDialogFragment().show(parentFragmentManager, tag)
     }
 
     override fun setupListeners() = with(binding) {
