@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.cardview.widget.CardView
+import androidx.core.view.isVisible
 import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.FragmentUserInfoBinding
 import com.coffeeinjection.message.presentation.BaseFragment
@@ -82,9 +83,16 @@ class UserInfoFragment : BaseFragment<FragmentUserInfoBinding>(FragmentUserInfoB
             }
         }
 
-        // 3) et_island_name 입력 -> tv_preview_island_name 즉시 반영
-        etIslandName.doAfterTextChanged {
-            tvPreviewIslandName.text = it?.toString().orEmpty()
+        // 2) 섬 이름 입력 -> 미리보기 텍스트 반영 + visible/gone 갱신
+        etIslandName.doAfterTextChanged { editable ->
+            tvPreviewIslandName.text = editable?.toString().orEmpty()
+            updatePreviewVisibility()
+        }
+
+        // 3) 유저 이름 입력 -> 미리보기 텍스트 반영 + visible/gone 갱신
+        evUserName.doAfterTextChanged { editable ->
+            tvPreviewUserName.text = editable?.toString().orEmpty()
+            updatePreviewVisibility()
         }
 
         // 5) ev_user_name 입력 -> tv_preview_user_name 즉시 반영
@@ -100,6 +108,17 @@ class UserInfoFragment : BaseFragment<FragmentUserInfoBinding>(FragmentUserInfoB
         // btnEditProfile.setOnClickListener {
         //     pickPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         // }
+    }
+
+    /**
+     * Priview 숨김처리
+     */
+    private fun updatePreviewVisibility() = with(binding) {
+        val hasIsland = etIslandName.text?.toString()?.trim().orEmpty().isNotEmpty()
+        val hasUser = evUserName.text?.toString()?.trim().orEmpty().isNotEmpty()
+
+        // preview만 숨김/표시
+        layoutPreview.isVisible = hasIsland && hasUser
     }
 
     /**
