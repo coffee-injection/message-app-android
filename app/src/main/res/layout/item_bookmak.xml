@@ -26,7 +26,6 @@
             app:cardBackgroundColor="@color/color_white"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
-            app:maxCardElevation="0dp"
             android:layout_marginLeft="3dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
