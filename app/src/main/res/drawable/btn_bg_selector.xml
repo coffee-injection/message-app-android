@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- 클릭후(눌림) -->
+    <!-- 선택됨(유지되는 상태) -->
+    <item android:state_selected="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/bg_primary"/>
+            <stroke
+                android:width="2dp"
+                android:color="@color/btn_primary"/>
+            <corners android:radius="16dp"/>
+        </shape>
+    </item>
+
+    <!-- 선택됨(유지되는 상태) -->
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <solid android:color="@color/bg_primary"/>
@@ -12,7 +23,7 @@
         </shape>
     </item>
 
-    <!-- 클릭전(기본) -->
+    <!-- 기본 -->
     <item>
         <shape android:shape="rectangle">
             <solid android:color="@color/color_white"/>

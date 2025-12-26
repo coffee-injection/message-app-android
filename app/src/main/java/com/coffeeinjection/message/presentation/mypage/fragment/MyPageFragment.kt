@@ -64,7 +64,7 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
         // 프로필 편집
         layoutChildProfile.setOnClickListener {
             this@MyPageFragment.findNavController().navigate(
-                MyPageFragmentDirections.actionMyPageFragmentToBookmarkFragment()
+                MyPageFragmentDirections.actionMyPageFragmentToUserInfoFragment()
             )
         }
 

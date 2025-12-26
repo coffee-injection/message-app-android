@@ -41,6 +41,9 @@
         <action
             android:id="@+id/action_myPageFragment_to_bookmarkFragment"
             app:destination="@id/bookmarkFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_userInfoFragment"
+            app:destination="@id/userInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
@@ -75,4 +78,9 @@
             android:name="receiverNickname"
             app:argType="string" />
     </dialog>
+    <fragment
+        android:id="@+id/userInfoFragment"
+        android:name="com.coffeeinjection.message.presentation.mypage.fragment.UserInfoFragment"
+        android:label="UserInfoFragment"
+        tools:layout="@layout/fragment_user_info" />
 </navigation>
