@@ -12,6 +12,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -89,13 +90,13 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
                 return false
             }
         }
-
+        btnKakao.setCenterIconWithText(true)
         btnConfirm.isEnabled = false
     }
 
     override fun setupListeners() = with(binding) {
         super.setupListeners()
-        btnA.setOnClickListener {
+        btnGoogle.setOnClickListener {
             this@SignInFragment.findNavController().navigate(
                 SignInFragmentDirections.actionSignInFragmentToHomeFragment()
             )

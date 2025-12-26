@@ -28,6 +28,10 @@ class GradientTextButton @JvmOverloads constructor(
     private var iconSizePx: Int = 0
     private var iconPaddingPx: Int = dp(8f)
 
+    private var basePaddingStartPx: Int = 0
+    private var basePaddingEndPx: Int = 0
+    private var centerIconWithText: Boolean = false
+
     init {
         isAllCaps = false
         gravity = Gravity.CENTER
@@ -44,33 +48,10 @@ class GradientTextButton @JvmOverloads constructor(
 
         // 텍스트 정렬
         if (!hasAndroidAttribute(attrs, android.R.attr.gravity)) {
-            gravity = Gravity.START
+            gravity = Gravity.CENTER
         }
 
         compoundDrawablePadding = iconPaddingPx
-        applyIcon()
-    }
-
-    // 아이콘 추가
-    private fun applyIcon() {
-        val isIcon = iconStart?.mutate()
-        if (isIcon != null) {
-            // 틴트 적용
-            iconTint?.let { DrawableCompat.setTintList(isIcon, it) }
-
-            // 크기 지정(있으면 bounds로, 없으면 intrinsic 사용)
-            if (iconSizePx > 0) {
-                isIcon.setBounds(0, 0, iconSizePx, iconSizePx)
-                // bounds를 수동 지정한 경우 setCompoundDrawables(Relative) 사용
-                setCompoundDrawablesRelative(isIcon, null, null, null)
-            } else {
-                // intrinsic 크기 사용
-                setCompoundDrawablesRelativeWithIntrinsicBounds(isIcon, null, null, null)
-            }
-        } else {
-            // 아이콘 제거
-            setCompoundDrawablesRelative(null, null, null, null)
-        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -101,5 +82,45 @@ class GradientTextButton @JvmOverloads constructor(
         } finally {
             a.recycle()
         }
+    }
+
+    override fun onFinishInflate() {
+        super.onFinishInflate()
+        basePaddingStartPx = paddingStart
+        basePaddingEndPx = paddingEnd
+    }
+
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+        if (centerIconWithText) updateCompoundCentering()
+    }
+
+    private fun updateCompoundCentering() {
+        val d = compoundDrawablesRelative[0] ?: run {
+            // 아이콘 없으면 원래 패딩 복구
+            if (paddingStart != basePaddingStartPx || paddingEnd != basePaddingEndPx) {
+                setPaddingRelative(basePaddingStartPx, paddingTop, basePaddingEndPx, paddingBottom)
+            }
+            return
+        }
+
+        val iconW = if (d.bounds.width() > 0) d.bounds.width() else d.intrinsicWidth
+        val textW = paint.measureText(text?.toString().orEmpty()).toInt()
+        val bodyW = iconW + compoundDrawablePadding + textW
+
+        val available = width - basePaddingStartPx - basePaddingEndPx
+        val extra = ((available - bodyW) / 2).coerceAtLeast(0)
+
+        val newStart = basePaddingStartPx + extra
+        val newEnd = basePaddingEndPx + extra
+
+        if (paddingStart != newStart || paddingEnd != newEnd) {
+            setPaddingRelative(newStart, paddingTop, newEnd, paddingBottom)
+        }
+    }
+
+    fun setCenterIconWithText(enable: Boolean) {
+        centerIconWithText = enable
+        requestLayout()
     }
 }
