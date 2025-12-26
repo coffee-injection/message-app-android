@@ -4,6 +4,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -31,8 +33,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     private val SEA_TOP_RATIO = 0.45f
     private val SEA_BOTTOM_RATIO = 1.0f
+    private var backPressedTime: Long = 0L
+    private val backCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (System.currentTimeMillis() - backPressedTime <= 2000) {
+                requireActivity().finish()
+            } else {
+                backPressedTime = System.currentTimeMillis()
+                Toast.makeText(requireContext(), "한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     override fun setupViews(savedInstanceState: Bundle?) {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner, // viewLifecycleOwner로 걸면 onDestroyView 때 자동 해제
+            backCallback
+        )
         // 받은 메세지 불러오기
         homeViewModel.loadReceivedMessages()
     }
