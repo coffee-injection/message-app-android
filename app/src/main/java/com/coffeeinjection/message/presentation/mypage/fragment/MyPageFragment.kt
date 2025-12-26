@@ -41,6 +41,8 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
     override fun setupViews(savedInstanceState: Bundle?) {
 
         binding.apply {
+            // TitleBar
+            titleBar.setupDefault(getString(R.string.title_mypage))
             // 현재 앱 버전 표시
             val versionName = BuildConfig.VERSION_NAME
             tvVersionNumber.text = getString(R.string.mypage_version, versionName)
