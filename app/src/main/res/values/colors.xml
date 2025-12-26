@@ -47,6 +47,7 @@
     <color name="btn_light_blue">#DBEAFE</color>
 
     <!-- Blue Scale -->
+    <color name="blue_300">#7BB8FF</color>
     <color name="blue_400">#3B82F6</color>
     <color name="blue_500">#2B7FFF</color>
     <color name="blue_700">#193CB8</color>

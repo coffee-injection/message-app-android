@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 선택됨 -->
+    <item android:state_selected="true" android:drawable="@drawable/cv_bg_gradient_blue" />
+
+    <!-- 터치중(선택 전이라도 잠깐 강조 원하면 유지) -->
+    <item android:state_pressed="true" android:drawable="@drawable/cv_bg_gradient_blue" />
+
+    <!-- 기본 -->
+    <item android:drawable="@color/color_white" />
+
+</selector>

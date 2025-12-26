@@ -37,7 +37,7 @@
 
     <!--Title-->
     <string name="title_mypage">마이페이지</string>
-    <string name="title_user_information">프로필 편집</string>
+    <string name="title_user_information">프로필 설정</string>
     <string name="title_bookmarks">BookMarks</string>
     <string name="title_settings">Settings</string>
     <string name="title_home">My Page</string>
@@ -63,5 +63,19 @@
     <string name="user_info_profile_emoji">프로필 이모지</string>
     <string name="user_info_title">섬 설정</string>
     <string name="user_info_sub">당신의 섬을 만들어주세요</string>
+    <string name="user_island_name">섬 이름</string>
+    <string name="user_island_name_text_hint">예: 제주, 평화로운, 작은...</string>
+    <string name="user_island_division">구분</string>
+    <string name="user_island1">도</string>
+    <string name="user_island2">섬</string>
+    <string name="user_name_text_hint">예: 바다사랑, 파도타기, 섬지기...</string>
+    <string name="user_nickname1">닉네임 :</string>
+    <string name="user_nickname2">닉네임 :</string>
+    <string name="user_profile_preview">프로필 미리보기</string>
+    <string name="user_preview_description_title">섬 이름과 닉네임</string>
+    <string name="user_preview_description_body">섬 이름은 위치 정보로, 닉네임은 메시지에 표시됩니다</string>
+    <string name="user_start">시작하기</string>
+    <string name="user_back">뒤로가기</string>
+
 
 </resources>
