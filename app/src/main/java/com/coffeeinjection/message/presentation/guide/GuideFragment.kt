@@ -2,6 +2,7 @@ package com.coffeeinjection.message.presentation.guide
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -17,8 +18,15 @@ class GuideFragment : BaseFragment<FragmentGuideBinding>(FragmentGuideBinding::i
     private var lastPage = 0
     val viewPagerAdapter by lazy { GuideViewPagerAdapter(this.layoutInflater) }
 
+    private var backPressedTime: Long = 0L
     private val backCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
+            if (System.currentTimeMillis() - backPressedTime <= 2000) {
+                requireActivity().finish()
+            } else {
+                backPressedTime = System.currentTimeMillis()
+                Toast.makeText(requireContext(), "한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -31,6 +39,10 @@ class GuideFragment : BaseFragment<FragmentGuideBinding>(FragmentGuideBinding::i
     }
 
     override fun setupViews(savedInstanceState: Bundle?) = with(binding) {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner, // viewLifecycleOwner로 걸면 onDestroyView 때 자동 해제
+            backCallback
+        )
         viewPager.adapter = viewPagerAdapter
         viewPager.registerOnPageChangeCallback(viewPagerCallback)
         dotsIndicator.attachTo(viewPager)

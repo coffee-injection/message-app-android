@@ -10,8 +10,8 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -33,12 +33,23 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
 
     private val viewModel: SignInViewModel by viewModels()
 
+    private var backPressedTime: Long = 0L
     private val backCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
+            if (System.currentTimeMillis() - backPressedTime <= 2000) {
+                requireActivity().finish()
+            } else {
+                backPressedTime = System.currentTimeMillis()
+                Toast.makeText(requireContext(), "한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
-
     override fun setupViews(savedInstanceState: Bundle?) = with(binding) {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner, // viewLifecycleOwner로 걸면 onDestroyView 때 자동 해제
+            backCallback
+        )
+
         // WebView 기본 설정
         with(webView.settings) {
             javaScriptEnabled = true
