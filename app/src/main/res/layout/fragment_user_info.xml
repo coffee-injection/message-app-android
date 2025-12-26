@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_main_gradient"
+    android:background="@drawable/bg_second_gradient"
     android:clipChildren="false"
     android:clipToPadding="false"
     tools:context=".presentation.mypage.fragment.UserInfoFragment">

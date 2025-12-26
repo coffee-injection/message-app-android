@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_main_gradient"
+    android:background="@drawable/bg_second_gradient"
     tools:context="com.coffeeinjection.message.presentation.setting.SettingFragment">
 
     <com.coffeeinjection.message.util.TitleBarView

@@ -41,12 +41,16 @@
     </style>
 
     <!-- 소 제목 -->
+    <style name="grey_second_title_normal14" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textColor">@color/stroke_dark</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
     <style name="grey_second_title_normal16" parent="TextAppearance.AppCompat.Title">
         <item name="android:textSize">@dimen/text_size_16</item>
         <item name="android:textColor">@color/stroke_dark</item>
         <item name="android:textStyle">normal</item>
-        <!-- 폰트 쓰면 아래 추가 -->
-        <!-- <item name="fontFamily">@font/pretendard_semibold</item> -->
     </style>
 
     <style name="grey_body_normal14" parent="TextAppearance.AppCompat.Body1">

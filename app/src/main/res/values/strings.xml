@@ -82,5 +82,34 @@
     <string name="bookmarks_title">북마크한 메시지가 없습니다</string>
     <string name="bookmarks_body">간직하고 싶은 메시지를 저장해보세요</string>
 
+    <!-- Settings -->
+    <!-- 개인정보 -->
+    <string name="settings_privacy_title1">1. 수집하는 개인정보</string>
+    <string name="settings_privacy_body1">Tium은 서비스 제공을 위해 다음의 최소한의 정보를 수집합니다:\n&#160;&#160;&#160;&#160;• 소셜 로그인 정보 (Google, Kakao, Naver, Apple)\n&#160;&#160;&#160;&#160;• 섬 이름 (사용자가 설정한 닉네임)\n&#160;&#160;&#160;&#160;• 프로필 이모지\n&#160;&#160;&#160;&#160;• 메시지 내용</string>
+    <string name="settings_privacy_title2">2. 개인정보의 이용 목적</string>
+    <string name="settings_privacy_body2">&#160;&#160;&#160;&#160;• 서비스 제공 및 운영\n&#160;&#160;&#160;&#160;• 메시지 전송 및 수신 기능 제공\n&#160;&#160;&#160;&#160;• 사용자 식별 및 인증\n&#160;&#160;&#160;&#160;• 공지사항 전달 및 푸시 알림 발송</string>
+    <string name="settings_privacy_title3">3. 개인정보의 보관 및 파기</string>
+    <string name="settings_privacy_body3">수집된 개인정보는 서비스 이용 기간 동안 보관되며, 회원 탈퇴 시 즉시 파기됩니다. 단, 관련 법령에 따라 보관이 필요한 경우 해당 기간 동안 보관합니다.</string>
+    <string name="settings_privacy_title4">4. 개인정보의 제3자 제공</string>
+    <string name="settings_privacy_body4">Tium은 사용자의 개인정보를 제3자에게 제공하지 않습니다. 단, 법령에 의해 요구되는 경우는 예외로 합니다.</string>
+    <string name="settings_privacy_title5">5. 사용자의 권리</string>
+    <string name="settings_privacy_body5">사용자는 언제든지 다음의 권리를 행사할 수 있습니다:\n&#160;&#160;&#160;&#160;• 개인정보 열람 요구\n&#160;&#160;&#160;&#160;• 개인정보 정정 및 삭제 요구\n&#160;&#160;&#160;&#160;• 개인정보 처리 정지 요구\n&#160;&#160;&#160;&#160;• 회원 탈퇴</string>
+
+    <!-- 이용약관 -->
+    <string name="settings_terms_title1">제1조 (목적)</string>
+    <string name="settings_terms_body1">본 약관은 Tium(이하 "서비스")이 제공하는 메시지 교환 서비스의 이용과 관련하여 회사와 회원 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.</string>
+    <string name="settings_terms_title2">제2조 (서비스의 내용)</string>
+    <string name="settings_terms_body2">서비스는 다음과 같은 기능을 제공합니다:\n&#160;&#160;&#160;&#160;• 익명 메시지 보틀 작성 및 전송\n&#160;&#160;&#160;&#160;• 다른 사용자가 보낸 메시지 수신 및 열람\n&#160;&#160;&#160;&#160;• 메시지 북마크 및 관리\n&#160;&#160;&#160;&#160;• 프로필 설정 및 관리</string>
+    <string name="settings_terms_title3">제3조 (회원의 의무)</string>
+    <string name="settings_terms_body3">회원은 다음 행위를 하여서는 안 됩니다:\n&#160;&#160;&#160;&#160;• 타인의 정보 도용 또는 허위 정보 입력\n&#160;&#160;&#160;&#160;• 욕설, 비방, 음란물 등 부적절한 콘텐츠 게시\n&#160;&#160;&#160;&#160;• 스팸, 광고성 메시지 무분별한 전송\n&#160;&#160;&#160;&#160;• 서비스 운영 방해 행위\n&#160;&#160;&#160;&#160;• 타인의 권리나 명예를 침해하는 행위</string>
+    <string name="settings_terms_title4">제4조 (서비스 이용 제한)</string>
+    <string name="settings_terms_body4">회사는 회원이 본 약관을 위반하거나 서비스의 정상적인 운영을 방해한 경우, 사전 통지 없이 서비스 이용을 제한하거나 계정을 정지 또는 삭제할 수 있습니다.</string>
+    <string name="settings_terms_title5">제5조 (면책 조항)</string>
+    <string name="settings_terms_body5">회사는 천재지변, 불가항력적 사유, 기타 회사의 귀책사유가 없는 경우 발생한 서비스 중단에 대해 책임을 지지 않습니다. 또한 회원이 게시한 정보, 자료의 신뢰도 및 정확성에 대해서는 책임을 지지 않습니다.</string>
+    <string name="settings_terms_title6">제6조 (저작권)</string>
+    <string name="settings_terms_body6">서비스 내 모든 콘텐츠에 대한 저작권은 회원 또는 회사에 귀속되며, 무단 사용 시 법적 조치를 받을 수 있습니다.</string>
+
+    <string name="settings_date">시행일: 2025년 1월 1일\n최종 수정일: 2025년 1월 1일</string>
+
 
 </resources>
