@@ -101,6 +101,18 @@
         <item name="android:textStyle">normal</item>
     </style>
 
+    <style name="divider_grey200_normal14" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textColor">@color/divider_grey200</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="divider_grey200_normal12" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/text_size_12</item>
+        <item name="android:textColor">@color/divider_grey200</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
     <style name="white_body_normal20" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textSize">@dimen/text_size_20</item>
         <item name="android:textColor">@color/color_white</item>
