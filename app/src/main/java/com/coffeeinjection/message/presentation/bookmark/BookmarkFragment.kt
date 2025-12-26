@@ -14,8 +14,6 @@ class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>(FragmentBookmarkB
     override fun setupViews(savedInstanceState: Bundle?) {
 
             binding.apply {
-                // TitleBar
-                titleBar.setupDefault(getString(R.string.title_bookmarks))
             }
     }
 

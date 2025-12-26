@@ -54,8 +54,6 @@ class UserInfoFragment : BaseFragment<FragmentUserInfoBinding>(FragmentUserInfoB
 
     override fun setupViews(savedInstanceState: Bundle?) {
         binding.apply {
-            // TitleBar
-            titleBar.setupDefault(getString(R.string.title_user_information))
         }
 
         // 초기 상태 세팅(디폴트 선택)

@@ -41,9 +41,6 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
     override fun setupViews(savedInstanceState: Bundle?) {
 
         binding.apply {
-            // TitleBar
-            titleBar.setupDefault(getString(R.string.title_mypage))
-
             // 현재 앱 버전 표시
             val versionName = BuildConfig.VERSION_NAME
             tvVersionNumber.text = getString(R.string.mypage_version, versionName)
@@ -77,20 +74,20 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
 
         // 알림 설정
         layoutChildNotification.setOnClickListener {
-            this@MyPageFragment.findNavController().navigate(
-                MyPageFragmentDirections.actionMyPageFragmentToSettingFragment()
-            )
+            // 토글 상태 반영해 api 요청해야함
         }
+
         // 개인정보 처리방침
         layoutChildPrivacy.setOnClickListener {
             this@MyPageFragment.findNavController().navigate(
-                MyPageFragmentDirections.actionMyPageFragmentToSettingFragment()
+                MyPageFragmentDirections.actionMyPageFragmentToSettingFragment(docType = "PRIVACY")
             )
         }
+
         // 이용약관
         layoutChildTerms.setOnClickListener {
             this@MyPageFragment.findNavController().navigate(
-                MyPageFragmentDirections.actionMyPageFragmentToSettingFragment()
+                MyPageFragmentDirections.actionMyPageFragmentToSettingFragment(docType = "TERMS")
             )
         }
 

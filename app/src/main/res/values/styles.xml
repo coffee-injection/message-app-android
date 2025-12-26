@@ -61,6 +61,12 @@
         <item name="android:textStyle">normal</item>
     </style>
 
+    <style name="tertiary_body_normal16" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textColor">@color/text_tertiary</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
     <style name="tertiary_body_normal14" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textSize">@dimen/text_size_14</item>
         <item name="android:textColor">@color/text_tertiary</item>

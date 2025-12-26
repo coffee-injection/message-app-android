@@ -27,8 +27,9 @@
     <!--Title-->
     <string name="title_mypage">마이페이지</string>
     <string name="title_user_information">프로필 설정</string>
-    <string name="title_bookmarks">BookMarks</string>
-    <string name="title_settings">Settings</string>
+    <string name="title_bookmarks">북마크</string>
+    <string name="title_privacy_policy">개인정보 처리방침</string>
+    <string name="title_terms">이용약관</string>
     <string name="title_home">My Page</string>
 
     <!-- MyPage -->
@@ -65,6 +66,10 @@
     <string name="user_preview_description_body">섬 이름은 위치 정보로, 닉네임은 메시지에 표시됩니다</string>
     <string name="user_start">시작하기</string>
     <string name="user_back">뒤로가기</string>
+
+    <!-- Bookmarks -->
+    <string name="bookmarks_title">북마크한 메시지가 없습니다</string>
+    <string name="bookmarks_body">간직하고 싶은 메시지를 저장해보세요</string>
 
 
 </resources>

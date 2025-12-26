@@ -10,7 +10,7 @@
         android:id="@+id/signInFragment"
         android:name="com.coffeeinjection.presentation.sign_in.SignInFragment"
         android:label="fragment_sign_in"
-        tools:layout="@layout/fragment_sign_in" >
+        tools:layout="@layout/fragment_sign_in">
         <action
             android:id="@+id/action_signInFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
@@ -22,7 +22,7 @@
         android:id="@+id/homeFragment"
         android:name="com.coffeeinjection.message.presentation.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_myPageFragment"
             app:destination="@id/myPageFragment" />
@@ -34,7 +34,7 @@
         android:id="@+id/myPageFragment"
         android:name="com.coffeeinjection.message.presentation.mypage.fragment.MyPageFragment"
         android:label="fragment_mypage"
-        tools:layout="@layout/fragment_mypage" >
+        tools:layout="@layout/fragment_mypage">
         <action
             android:id="@+id/action_myPageFragment_to_settingFragment"
             app:destination="@id/settingFragment" />
@@ -48,7 +48,12 @@
     <fragment
         android:id="@+id/settingFragment"
         android:name="com.coffeeinjection.message.presentation.setting.SettingFragment"
-        android:label="SettingFragment" />
+        android:label="SettingFragment">
+        <argument
+            android:name="docType"
+            android:defaultValue="TERMS"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/bookmarkFragment"
         android:name="com.coffeeinjection.message.presentation.bookmark.BookmarkFragment"
@@ -56,7 +61,7 @@
     <dialog
         android:id="@+id/messageDialogFragment"
         android:name="com.coffeeinjection.message.presentation.message.MessageDialogFragment"
-        android:label="messageDialogFragment" >
+        android:label="messageDialogFragment">
         <argument
             android:name="letterId"
             app:argType="long" />
@@ -71,8 +76,8 @@
 
         <argument
             android:name="readOnly"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:defaultValue="false"
+            app:argType="boolean" />
 
         <argument
             android:name="receiverNickname"

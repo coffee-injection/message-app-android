@@ -4,34 +4,82 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_main_gradient"
-    tools:context="com.coffeeinjection.message.presentation.bookmark.BookmarkFragment">
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    tools:context=".presentation.mypage.fragment.UserInfoFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingBottom="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleBar">
+
+        <!-- 스크롤될 실제 컨텐츠 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/text_size_16">
+
+            <LinearLayout
+                android:id="@+id/layout_empty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="50dp"
+                    android:src="@drawable/ic_bookmark_img" />
+
+                <TextView
+                    android:id="@+id/tv_empty_title"
+                    style="@style/tertiary_body_normal16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/bookmarks_title"
+                    app:layout_constraintStart_toStartOf="@+id/btn_island1"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_island1" />
+
+                <TextView
+                    android:id="@+id/tv_empty_body"
+                    style="@style/quaternary_body_normal14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/bookmarks_body"
+                    app:layout_constraintStart_toStartOf="@+id/btn_island1"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_island1" />
+            </LinearLayout>
+
+
+            <ListView
+                android:id="@+id/list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <com.coffeeinjection.message.util.TitleBarView
         android:id="@+id/titleBar"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:showBack="true"
         app:titleText="@string/title_bookmarks" />
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        app:cardBackgroundColor="@color/color_white"
-        app:cardUseCompatPadding="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleBar"
-        app:shapeAppearanceOverlay="@style/shape_top_radius">
-
-        <ListView
-            android:id="@+id/lv_settings"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-    </androidx.cardview.widget.CardView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
