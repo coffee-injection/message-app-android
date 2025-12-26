@@ -9,21 +9,22 @@
     tools:context=".presentation.activity.SplashActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:src="@drawable/logo_transparent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/ic_logo_shadow"
+        app:layout_constraintBottom_toTopOf="@id/tv_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="80dp"
-        android:text="@string/SAILBOAT"
-        android:textColor="@color/color_white"
-        android:textSize="24sp"
+        android:text="@string/Tium"
+        android:textColor="@color/color_black"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

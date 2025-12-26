@@ -3,6 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <!--  Splash  -->
     <string name="SAILBOAT">SAILBOAT</string>
+    <string name="Tium">Tium</string>
 
     <!--  SignIn  -->
     <string name="sign_in_hint">email@example.com</string>
