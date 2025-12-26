@@ -6,72 +6,54 @@
     android:background="@drawable/bg_second_gradient"
     android:clipChildren="false"
     android:clipToPadding="false"
-    tools:context=".presentation.mypage.fragment.UserInfoFragment">
+    tools:context=".presentation.bookmark.BookmarkFragment">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:fillViewport="true"
-        android:paddingBottom="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <LinearLayout
+        android:id="@+id/layout_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleBar">
 
-        <!-- 스크롤될 실제 컨텐츠 -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_parent"
-            android:layout_width="match_parent"
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/ic_bookmark_img" />
+
+        <TextView
+            android:id="@+id/tv_empty_title"
+            style="@style/tertiary_body_normal16"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/text_size_16">
+            android:layout_marginTop="16dp"
+            android:text="@string/bookmarks_title"
+            app:layout_constraintStart_toStartOf="@+id/btn_island1"
+            app:layout_constraintTop_toBottomOf="@+id/btn_island1" />
 
-            <LinearLayout
-                android:id="@+id/layout_empty"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/tv_empty_body"
+            style="@style/quaternary_body_normal14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/bookmarks_body"
+            app:layout_constraintStart_toStartOf="@+id/btn_island1"
+            app:layout_constraintTop_toBottomOf="@+id/btn_island1" />
+    </LinearLayout>
 
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="50dp"
-                    android:src="@drawable/ic_bookmark_img" />
-
-                <TextView
-                    android:id="@+id/tv_empty_title"
-                    style="@style/tertiary_body_normal16"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/bookmarks_title"
-                    app:layout_constraintStart_toStartOf="@+id/btn_island1"
-                    app:layout_constraintTop_toBottomOf="@+id/btn_island1" />
-
-                <TextView
-                    android:id="@+id/tv_empty_body"
-                    style="@style/quaternary_body_normal14"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/bookmarks_body"
-                    app:layout_constraintStart_toStartOf="@+id/btn_island1"
-                    app:layout_constraintTop_toBottomOf="@+id/btn_island1" />
-            </LinearLayout>
-
-
-            <ListView
-                android:id="@+id/list_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="50dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/titleBar"
+        tools:listitem="@layout/item_bookmak" />
 
     <com.coffeeinjection.message.util.TitleBarView
         android:id="@+id/titleBar"

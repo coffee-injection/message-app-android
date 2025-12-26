@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:layout_marginLeft="@dimen/text_size_12"
+    android:layout_marginRight="@dimen/text_size_12"
+    android:focusable="true"
+    style="@style/cardView_base_white"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/btn_green">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/view_accent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/color_white"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:maxCardElevation="0dp"
+            android:layout_marginLeft="3dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="0dp"
+                android:minHeight="88dp"
+                android:padding="14dp">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_icon"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_marginStart="3dp"
+                    app:cardBackgroundColor="@color/btn_green"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/iv_icon"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="10dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_message" />
+                </androidx.cardview.widget.CardView>
+
+                <!-- 왼쪽 작은 점 -->
+                <View
+                    android:id="@+id/view_dot"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:background="@drawable/ic_dot_circle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- 우측 상단: 시간 -->
+                <TextView
+                    android:id="@+id/tv_time"
+                    style="@style/quaternary_body_normal12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:includeFontPadding="false"
+                    android:text="5시간 전"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_bookmark"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_bookmark"
+                    app:layout_constraintTop_toTopOf="@+id/iv_bookmark" />
+
+                <!-- 우측 상단: 북마크 -->
+                <ImageView
+                    android:id="@+id/iv_bookmark"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_bookmark_select"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- 제목 -->
+                <TextView
+                    android:id="@+id/tv_title"
+                    style="@style/primary_body_normal16"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:ellipsize="end"
+                    android:includeFontPadding="false"
+                    android:maxLines="1"
+                    android:text="파도소리"
+                    app:layout_constraintEnd_toStartOf="@id/tv_time"
+                    app:layout_constraintStart_toEndOf="@id/card_icon"
+                    app:layout_constraintTop_toTopOf="@id/card_icon" />
+
+                <!-- 지역(서브 타이틀) -->
+                <TextView
+                    android:id="@+id/tv_subtitle"
+                    style="@style/tertiary_body_normal14"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="8dp"
+                    android:ellipsize="end"
+                    android:includeFontPadding="false"
+                    android:maxLines="1"
+                    android:text="강원도"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/card_icon"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+                <!-- 내용 프리뷰 -->
+                <TextView
+                    android:id="@+id/tv_preview"
+                    style="@style/grey_body_normal16"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="8dp"
+                    android:ellipsize="end"
+                    android:includeFontPadding="false"
+                    android:maxLines="2"
+                    android:text="바다를 바라보며 커피를 마시고 있어요. 이 평화로운 순간을 누군가 testsestsetset"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_subtitle"
+                    app:layout_constraintStart_toEndOf="@id/card_icon"
+                    app:layout_constraintTop_toBottomOf="@id/tv_subtitle" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
