@@ -45,6 +45,9 @@
     <string name="dialog_fragment_message_sender">From.</string>
     <string name="dialog_fragment_message_island_name">섬이름</string>
     <string name="dialog_fragment_message_send">보내기</string>
+    <string name="dialog_fragment_message_reply">답장하기</string>
+    <string name="dialog_fragment_message_save">북마크</string>
+    <string name="dialog_fragment_message_report">신고하기</string>
     <string name="dialog_fragment_message_title">바다에 띄울 메시지를 작성해 주세요</string>
     <string name="dialog_fragment_message_hint">당신의 이야기를 들려주세요...</string>
     <string name="dialog_fragment_hint">익명으로 전송됩니다</string>

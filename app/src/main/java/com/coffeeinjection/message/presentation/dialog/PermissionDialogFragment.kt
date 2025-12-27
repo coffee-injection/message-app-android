@@ -1,12 +1,9 @@
 package com.coffeeinjection.message.presentation.dialog
 
 import android.Manifest
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -15,15 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
-import com.coffeeinjection.message.databinding.FragmentPermissionDialogBinding
 import androidx.core.graphics.drawable.toDrawable
-import com.coffeeinjection.message.util.Logger
+import androidx.fragment.app.DialogFragment
+import com.coffeeinjection.message.databinding.DialogFragmentPermissionBinding
 
 class PermissionDialogFragment : DialogFragment() {
 
-    private var _binding: FragmentPermissionDialogBinding? = null
+    private var _binding: DialogFragmentPermissionBinding? = null
     val binding get() = _binding!!
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -50,7 +45,7 @@ class PermissionDialogFragment : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentPermissionDialogBinding.inflate(inflater, container, false)
+        _binding = DialogFragmentPermissionBinding.inflate(inflater, container, false)
         return binding.root
     }
 

@@ -55,13 +55,12 @@
     <com.coffeeinjection.message.util.GradientTextButton
         android:id="@+id/btn_next"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:layout_marginHorizontal="40dp"
         android:layout_marginBottom="28dp"
         android:gravity="center"
         android:text="@string/guide_next"
         android:textColor="@color/color_white"
-        android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="40dp" />
 

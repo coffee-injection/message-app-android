@@ -13,14 +13,21 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.coffeeinjection.message.R
-import com.coffeeinjection.message.databinding.DialogFragmentMessageBinding
+import com.coffeeinjection.message.databinding.DialogFragmentMessageReadBinding
+import com.coffeeinjection.message.databinding.DialogFragmentMessageWriteBinding
 import com.coffeeinjection.message.presentation.activity.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * 다이얼로그 메세지 프레그먼트
+ * 메세지 읽기모드 / 쓰기모드 둘다 지원
+ */
 @AndroidEntryPoint
 class MessageDialogFragment : DialogFragment() {
 
@@ -28,51 +35,147 @@ class MessageDialogFragment : DialogFragment() {
         private const val MAX_LENGTH = 500
     }
 
-    private var _binding: DialogFragmentMessageBinding? = null
-    private val binding get() = _binding!!
+    // 읽기/쓰기 모드를 한 Fragment에서 관리하되, layout(binding)은 분리해서 들고 갑니다.
+    // (한 번에 하나만 inflate 되므로 메모리 낭비는 거의 없습니다.)
+    private var _readBinding: DialogFragmentMessageReadBinding? = null
+    private val readBinding get() = _readBinding!!
+
+    private var _writeBinding: DialogFragmentMessageWriteBinding? = null
+    private val writeBinding get() = _writeBinding!!
 
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private val args: MessageDialogFragmentArgs by navArgs()
 
+    /** 현재 모드 */
+    private val mode: Mode
+        get() = if (args.readOnly) Mode.READ else Mode.WRITE
+
+    private enum class Mode { READ, WRITE }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Dialog 스타일 적용
         setStyle(STYLE_NORMAL, R.style.MessageDialogTheme)
     }
 
+    /**
+     * 모드에 따라 다른 레이아웃을 inflate 합니다.
+     * - READ  : dialog_fragment_message_read.xml
+     * - WRITE : dialog_fragment_message_write.xml
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = DialogFragmentMessageBinding.inflate(inflater, container, false)
-        return binding.root
+        return when (mode) {
+            Mode.READ -> {
+                _readBinding = DialogFragmentMessageReadBinding.inflate(inflater, container, false)
+                readBinding.root
+            }
+            Mode.WRITE -> {
+                _writeBinding = DialogFragmentMessageWriteBinding.inflate(inflater, container, false)
+                writeBinding.root
+            }
+        }
     }
 
+    /**
+     * inflate 된 레이아웃에 맞춰 동작(클릭/바인딩)을 설정합니다.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 이 프래그먼트는 "쓰기 전용" (읽기모드는 별도 프래그먼트에서 처리)
-        if (args.readOnly) {
-            dismiss()
-            return
+        when (mode) {
+            Mode.READ -> setupReadMode()
+            Mode.WRITE -> setupWriteMode()
         }
-
-        setupWriteMode()
-
-        binding.ivClose.setOnClickListener { dismiss() }
     }
 
-    private fun setupWriteMode() = with(binding) {
-        // 입력 가능
-        etMessage.visibility = View.VISIBLE
-        tvCharCount.visibility = View.VISIBLE
-        btnSend.visibility = View.VISIBLE
+    // ---------------------------------------------------------------------------------------------
+    // READ MODE (읽기 레이아웃: dialog_fragment_message_read.xml)
+    // ---------------------------------------------------------------------------------------------
+    private fun setupReadMode() = with(readBinding) {
+        // 닫기
+        ivClose.setOnClickListener { dismiss() }
 
-        // 최대 글자수 제한
+        // ----------------------------
+        // 1) 화면 데이터 바인딩
+        // ----------------------------
+        // nav_graph argument 기준으로 들어오는 값들
+        tvNickname.text = args.senderName
+        tvReceivedMsg.text = args.content
+
+        // 현재 nav_graph에 islandName / receivedDate가 없으니 필요하면:
+        // - args에 추가하거나
+        // - letterId로 서버/DB 조회해서 VM에서 가져와 세팅하세요.
+        // tvIslandName.text = ...
+        // tvReceivedDate.text = ...
+
+        // ----------------------------
+        // 2) 저장(북마크)
+        // ----------------------------
+        btnSave.setOnClickListener {
+            // TODO: 실제 북마크 로직으로 교체
+            // 예) sharedViewModel.toggleBookmark(args.letterId)
+            Toast.makeText(requireContext(), "저장했습니다.", Toast.LENGTH_SHORT).show()
+        }
+
+        // ----------------------------
+        // 3) 답장하기
+        // ----------------------------
+        btnReply.setOnClickListener {
+            // 현재 네비게이션 그래프에는 "dialog -> dialog self action"이 없습니다.
+            // 그래서 action 기반 SafeArgs 대신, destinationId + args bundle 방식이 가장 확실합니다.
+
+            // 답장 모드 = write 모드로 같은 messageDialogFragment를 다시 띄움
+            // - receiverNickname: 답장 대상(= 보낸 사람)
+            // - letterId/content/senderName: write 모드에서 필요 없으면 더미 값 전달(필수 args라서)
+            val bundle = MessageDialogFragmentArgs(
+                letterId = 0L,
+                content = "",
+                senderName = "",
+                readOnly = false,
+                receiverNickname = args.senderName
+            ).toBundle()
+
+            // 새 다이얼로그 열기
+            findNavController().navigate(R.id.messageDialogFragment, bundle)
+
+            // 기존 읽기 다이얼로그 닫기(스택에 다이얼로그 2개 쌓이는 것 방지)
+            dismiss()
+        }
+
+        // ----------------------------
+        // 4) 신고하기
+        // ----------------------------
+        btnReport.setOnClickListener {
+            AlertDialog.Builder(requireContext())
+                .setTitle("신고하기")
+                .setMessage("해당 메시지를 신고하시겠습니까?")
+                .setPositiveButton("신고") { _, _ ->
+                    // TODO: 실제 신고 로직으로 교체
+                    // 예) sharedViewModel.reportLetter(args.letterId)
+                    Toast.makeText(requireContext(), "신고가 접수되었습니다.", Toast.LENGTH_SHORT).show()
+                    dismiss()
+                }
+                .setNegativeButton("취소", null)
+                .show()
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // WRITE MODE (쓰기 레이아웃: dialog_fragment_message_write.xml)
+    // ---------------------------------------------------------------------------------------------
+    private fun setupWriteMode() = with(writeBinding) {
+        // 닫기
+        ivClose.setOnClickListener { dismiss() }
+
+        // 최대 글자수 제한 + 카운트 초기화
         etMessage.filters = arrayOf(InputFilter.LengthFilter(MAX_LENGTH))
         tvCharCount.text = "0/$MAX_LENGTH"
 
-        // 글자수 카운트
+        // 글자수 카운트 업데이트
         etMessage.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
@@ -82,6 +185,7 @@ class MessageDialogFragment : DialogFragment() {
             }
         })
 
+        // 전송 버튼
         btnSend.setOnClickListener {
             val message = etMessage.text?.toString()?.trim().orEmpty()
             if (message.isBlank()) {
@@ -89,15 +193,14 @@ class MessageDialogFragment : DialogFragment() {
                 return@setOnClickListener
             }
 
-            val receiverNickname = args.receiverNickname
-            val vm = sharedViewModel
-
+            // 전송 확인
             AlertDialog.Builder(requireContext())
                 .setTitle("메세지 보틀 띄우기")
                 .setMessage("메세지를 바다에 띄우시겠습니까?")
                 .setPositiveButton("전송") { _, _ ->
-                    vm.sendLetter(
-                        receiverNickname = receiverNickname,
+                    // receiverNickname 은 nav args로 전달받음
+                    sharedViewModel.sendLetter(
+                        receiverNickname = args.receiverNickname,
                         content = message
                     )
                     dismiss()
@@ -107,6 +210,9 @@ class MessageDialogFragment : DialogFragment() {
         }
     }
 
+    // ---------------------------------------------------------------------------------------------
+    // Dialog Window 공통 설정 (크기/배경/중앙정렬/딤/키보드)
+    // ---------------------------------------------------------------------------------------------
     override fun onStart() {
         super.onStart()
 
@@ -114,20 +220,28 @@ class MessageDialogFragment : DialogFragment() {
             val metrics = resources.displayMetrics
             val width = (metrics.widthPixels * 0.9f).toInt()
 
+            // 다이얼로그 크기
             window.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
-            window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+            // 투명 배경 + 딤
+            window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             window.attributes = window.attributes.apply {
                 gravity = Gravity.CENTER
                 dimAmount = 0.6f
             }
 
+            // 쓰기모드에서 키보드 올라올 때 레이아웃이 잘 보이도록
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         }
     }
 
+    /**
+     * 모드에 따라 inflate 된 binding만 정리합니다.
+     * (메모리 릭 방지)
+     */
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        _readBinding = null
+        _writeBinding = null
     }
 }
