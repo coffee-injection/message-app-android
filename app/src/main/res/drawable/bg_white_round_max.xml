@@ -5,5 +5,5 @@
     <solid android:color="@color/color_white"/>
 
     <!-- 버튼 둥글기 -->
-    <corners android:radius="16dp" />
+    <corners android:radius="100dp" />
 </shape>

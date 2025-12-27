@@ -1,10 +1,14 @@
 package com.coffeeinjection.message.presentation.home
 
 import android.Manifest
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
@@ -26,6 +30,8 @@ import com.coffeeinjection.presentation.home.HomeViewModel
 import com.google.android.material.internal.ViewUtils.dpToPx
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.time.LocalTime
+import java.util.Calendar
 
 /**
  * 홈 화면
@@ -148,9 +154,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
             messages.forEach { msg ->
                 val iconRes = when (msg.zone) {
-                    SeaZone.SHALLOW -> R.drawable.ic_bottle_sea_shallow
-                    SeaZone.MIDDLE  -> R.drawable.ic_bottle_sea_middle
-                    SeaZone.DEEP    -> R.drawable.ic_bottle_sea_middle
+                    SeaZone.SHALLOW -> R.drawable.ic_bottle
+                    SeaZone.MIDDLE  -> R.drawable.ic_bottle
+                    SeaZone.DEEP    -> R.drawable.ic_bottle
                 }
 
                 val layoutParams = FrameLayout.LayoutParams(iconSize, iconSize)
@@ -210,6 +216,66 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         return (dp * density).toInt()
     }
 
+    fun getDayTimeType(): DayTimeType {
+        val cal = Calendar.getInstance()
+        val minutes = cal.get(Calendar.HOUR_OF_DAY) * 60 + cal.get(Calendar.MINUTE)
+
+        return when (minutes) {
+            in 240..479  -> DayTimeType.DAWN    // 04:00~07:59
+            in 480..659  -> DayTimeType.MORNING // 08:00~10:59
+            in 660..959  -> DayTimeType.DAYTIME // 11:00~15:59
+            in 960..1139 -> DayTimeType.SUNSET  // 16:00~18:59
+            else -> DayTimeType.NIGHT                 // 19:00~03:59
+        }
+    }
+
+    private var floatAnim: ObjectAnimator? = null
+
+    override fun onStart() = with(binding) {
+        super.onStart()
+        when (getDayTimeType()) {
+            DayTimeType.DAWN -> {
+                ivBackground.setImageResource(R.drawable.bg_dawn)
+                ivIsland.setImageResource(R.drawable.ic_island_dawn)
+            }
+            DayTimeType.MORNING -> {
+                ivBackground.setImageResource(R.drawable.bg_daytime)
+                ivIsland.setImageResource(R.drawable.ic_island_daytime)
+            }
+            DayTimeType.DAYTIME -> {
+                ivBackground.setImageResource(R.drawable.bg_daytime)
+                ivIsland.setImageResource(R.drawable.ic_island_daytime)
+            }
+            DayTimeType.SUNSET -> {
+                ivBackground.setImageResource(R.drawable.bg_sunset)
+                ivIsland.setImageResource(R.drawable.ic_island_sunset)
+            }
+            DayTimeType.NIGHT -> {
+                ivBackground.setImageResource(R.drawable.bg_night)
+                ivIsland.setImageResource(R.drawable.ic_island_night)
+            }
+        }
+        floatAnim = layoutIsland.startFloatUpDown(distanceDp = 6f, duration = 1100L)
+    }
+
+    override fun onStop() {
+        floatAnim?.cancel()
+        floatAnim = null
+        binding.layoutIsland.translationY = 0f
+        super.onStop()
+    }
+
+    private fun View.startFloatUpDown(distanceDp: Float = 8f, duration: Long = 1200L): ObjectAnimator {
+        val distancePx = distanceDp * resources.displayMetrics.density
+
+        return ObjectAnimator.ofFloat(this, View.TRANSLATION_Y, 0f, -distancePx).apply {
+            this.duration = duration
+            repeatCount = ValueAnimator.INFINITE
+            repeatMode = ValueAnimator.REVERSE
+            interpolator = AccelerateDecelerateInterpolator()
+            start()
+        }
+    }
 
 
 }
