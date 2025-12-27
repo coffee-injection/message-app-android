@@ -440,6 +440,7 @@
                 android:background="@drawable/et_bg_selector"
                 android:hint="@string/user_island_name_text_hint"
                 android:padding="@dimen/text_size_16"
+                android:maxLength="8"
                 android:textColorHint="@color/text_tertiary"
                 android:textSize="@dimen/text_size_16"
                 app:layout_constraintEnd_toEndOf="@+id/layout_parent_emoji12"
@@ -500,7 +501,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/btn_island1" />
 
             <EditText
-                android:id="@+id/ev_user_name"
+                android:id="@+id/et_user_name"
                 android:layout_width="0dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="8dp"
@@ -508,6 +509,7 @@
                 android:hint="@string/user_name_text_hint"
                 android:padding="@dimen/text_size_16"
                 android:textColorHint="@color/text_tertiary"
+                android:maxLength="12"
                 android:textSize="@dimen/text_size_16"
                 app:layout_constraintEnd_toEndOf="@+id/btn_island2"
                 app:layout_constraintStart_toStartOf="@+id/tv_user_name"
@@ -521,9 +523,9 @@
                 android:layout_marginTop="@dimen/text_size_16"
                 android:background="@drawable/view_bg_gradient_blue"
                 android:padding="@dimen/text_size_16"
-                app:layout_constraintEnd_toEndOf="@+id/ev_user_name"
-                app:layout_constraintStart_toStartOf="@+id/ev_user_name"
-                app:layout_constraintTop_toBottomOf="@+id/ev_user_name">
+                app:layout_constraintEnd_toEndOf="@+id/et_user_name"
+                app:layout_constraintStart_toStartOf="@+id/et_user_name"
+                app:layout_constraintTop_toBottomOf="@+id/et_user_name">
 
                 <TextView
                     android:id="@+id/tv_preview"
@@ -594,7 +596,7 @@
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier_after_preview"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="ev_user_name,layout_preview"
+                app:constraint_referenced_ids="et_user_name,layout_preview"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"/>
 

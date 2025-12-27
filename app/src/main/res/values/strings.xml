@@ -91,6 +91,8 @@
     <string name="user_preview_description_body">섬 이름은 위치 정보로, 닉네임은 메시지에 표시됩니다</string>
     <string name="user_start">시작하기</string>
     <string name="user_back">뒤로가기</string>
+    <string name="user_toast_island_name">섬 이름은 1~8자 사이로 작성 해주세요.</string>
+    <string name="user_toast_nick_name">닉네임은 2~12자 사이로 작성 해주세요.</string>
 
     <!-- Bookmarks -->
     <string name="bookmarks_title">북마크한 메시지가 없습니다</string>

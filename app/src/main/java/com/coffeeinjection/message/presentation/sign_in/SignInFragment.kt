@@ -90,7 +90,6 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
             }
         }
         btnKakao.setCenterIconWithText(true)
-        btnConfirm.isEnabled = false
     }
 
     override fun setupListeners() = with(binding) {
@@ -106,21 +105,21 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
                 viewModel.loadKakaoLoginUrl()
             }
         }
-        etNickname.setOnClickListener {
-            tvDescriptionNickname.visibility = View.GONE
-            etNickname.setBackgroundResource(R.drawable.btn_normal_round_white)
-        }
-        btnConfirm.setOnClickListener {
-            if(etNickname.text?.length in 2..12) {
-                Logger.d("nickname check : ${etNickname.text?.length}")
-                val nickname = etNickname.text?.toString()?.trim().orEmpty()
-                viewModel.completeSignup(nickname)
-            } else{
-                Logger.d("nickname check2 : ${etNickname.text?.length}")
-                tvDescriptionNickname.visibility = View.VISIBLE
-                etNickname.setBackgroundResource(R.drawable.btn_normal_round_white_red_border)
-            }
-        }
+//        etNickname.setOnClickListener {
+//            tvDescriptionNickname.visibility = View.GONE
+//            etNickname.setBackgroundResource(R.drawable.btn_normal_round_white)
+//        }
+//        btnConfirm.setOnClickListener {
+//            if(etNickname.text?.length in 2..12) {
+//                Logger.d("nickname check : ${etNickname.text?.length}")
+//                val nickname = etNickname.text?.toString()?.trim().orEmpty()
+//                viewModel.completeSignup(nickname)
+//            } else{
+//                Logger.d("nickname check2 : ${etNickname.text?.length}")
+//                tvDescriptionNickname.visibility = View.VISIBLE
+//                etNickname.setBackgroundResource(R.drawable.btn_normal_round_white_red_border)
+//            }
+//        }
     }
 
     override fun setupCollectors() {
@@ -139,20 +138,30 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
                         webView.loadUrl(state.loginUrl)
                     }
                     if (state.navigateToNickname) {
-                        viewModel.consumedNavigation()
-                        webView.visibility = View.GONE
-                        //todo NickName View로 전환하기.
-                        toggleAddInfoView(true)
-                    }
-                    if (state.navigateToMain) {
-                        webView.visibility = View.GONE
-                        viewModel.consumedNavigation()
+                        clearWebView()
                         findNavController().navigate(
                             SignInFragmentDirections.actionSignInFragmentToUserInfoFragment()
                         )
                     }
+                    if (state.navigateToMain) {
+                        clearWebView()
+                        findNavController().navigate(
+                            SignInFragmentDirections.actionSignInFragmentToHomeFragment()
+                        )
+                    }
                 }
             }
+        }
+    }
+
+    private fun clearWebView(){
+        viewModel.consumedNavigation()
+        binding.webView.apply {
+            stopLoading()
+            loadUrl("about:blank")
+            clearHistory()
+            removeAllViews()
+            destroy()
         }
     }
 
@@ -162,10 +171,5 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
         try {
             binding.webView.saveState(outState)
         } catch (_: Throwable) { /* 필요 시 로그 */ }
-    }
-
-    fun toggleAddInfoView(isAddInfo: Boolean) = with(binding) {
-        addInfoLayout.visibility = if (isAddInfo) View.VISIBLE else View.GONE
-        signInLayout.visibility = if (!isAddInfo) View.VISIBLE else View.GONE
     }
 }
