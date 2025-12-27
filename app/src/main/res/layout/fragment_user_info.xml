@@ -6,7 +6,7 @@
     android:background="@drawable/bg_second_gradient"
     android:clipChildren="false"
     android:clipToPadding="false"
-    tools:context=".presentation.mypage.fragment.UserInfoFragment">
+    tools:context=".presentation.user_info.UserInfoFragment">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"

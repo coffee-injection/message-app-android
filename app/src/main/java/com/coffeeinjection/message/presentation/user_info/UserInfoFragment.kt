@@ -1,15 +1,18 @@
-package com.coffeeinjection.message.presentation.mypage.fragment
+package com.coffeeinjection.message.presentation.user_info
 
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.FragmentUserInfoBinding
 import com.coffeeinjection.message.presentation.BaseFragment
@@ -62,7 +65,7 @@ class UserInfoFragment : BaseFragment<FragmentUserInfoBinding>(FragmentUserInfoB
 
         // sharedViewModel 프로필 uri가 오면 프리뷰 이미지에 반영(원하실 때만 사용)
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 sharedViewModel.profileUri.collect { uri ->
                     uri ?: return@collect
                     // 사진 선택이 들어오면 프리뷰를 사진으로 바꿈 (원치 않으면 이 블록 제거하세요)
@@ -160,5 +163,20 @@ class UserInfoFragment : BaseFragment<FragmentUserInfoBinding>(FragmentUserInfoB
         tvPreviewIslandDivision.text = getString(
             if (isDo) R.string.user_island1 else R.string.user_island2
         )
+    }
+
+    private fun closeSelf() {
+        if (parentFragment is DialogFragment) {
+            (parentFragment as DialogFragment).dismiss()
+        } else {
+            findNavController().navigate(
+                UserInfoFragmentDirections.actionUserInfoFragmentToHomeFragment()
+            )
+        }
+    }
+
+    private fun isOpenedFromBottomSheet(): Boolean {
+        // todo 좀 더 좁혀서 바텀시트 인지를 확인하려면 : com.google.android.material.bottomsheet.BottomSheetDialogFragment
+        return parentFragment is DialogFragment // check parent is dialog
     }
 }

@@ -12,7 +12,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -131,6 +130,8 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.uiState.collectLatest { state ->
                     state.errorMessage?.let {
+                        // Toast 등으로 알림
+                        // Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
                         viewModel.clearError()
                     }
                     if (state.loginUrl != null && webView.url != state.loginUrl) {
@@ -147,24 +148,7 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
                         webView.visibility = View.GONE
                         viewModel.consumedNavigation()
                         findNavController().navigate(
-                            //todo Home으로 이동
-                            SignInFragmentDirections.actionSignInFragmentToHomeFragment()
-                        )
-                    }
-                }
-            }
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.uiState.collectLatest { state ->
-                    state.errorMessage?.let {
-                        // Toast 등으로 알림
-                        // Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-                        viewModel.clearError()
-                    }
-
-                    if (state.navigateToMain) {
-                        viewModel.consumedNavigation()
-                        findNavController().navigate(
-                            SignInFragmentDirections.actionSignInFragmentToHomeFragment()
+                            SignInFragmentDirections.actionSignInFragmentToUserInfoFragment()
                         )
                     }
                 }
