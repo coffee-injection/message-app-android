@@ -10,6 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
+import androidx.fragment.app.DialogFragment
+import androidx.navigation.fragment.findNavController
 import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.FragmentUserInfoBinding
 import com.coffeeinjection.message.presentation.BaseFragment
@@ -160,5 +162,20 @@ class UserInfoFragment : BaseFragment<FragmentUserInfoBinding>(FragmentUserInfoB
         tvPreviewIslandDivision.text = getString(
             if (isDo) R.string.user_island1 else R.string.user_island2
         )
+    }
+
+    private fun closeSelf() {
+        if (parentFragment is DialogFragment) {
+            (parentFragment as DialogFragment).dismiss()
+        } else {
+            findNavController().navigate(
+                UserInfoFragmentDirections.actionUserInfoFragmentToHomeFragment()
+            )
+        }
+    }
+
+    private fun isOpenedFromBottomSheet(): Boolean {
+        // todo 좀 더 좁혀서 바텀시트 인지를 확인하려면 : com.google.android.material.bottomsheet.BottomSheetDialogFragment
+        return parentFragment is DialogFragment // check parent is dialog
     }
 }
