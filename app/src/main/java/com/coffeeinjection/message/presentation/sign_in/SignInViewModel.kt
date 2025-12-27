@@ -101,4 +101,8 @@ class SignInViewModel @Inject constructor(
     fun clearError() {
         _uiState.value = _uiState.value.copy(errorMessage = null)
     }
+
+    fun clearUiState() {
+        _uiState.value = AuthUiState(false, null, null, null, false, false)
+    }
 }

@@ -12,6 +12,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -36,6 +37,10 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
     private var backPressedTime: Long = 0L
     private val backCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
+            if (binding.webView.isVisible) {
+                clearWebView()
+                return
+            }
             if (System.currentTimeMillis() - backPressedTime <= 2000) {
                 requireActivity().finish()
             } else {
@@ -128,6 +133,7 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
             // 상태 관찰
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.uiState.collectLatest { state ->
+                    Logger.d("[uistate check!!] : $state")
                     state.errorMessage?.let {
                         // Toast 등으로 알림
                         // Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
@@ -162,6 +168,7 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
             clearHistory()
             removeAllViews()
             destroy()
+            visibility = View.GONE
         }
     }
 
@@ -171,5 +178,10 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
         try {
             binding.webView.saveState(outState)
         } catch (_: Throwable) { /* 필요 시 로그 */ }
+    }
+
+    override fun onDestroyView() {
+        viewModel.clearUiState()
+        super.onDestroyView()
     }
 }
