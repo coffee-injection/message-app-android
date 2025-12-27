@@ -2,6 +2,7 @@ package com.coffeeinjection.message.presentation.user_info
 
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
@@ -18,14 +19,17 @@ import com.coffeeinjection.message.databinding.FragmentUserInfoBinding
 import com.coffeeinjection.message.presentation.BaseFragment
 import com.coffeeinjection.message.presentation.activity.SharedViewModel
 import com.coffeeinjection.message.presentation.mypage.viewmodel.MyPageViewModel
+import com.coffeeinjection.message.presentation.user_info.model.UserSubData
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 /**
  * 프로필 설정 화면
  */
+@AndroidEntryPoint
 class UserInfoFragment : BaseFragment<FragmentUserInfoBinding>(FragmentUserInfoBinding::inflate) {
 
-    private val viewModel: MyPageViewModel by viewModels()
+    private val viewModel: UserInfoViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
     // 포토 피커 (이미지 전용). 구버전은 자동으로 기본 이미지 선택기로 폴백됨.
@@ -92,14 +96,9 @@ class UserInfoFragment : BaseFragment<FragmentUserInfoBinding>(FragmentUserInfoB
         }
 
         // 3) 유저 이름 입력 -> 미리보기 텍스트 반영 + visible/gone 갱신
-        evUserName.doAfterTextChanged { editable ->
+        etUserName.doAfterTextChanged { editable ->
             tvPreviewUserName.text = editable?.toString().orEmpty()
             updatePreviewVisibility()
-        }
-
-        // 5) ev_user_name 입력 -> tv_preview_user_name 즉시 반영
-        evUserName.doAfterTextChanged {
-            tvPreviewUserName.text = it?.toString().orEmpty()
         }
 
         // 4) 도/섬 버튼: 라디오(둘 중 하나는 무조건 선택)
@@ -110,6 +109,33 @@ class UserInfoFragment : BaseFragment<FragmentUserInfoBinding>(FragmentUserInfoB
         // btnEditProfile.setOnClickListener {
         //     pickPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         // }
+
+        btnStart.setOnClickListener {
+            when {
+                etUserName.text?.length !in 2..12 -> {
+                    Toast.makeText(requireContext(), R.string.user_toast_nick_name, Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                etIslandName.text?.length !in 1..8 -> {
+                    Toast.makeText(requireContext(), R.string.user_toast_island_name, Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+            }
+
+            val userSubData = UserSubData(
+                islandName = etIslandName.text.toString() + checkIslandDivision(),
+                nickName = etUserName.text.toString(),
+                profileIndex = checkProfileSelected()
+            )
+
+            if (isOpenedFromBottomSheet()){
+                // TODO 프로필 수정일 경우 처리
+            }
+            else {
+                //todo userSubData 넘기도록 변경
+                viewModel.completeSignup(userSubData.nickName)
+            }
+        }
     }
 
     /**
@@ -117,7 +143,7 @@ class UserInfoFragment : BaseFragment<FragmentUserInfoBinding>(FragmentUserInfoB
      */
     private fun updatePreviewVisibility() = with(binding) {
         val hasIsland = etIslandName.text?.toString()?.trim().orEmpty().isNotEmpty()
-        val hasUser = evUserName.text?.toString()?.trim().orEmpty().isNotEmpty()
+        val hasUser = etUserName.text?.toString()?.trim().orEmpty().isNotEmpty()
 
         // preview만 숨김/표시
         layoutPreview.isVisible = hasIsland && hasUser
@@ -138,7 +164,7 @@ class UserInfoFragment : BaseFragment<FragmentUserInfoBinding>(FragmentUserInfoB
 
         // 프리뷰 초기 동기화
         tvPreviewIslandName.text = etIslandName.text?.toString().orEmpty()
-        tvPreviewUserName.text = evUserName.text?.toString().orEmpty()
+        tvPreviewUserName.text = etUserName.text?.toString().orEmpty()
     }
 
     /**
@@ -165,18 +191,12 @@ class UserInfoFragment : BaseFragment<FragmentUserInfoBinding>(FragmentUserInfoB
         )
     }
 
-    private fun closeSelf() {
-        if (parentFragment is DialogFragment) {
-            (parentFragment as DialogFragment).dismiss()
-        } else {
-            findNavController().navigate(
-                UserInfoFragmentDirections.actionUserInfoFragmentToHomeFragment()
-            )
-        }
-    }
-
     private fun isOpenedFromBottomSheet(): Boolean {
         // todo 좀 더 좁혀서 바텀시트 인지를 확인하려면 : com.google.android.material.bottomsheet.BottomSheetDialogFragment
         return parentFragment is DialogFragment // check parent is dialog
     }
+
+    // 현재 선택된 profile index 가져 오섬
+    private fun checkProfileSelected() = emojiCards.indexOfFirst { it.first.isSelected } + 1
+    private fun checkIslandDivision() = if (binding.btnIsland1.isSelected) R.string.user_island1 else R.string.user_island2
 }
