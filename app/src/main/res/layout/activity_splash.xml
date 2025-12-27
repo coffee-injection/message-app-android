@@ -23,8 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="80dp"
         android:text="@string/Tium"
-        android:textColor="@color/color_black"
-        android:textSize="20sp"
+        style="@style/black_title_normal18"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

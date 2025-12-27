@@ -13,8 +13,7 @@
         android:layout_height="wrap_content"
         android:padding="30dp"
         android:text="@string/guide_skip"
-        android:textColor="@color/text_tertiary"
-        android:textSize="17sp"
+        style="@style/tertiary_body_normal16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -58,9 +57,7 @@
         android:layout_height="55dp"
         android:layout_marginHorizontal="40dp"
         android:layout_marginBottom="28dp"
-        android:gravity="center"
         android:text="@string/guide_next"
-        android:textColor="@color/color_white"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="40dp" />
 

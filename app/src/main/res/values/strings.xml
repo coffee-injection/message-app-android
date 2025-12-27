@@ -51,6 +51,10 @@
     <string name="dialog_fragment_message_title">바다에 띄울 메시지를 작성해 주세요</string>
     <string name="dialog_fragment_message_hint">당신의 이야기를 들려주세요...</string>
     <string name="dialog_fragment_hint">익명으로 전송됩니다</string>
+    <string name="dialog_fragment_warning_title">메시지를 닫으시겠어요?</string>
+    <string name="dialog_fragment_warning_sub_title">북마크되지 않은 메시지는 바다로 떠내려가요</string>
+    <string name="dialog_fragment_warning_close">닫기</string>
+    <string name="dialog_fragment_warning_cancel">취소</string>
 
     <!--Title-->
     <string name="title_mypage">마이페이지</string>

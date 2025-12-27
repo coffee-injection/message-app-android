@@ -9,6 +9,14 @@
         <!-- <item name="fontFamily">@font/pretendard_semibold</item> -->
     </style>
 
+    <style name="black_title_bold18" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/text_size_18</item>
+        <item name="android:textColor">@color/text_black</item>
+        <item name="android:textStyle">bold</item>
+        <!-- 폰트 쓰면 아래 추가 -->
+        <!-- <item name="fontFamily">@font/pretendard_semibold</item> -->
+    </style>
+
     <style name="black_title_normal16" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textSize">@dimen/text_size_16</item>
         <item name="android:textColor">@color/text_black</item>

@@ -51,7 +51,6 @@
             android:layout_marginHorizontal="40dp"
             android:layout_marginBottom="15dp"
             android:background="@drawable/btn_background_white"
-            android:gravity="center"
             android:text="@string/sign_in_google"
             android:textColor="@color/text_black"
             app:layout_constraintBottom_toTopOf="@id/btn_kakao" />
@@ -64,7 +63,6 @@
             android:layout_marginBottom="130dp"
             android:background="@drawable/btn_background_kakao"
             android:drawableStart="@drawable/ic_kakao"
-            android:gravity="center"
             android:text="@string/sign_in_kakao"
             android:textColor="@color/text_black"
             app:layout_constraintBottom_toTopOf="@id/tv_description" />
