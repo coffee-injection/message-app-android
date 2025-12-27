@@ -27,6 +27,12 @@
         <item name="android:textStyle">normal</item>
     </style>
 
+    <style name="context_normal14" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textColor">@color/text_context</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
     <!--  본문  -->
     <style name="primary_body_normal16" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textSize">@dimen/text_size_16</item>
@@ -41,6 +47,12 @@
     </style>
 
     <!-- 소 제목 -->
+    <style name="grey_second_title_normal12" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textSize">@dimen/text_size_12</item>
+        <item name="android:textColor">@color/stroke_dark</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
     <style name="grey_second_title_normal14" parent="TextAppearance.AppCompat.Title">
         <item name="android:textSize">@dimen/text_size_14</item>
         <item name="android:textColor">@color/stroke_dark</item>
@@ -97,6 +109,12 @@
 
     <style name="quaternary_body_normal12" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textSize">@dimen/text_size_12</item>
+        <item name="android:textColor">@color/text_quaternary</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="quaternary_body_normal10" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/text_size_10</item>
         <item name="android:textColor">@color/text_quaternary</item>
         <item name="android:textStyle">normal</item>
     </style>

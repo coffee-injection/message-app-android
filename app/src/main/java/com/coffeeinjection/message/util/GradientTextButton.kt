@@ -20,7 +20,7 @@ class GradientTextButton @JvmOverloads constructor(
 ) : AppCompatButton(context, attrs, defStyleAttr) {
 
     private val defaultWidthPx = dp(320f)
-    private val defaultHeightPx = dp(40f)
+    private val defaultHeightPx = dp(55f)
 
     // 아이콘 관련
     private var iconStart: Drawable? = null

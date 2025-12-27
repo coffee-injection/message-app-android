@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp">
 
-    <!-- 카드(편지) 영역 -->
+    <!-- 카드(편지) 쓰기모드 영역 -->
     <androidx.cardview.widget.CardView
         android:id="@+id/card_container"
         android:layout_width="350dp"
-        android:layout_height="600dp"
-        app:cardCornerRadius="14dp"
-        app:cardElevation="0dp"
+        android:layout_height="500dp"
+        android:layout_marginTop="48dp"
+        app:cardCornerRadius="12dp"
         app:cardUseCompatPadding="true"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_send">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -52,7 +52,7 @@
             <!-- 타이틀 -->
             <TextView
                 android:id="@+id/tv_title"
-                style="@style/grey_second_title_normal14"
+                style="@style/grey_second_title_normal12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -66,14 +66,14 @@
                 android:id="@+id/et_message"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="14dp"
+                android:layout_marginTop="24dp"
                 android:background="@android:color/transparent"
                 android:gravity="top|start"
                 android:hint="@string/dialog_fragment_message_hint"
                 android:inputType="textMultiLine|textCapSentences"
                 android:maxLength="500"
                 android:overScrollMode="ifContentScrolls"
-                android:padding="0dp"
+                android:padding="14dp"
                 android:textColor="@color/text_context"
                 android:textColorHint="@color/divider_grey600"
                 android:textSize="14sp"
@@ -86,7 +86,7 @@
                 android:id="@+id/view_divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/divider_grey200"
+                android:background="@color/divider_grey400"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_message" />
@@ -96,15 +96,15 @@
                 android:id="@+id/layout_bottom"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_message">
 
                 <TextView
-                    android:id="@+id/tv_charCount"
-                    style="@style/divider_grey200_normal12"
+                    android:id="@+id/tv_char_count"
+                    style="@style/quaternary_body_normal10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0/500"
@@ -112,11 +112,11 @@
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
-                    android:id="@+id/tvHint"
-                    style="@style/divider_grey200_normal12"
+                    android:id="@+id/tv_hint"
+                    style="@style/quaternary_body_normal10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="익명으로 전송됩니다"
+                    android:text="@string/dialog_fragment_hint"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -127,17 +127,13 @@
     <!-- 보내기 버튼 -->
     <com.coffeeinjection.message.util.GradientTextButton
         android:id="@+id/btn_send"
-        android:layout_width="350dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="12dp"
-        android:gravity="center"
-        android:text="보내기"
+        android:text="@string/dialog_fragment_message_send"
         android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/card_container" />
+        app:layout_constraintTop_toBottomOf="@+id/card_container" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
