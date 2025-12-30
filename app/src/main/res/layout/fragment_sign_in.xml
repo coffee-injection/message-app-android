@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_main_gradient"
+    android:fitsSystemWindows="true"
     tools:context="com.coffeeinjection.presentation.sign_in.SignInFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,6 +16,7 @@
             android:id="@+id/iv_island"
             android:layout_width="130dp"
             android:layout_height="130dp"
+            android:layout_marginTop="70dp"
             android:src="@drawable/ic_island_daytime"
             app:layout_constraintBottom_toTopOf="@id/tv_title"
             app:layout_constraintEnd_toEndOf="parent"
@@ -26,8 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/Tium"
-            android:textColor="@color/color_black"
-            android:textSize="20sp"
+            style="@style/black_title_normal18"
             app:layout_constraintBottom_toTopOf="@id/tv_sub_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,6 +39,7 @@
             android:layout_width="wrap_content"
             android:gravity="center"
             android:layout_height="wrap_content"
+            style="@style/grey_second_title_normal14"
             android:text="@string/sign_in_sub_title"
             app:layout_constraintBottom_toTopOf="@id/btn_google"
             app:layout_constraintEnd_toEndOf="parent"

@@ -6,6 +6,7 @@
     android:background="@drawable/bg_second_gradient"
     android:clipChildren="false"
     android:clipToPadding="false"
+    android:fitsSystemWindows="true"
     tools:context=".presentation.mypage.fragment.MyPageFragment">
 
     <androidx.core.widget.NestedScrollView
@@ -403,7 +404,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/text_size_12"
                 android:layout_marginRight="@dimen/text_size_12"
-                android:layout_marginBottom="50dp"
+                android:layout_marginBottom="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

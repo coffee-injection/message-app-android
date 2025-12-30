@@ -6,6 +6,7 @@
     android:background="@drawable/bg_second_gradient"
     android:clipChildren="false"
     android:clipToPadding="false"
+    android:fitsSystemWindows="true"
     tools:context=".presentation.bookmark.BookmarkFragment">
 
     <LinearLayout

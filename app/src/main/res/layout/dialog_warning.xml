@@ -9,7 +9,7 @@
     <!-- 카드(편지) 쓰기모드 영역 -->
     <androidx.cardview.widget.CardView
         android:id="@+id/card_container"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_marginBottom="32dp"
         app:cardCornerRadius="12dp"

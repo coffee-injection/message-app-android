@@ -6,6 +6,18 @@
 
     <!-- 앱 실제 테마 -->
     <style name="Theme.MessageApp" parent="Base.Theme.MessageApp">
-        <!-- ... 기존 앱 테마 설정 ... -->
+        <item name="colorPrimary">@color/color_white</item>
+        <item name="colorPrimaryDark">@color/color_navy_primary</item>
+        <item name="colorAccent">@color/color_navy_primary</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+
+        <!-- Status bar (상단) -->
+        <item name="android:statusBarColor">@color/color_navy_primary</item>
+        <item name="android:windowLightStatusBar">true</item> <!-- 아이콘 어두운색 -->
+
+        <!-- Navigation bar (하단, 제스처/버튼 영역) -->
+        <item name="android:navigationBarColor">@color/color_navy_primary</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
+
 </resources>
