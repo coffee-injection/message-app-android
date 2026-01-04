@@ -15,11 +15,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.coffeeinjection.message.R
+import com.coffeeinjection.message.data.local.UserInfo
 import com.coffeeinjection.message.databinding.FragmentUserInfoBinding
 import com.coffeeinjection.message.presentation.BaseFragment
 import com.coffeeinjection.message.presentation.activity.SharedViewModel
-import com.coffeeinjection.message.presentation.mypage.viewmodel.MyPageViewModel
-import com.coffeeinjection.message.presentation.user_info.model.UserSubData
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -122,18 +121,18 @@ class UserInfoFragment : BaseFragment<FragmentUserInfoBinding>(FragmentUserInfoB
                 }
             }
 
-            val userSubData = UserSubData(
+            val userInfo = UserInfo(
                 islandName = etIslandName.text.toString() + checkIslandDivision(),
                 nickName = etUserName.text.toString(),
-                profileIndex = checkProfileSelected()
+                profileImageIndex = checkProfileSelected()
             )
 
             if (isOpenedFromBottomSheet()){
                 // TODO 프로필 수정일 경우 처리
             }
             else {
-                //todo userSubData 넘기도록 변경
-                viewModel.completeSignup(userSubData.nickName)
+                // 회원 가입의 경우
+                viewModel.completeSignup(userInfo)
             }
         }
     }
@@ -198,5 +197,5 @@ class UserInfoFragment : BaseFragment<FragmentUserInfoBinding>(FragmentUserInfoB
 
     // 현재 선택된 profile index 가져 오섬
     private fun checkProfileSelected() = emojiCards.indexOfFirst { it.first.isSelected } + 1
-    private fun checkIslandDivision() = if (binding.btnIsland1.isSelected) R.string.user_island1 else R.string.user_island2
+    private fun checkIslandDivision() = getString(if (binding.btnIsland1.isSelected) R.string.user_island1 else R.string.user_island2)
 }

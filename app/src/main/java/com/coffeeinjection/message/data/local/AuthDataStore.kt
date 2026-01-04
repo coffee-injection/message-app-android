@@ -26,7 +26,8 @@ class AuthDataStore @Inject constructor(
     companion object {
         private val KEY_ACCESS_TOKEN   = stringPreferencesKey("access_token")
         private val KEY_USER_NICKNAME  = stringPreferencesKey("user_nickname")
-        private val KEY_USER_IMG      = stringPreferencesKey("user_img")
+        private val KEY_USER_ISLAND_NAME  = stringPreferencesKey("user_island_name")
+        private val KEY_USER_IMG_IDX      = stringPreferencesKey("user_img_idx")
     }
 
     /** 현재 저장된 액세스 토큰 */
@@ -36,13 +37,12 @@ class AuthDataStore @Inject constructor(
 
     /** 유저 정보 Flow (모두 있을 때만 UserInfo 반환, 아니면 null) */
     val userInfoFlow: Flow<UserInfo?> = context.authDataStore.data.map { prefs ->
-        val img = prefs[KEY_USER_IMG]
-        val nickname = prefs[KEY_USER_NICKNAME]
+        val nickName = prefs[KEY_USER_NICKNAME]
+        val islandName = prefs[KEY_USER_ISLAND_NAME]
+        val profileImageIndex = prefs[KEY_USER_IMG_IDX]
 
-        val imgUri = img?.toUri()
-
-        if (img == null || nickname == null) null
-        else UserInfo(nickname = nickname, userImg = imgUri)
+        if (islandName == null || nickName == null || profileImageIndex == null) null
+        else UserInfo(nickName = nickName, islandName = islandName, profileImageIndex = profileImageIndex.toInt())
     }
 
     /** 액세스 토큰 저장/갱신 */
@@ -56,8 +56,9 @@ class AuthDataStore @Inject constructor(
     suspend fun saveUserInfo(userinfo: UserInfo) {
         Logger.d("[AuthDataStore] saveUserInfo init --> userinfo : $userinfo")
         context.authDataStore.edit { prefs ->
-            prefs[KEY_USER_NICKNAME] = userinfo.nickname
-            prefs[KEY_USER_IMG] = userinfo.userImg.toString()
+            prefs[KEY_USER_NICKNAME] = userinfo.nickName
+            prefs[KEY_USER_ISLAND_NAME] = userinfo.islandName
+            prefs[KEY_USER_IMG_IDX] = userinfo.profileImageIndex.toString()
         }
     }
 
@@ -68,12 +69,14 @@ class AuthDataStore @Inject constructor(
         context.authDataStore.edit { prefs ->
             prefs.remove(KEY_ACCESS_TOKEN)
             prefs.remove(KEY_USER_NICKNAME)
-            prefs.remove(KEY_USER_IMG)
+            prefs.remove(KEY_USER_ISLAND_NAME)
+            prefs.remove(KEY_USER_IMG_IDX)
         }
     }
 }
 
 data class UserInfo(
-    val nickname: String,
-    val userImg: Uri?
+    val nickName: String,
+    val islandName: String,
+    val profileImageIndex: Int = 1
 )

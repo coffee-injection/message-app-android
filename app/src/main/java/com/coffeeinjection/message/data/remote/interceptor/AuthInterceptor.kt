@@ -1,6 +1,7 @@
 package com.coffeeinjection.message.data.remote.interceptor
 
 import com.coffeeinjection.message.data.local.AuthDataStore
+import com.coffeeinjection.message.util.Logger
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -38,6 +39,7 @@ class AuthInterceptor @Inject constructor(
         } else {
             original
         }
+        Logger.d("[intercept] header : $newRequest")
 
         return chain.proceed(newRequest)
     }

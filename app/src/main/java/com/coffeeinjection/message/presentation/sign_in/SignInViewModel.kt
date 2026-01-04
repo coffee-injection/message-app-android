@@ -41,22 +41,18 @@ class SignInViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
         runCatching { exchangeCodeToJwt(code) }
             .onSuccess { res ->
+                saveAccessToken(res.accessToken)
                 if (res.isNewMember && res.memberId == null) {
                     Logger.d("[kakao] exchangeCode success -> new user")
 
-//                    // todo 여기서 저장하면 안됨 -> 일괄 저장 필요 !!!! " 임시 토큰도 DataStore 에 저장
-//                    saveAccessToken(res.accessToken)
-
-                    // 신규 회원: 임시 토큰 저장 후 닉네임 입력 화면으로
+                    // 신규 회원: 닉네임 입력 화면으로 이동
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        tempToken = res.accessToken,
                         navigateToNickname = true
                     )
                 } else {
                     // 기존 회원: 액세스 토큰 저장 후 메인 이동
                     Logger.d("[kakao] exchangeCode success -> old user")
-                    saveAccessToken(res.accessToken)
                     _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
                 }
             }
@@ -65,32 +61,6 @@ class SignInViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "카카오 로그인 처리 중 오류가 발생했습니다")
             }
     }
-
-//    /** 3) 신규회원 닉네임 완료 */
-//    fun completeSignup(nickname: String) = viewModelScope.launch {
-//        if (nickname.length !in 2..20) {
-//            Logger.error("[kakao] completeSignup fail -> nickname is invalid")
-//            _uiState.value = _uiState.value.copy(errorMessage = "닉네임은 2자 이상 20자 이하로 입력해주세요")
-//            return@launch
-//        }
-//
-//        _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
-//        runCatching { repo.completeSignup(nickname) }
-//            .onSuccess { res ->
-//                Logger.d("[kakao] completeSignup success")
-//                // 서버가 최종 토큰을 내려줌
-//                repo.apply {
-//                    saveAccessToken(res.accessToken)
-//                    saveUserInfo(UserInfo(nickname,null))
-//                }
-//
-//                _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
-//            }
-//            .onFailure { e ->
-//                Logger.error("[kakao] completeSignup fail errorMsg(${e.message}) cause(${e.cause})")
-//                _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "회원가입 완료 처리에 실패했습니다")
-//            }
-//    }
 
     /** 4) 일회성 네비게이션 플래그 리셋 */
     fun consumedNavigation() {
@@ -103,6 +73,6 @@ class SignInViewModel @Inject constructor(
     }
 
     fun clearUiState() {
-        _uiState.value = AuthUiState(false, null, null, null, false, false)
+        _uiState.value = AuthUiState(false, null, null, false, false)
     }
 }

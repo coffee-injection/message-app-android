@@ -12,7 +12,7 @@ import com.coffeeinjection.message.data.remote.dto.SignupCompleteResponse
 interface AuthRepository {
     suspend fun getKakaoLoginUrl(): KakaoLoginUrlResponse
     suspend fun exchangeCodeToJwt(code: String): LoginResponse
-    suspend fun completeSignup(nickname: String): SignupCompleteResponse
+    suspend fun completeSignup(userinfo: UserInfo): SignupCompleteResponse
     suspend fun saveAccessToken(token: String)
     suspend fun saveUserInfo(userinfo: UserInfo)
 }
