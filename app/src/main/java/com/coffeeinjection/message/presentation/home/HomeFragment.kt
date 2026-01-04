@@ -4,6 +4,7 @@ import android.Manifest
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.pm.PackageManager
+import android.graphics.RectF
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -13,6 +14,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -26,12 +28,12 @@ import com.coffeeinjection.message.databinding.FragmentHomeBinding
 import com.coffeeinjection.message.presentation.activity.SharedViewModel
 import com.coffeeinjection.message.presentation.BaseFragment
 import com.coffeeinjection.message.presentation.dialog.PermissionDialogFragment
+import com.coffeeinjection.message.util.Logger
 import com.coffeeinjection.presentation.home.HomeViewModel
-import com.google.android.material.internal.ViewUtils.dpToPx
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.time.LocalTime
 import java.util.Calendar
+import kotlin.random.Random
 
 /**
  * 홈 화면
@@ -139,39 +141,77 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private fun renderMessageIcons(messages: List<SeaMessageUiModel>) {
         val container = binding.bgSeaLayer
         container.removeAllViews()
-
         if (messages.isEmpty()) return
 
         container.post {
             val width = container.width
             val height = container.height
-            if (width == 0 || height == 0) return@post
+            if (width <= 0 || height <= 0) return@post
 
-            val iconSize = dpToPx(56) // 56dp → px
+            val iconSize = dpToPx(56)
+
+            val maxX = (width - iconSize).coerceAtLeast(0)
+            val maxY = (height - iconSize).coerceAtLeast(0)
+
+            // 병들끼리 "조금 떨어져 보이게" 할 간격(원치 않으면 0으로)
+            val spacing = dpToPx(6)
+
+            // 이미 배치된 병들의 영역(간격 포함)을 저장
+            val placedRects = mutableListOf<RectF>()
+
+            // 랜덤 배치 시도 횟수: 메시지 개수가 많아지면 못 찾을 수도 있으니 적당히 제한
+            val maxTriesPerIcon = 60
+
+            fun findNonOverlappingPosition(): Pair<Int, Int>? {
+                if (maxX == 0 && maxY == 0) return 0 to 0
+
+                repeat(maxTriesPerIcon) {
+                    val x = if (maxX == 0) 0 else Random.nextInt(0, maxX + 1)
+                    val y = if (maxY == 0) 0 else Random.nextInt(0, maxY + 1)
+
+                    // spacing까지 포함한 후보 영역 (간격을 유지하려고 조금 크게 잡음)
+                    val candidate = RectF(
+                        (x - spacing).toFloat(),
+                        (y - spacing).toFloat(),
+                        (x + iconSize + spacing).toFloat(),
+                        (y + iconSize + spacing).toFloat()
+                    )
+
+                    val overlapped = placedRects.any { RectF.intersects(it, candidate) }
+                    if (!overlapped) {
+                        placedRects.add(candidate)
+                        return x to y
+                    }
+                }
+                return null // 너무 빽빽해서 자리 못 찾음
+            }
 
             messages.forEach { msg ->
-                val iconRes = when (msg.zone) {
-                    SeaZone.SHALLOW -> R.drawable.ic_bottle
-                    SeaZone.MIDDLE  -> R.drawable.ic_bottle
-                    SeaZone.DEEP    -> R.drawable.ic_bottle
+                val pos = findNonOverlappingPosition()
+
+                // 공간이 부족하면: (1) 더 이상 추가 안 함 or (2) 겹쳐도 추가
+                // 여기선 "더 이상 추가 안 함"으로 처리했습니다.
+                if (pos == null) {
+                    Logger.d("[sea] no space to place more icons. messages=${messages.size}, placed=${placedRects.size}")
+                    return@forEach
                 }
 
-                val layoutParams = FrameLayout.LayoutParams(iconSize, iconSize)
+                val (x, y) = pos
 
-                // X는 전체 바다 레이어 범위에서 랜덤
-                val xRange = 0..(width - iconSize).coerceAtLeast(0)
-
-                // Y는 존별로 범위 나누기
-                val yRange = zoneYRange(height, msg.zone, iconSize)
-
-                val x = xRange.random() // Kotlin Random 사용
-                val y = yRange.random()
+                val lp = ConstraintLayout.LayoutParams(iconSize, iconSize).apply {
+                    startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                    topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                    marginStart = x
+                    topMargin = y
+                }
 
                 val iv = ImageView(requireContext()).apply {
-                    setImageResource(iconRes)
-                    this.layoutParams = layoutParams
-                    translationX = x.toFloat()
-                    translationY = y.toFloat()
+                    setImageResource(R.drawable.ic_bottle)
+                    layoutParams = lp
+
+                    // 애니메이션을 위해 translation은 0으로 두는 게 포인트
+                    translationX = 0f
+                    translationY = 0f
 
                     setOnClickListener {
                         val action =
@@ -182,27 +222,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                         findNavController().navigate(action)
                     }
                 }
-
+//                val iv = ImageView(requireContext()).apply {
+//                    setImageResource(R.drawable.ic_bottle)
+//                    layoutParams = FrameLayout.LayoutParams(iconSize, iconSize)
+//                    translationX = x.toFloat()
+//                    translationY = y.toFloat()
+//
+//                    setOnClickListener {
+//                        val action =
+//                            HomeFragmentDirections.actionHomeFragmentToMessageDialogFragment(
+//                                letterId = msg.letterId,
+//                                readOnly = true
+//                            )
+//                        findNavController().navigate(action)
+//                    }
+//                }
+                // 애니메이션 적용
+                val distance = (6..12).random().toFloat()      // dp
+                val duration = (900L..1600L).random()          // ms
+                val delay = (0L..600L).random()                // ms
 
                 container.addView(iv)
+                iv.startFloatUpDown(distanceDp = distance, duration = duration, startDelay = delay)
             }
         }
-    }
-
-    private fun zoneYRange(height: Int, zone: SeaZone, iconSize: Int): IntRange {
-        val seaTop = (height * SEA_TOP_RATIO).toInt()
-        val seaBottom = (height * SEA_BOTTOM_RATIO).toInt()
-
-        val seaHeight = seaBottom - seaTop
-        val bandHeight = seaHeight / 3
-
-        val (startY, endY) = when (zone) {
-            SeaZone.SHALLOW -> seaTop to (seaTop + bandHeight)
-            SeaZone.MIDDLE  -> (seaTop + bandHeight) to (seaTop + bandHeight * 2)
-            SeaZone.DEEP    -> (seaTop + bandHeight * 2) to seaBottom
-        }
-
-        return (startY..(endY - iconSize).coerceAtLeast(startY))
     }
 
     private fun dpToPx(dp: Int): Int {
@@ -223,7 +266,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         }
     }
 
-    private var floatAnim: ObjectAnimator? = null
+    private var floatAnimIsland: ObjectAnimator? = null
 
     override fun onStart() = with(binding) {
         super.onStart()
@@ -249,21 +292,33 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 ivIsland.setImageResource(R.drawable.ic_island_night)
             }
         }
-        floatAnim = layoutIsland.startFloatUpDown(distanceDp = 6f, duration = 1100L)
+        floatAnimIsland = layoutIsland.startFloatUpDown(distanceDp = 6f, duration = 1100L)
     }
 
     override fun onStop() {
-        floatAnim?.cancel()
-        floatAnim = null
+        floatAnimIsland?.cancel()
+        floatAnimIsland = null
         binding.layoutIsland.translationY = 0f
         super.onStop()
     }
 
-    private fun View.startFloatUpDown(distanceDp: Float = 8f, duration: Long = 1200L): ObjectAnimator {
-        val distancePx = distanceDp * resources.displayMetrics.density
+    override fun onDestroyView() {
+        val container = binding.bgSeaLayer
+        for (i in 0 until container.childCount) {
+            container.getChildAt(i).stopFloatUpDown()
+        }
+        container.removeAllViews()
+        super.onDestroyView()
+    }
 
+    private fun View.startFloatUpDown(distanceDp: Float = 8f, duration: Long = 1200L, startDelay: Long = 0L): ObjectAnimator {
+        // 중복으로 계속 start 되는 것 방지(선택)
+        (getTag(R.id.tag_float_anim) as? ObjectAnimator)?.cancel()
+
+        val distancePx = distanceDp * resources.displayMetrics.density
         return ObjectAnimator.ofFloat(this, View.TRANSLATION_Y, 0f, -distancePx).apply {
             this.duration = duration
+            this.startDelay = startDelay
             repeatCount = ValueAnimator.INFINITE
             repeatMode = ValueAnimator.REVERSE
             interpolator = AccelerateDecelerateInterpolator()
@@ -271,5 +326,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         }
     }
 
-
+    private fun View.stopFloatUpDown() {
+        (getTag(R.id.tag_float_anim) as? ObjectAnimator)?.cancel()
+        setTag(R.id.tag_float_anim, null)
+    }
 }

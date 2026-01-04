@@ -61,7 +61,7 @@ class UserInfoViewModel @Inject constructor(
         runCatching {
             checkDuplicate(nickname)
         }.onSuccess { res ->
-            Logger.d("[kakao] checkDuplicate")
+            Logger.d("[kakao] checkDuplicate msg(${res.message})")
             isAvailable = res.available
             _uiState.value = _uiState.value.copy(isLoading = false, errorMessage =  if (isAvailable) null else "중복된 닉네임 입니다.")
         }.onFailure { e ->
