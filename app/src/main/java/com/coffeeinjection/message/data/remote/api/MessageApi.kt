@@ -36,7 +36,7 @@ interface MessageApi {
     @POST("bookmark")
     suspend fun bookmarkLetter(
         @Body body: BookmarkLetterRequest
-    ): ApiEnvelope<Unit>
+    ): ApiEnvelope<Any?>
 
     /** 4) 북마크 리스트 불러오기 */
     @GET("bookmark/list")
@@ -46,5 +46,5 @@ interface MessageApi {
     @POST("report")
     suspend fun reportLetter(
         @Body body: ReportLetterRequest
-    ): ApiEnvelope<Unit>
+    ): ApiEnvelope<Any?>
 }
