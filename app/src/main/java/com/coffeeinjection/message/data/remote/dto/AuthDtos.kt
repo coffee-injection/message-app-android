@@ -58,3 +58,16 @@ data class SignupCompleteResponse(
     @Json(name = "islandName") val islandName: String,
     @Json(name = "profileImageIndex") val profileImageIndex: Int
 )
+
+// ------------------------------------
+// 4) POST /member/check-nickname 요청/응답
+// ------------------------------------
+data class CheckNicknameDuplicateRequest(
+    @Json(name = "nickname") val nickname: String
+)
+
+data class CheckNicknameDuplicateResponse(
+    @Json(name = "message") val message: String,
+    @Json(name = "available") val available: Boolean
+)
+
