@@ -9,6 +9,7 @@ fun LoadBookmarkResponse.toUiModel(): BookmarkModel {
         subtitle = "추가해야함",
         preview = content,
         timeText = createdAt,
-        isBookmarked = true
+        isBookmarked = true,
+        accentColorRes = accentColorById(letterId)
     )
 }
