@@ -25,6 +25,7 @@ import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.DialogFragmentMessageReadBinding
 import com.coffeeinjection.message.databinding.DialogFragmentMessageWriteBinding
 import com.coffeeinjection.message.presentation.activity.SharedViewModel
+import com.coffeeinjection.message.util.toKoreanDateHourFast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -115,8 +116,10 @@ class MessageDialogFragment : DialogFragment() {
                     sharedViewModel.letterDetail.collect { letter ->
                         if (letter == null) return@collect
                         tvNickname.text = letter.senderName
-                        // todo -> 섬 이름 추가되어야함
                         tvReceivedMsg.text = letter.content
+                        // todo -> 섬 이름 추가되어야함
+//                        tvIslandName.text =letter.senderName
+                        tvReceivedDate.text =letter.matchedAt.toKoreanDateHourFast()
                     }
                 }
 
@@ -154,7 +157,7 @@ class MessageDialogFragment : DialogFragment() {
                 .setTitle("신고하기")
                 .setMessage("해당 메시지를 신고하시겠습니까?")
                 .setPositiveButton("신고") { _, _ ->
-                    sharedViewModel.reportLetter(args.letterId, reason = null)
+                    sharedViewModel.reportLetter(args.letterId, reason = "Bad Request")
                     Toast.makeText(requireContext(), "신고가 접수되었습니다.", Toast.LENGTH_SHORT).show()
                     dismiss()
                 }

@@ -2,12 +2,14 @@ package com.coffeeinjection.message.presentation.bookmark.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.ItemBookmakBinding
 import com.coffeeinjection.message.presentation.bookmark.model.BookmarkModel
+import com.coffeeinjection.message.util.toKoreanDateHourFast
 
 class BookmarkAdapter(
     private val onClickItem: (BookmarkModel) -> Unit,
@@ -41,15 +43,19 @@ class BookmarkAdapter(
             tvTitle.text = item.title
             tvSubtitle.text = item.subtitle
             tvPreview.text = item.preview
-            tvTime.text = item.timeText
+            tvTime.text = item.timeText.toKoreanDateHourFast()
 
             ivBookmark.setOnClickListener { onClickBookmark(item) }
 
-            // 아이콘(고정이면 굳이 매번 세팅 안 해도 되지만 명시)
-            ivIcon.setImageResource(R.drawable.ic_message)
 
-            // "읽지 않음 점" 표시가 필요하면 여기서 제어
-            // viewDot.visibility = if (item.isUnread) View.VISIBLE else View.GONE
+            // 점 표시 및 메세지 색상 랜덤 적용 필요하면 여기서 제어
+            val color = ContextCompat.getColor(root.context, item.accentColorRes)
+            val d = viewDot.background?.mutate()
+            if (d != null) {
+                DrawableCompat.setTint(d, color)   // 원형 유지 + 색만 변경
+            }
+            cardIcon.setCardBackgroundColor(color)
+            layoutParent.setBackgroundColor(color)
         }
     }
 
@@ -60,4 +66,5 @@ class BookmarkAdapter(
         override fun areContentsTheSame(oldItem: BookmarkModel, newItem: BookmarkModel): Boolean =
             oldItem == newItem
     }
+
 }

@@ -35,7 +35,7 @@ class BookmarkViewModel @Inject constructor(
 
             runCatching { repo.loadBookmarksList() }
                 .onSuccess { dtoList ->
-                    _bookmarks.value = dtoList.map { it.toUiModel() } // ✅ List<BookmarkModel>
+                    _bookmarks.value = dtoList.map { it.toUiModel() }
                     Logger.d("[bookmark/list] success size=${dtoList.map { it.toUiModel() }.size}")
                 }
                 .onFailure { e ->

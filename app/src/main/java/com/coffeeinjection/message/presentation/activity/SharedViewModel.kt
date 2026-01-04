@@ -84,6 +84,21 @@ class SharedViewModel @Inject constructor(
     }
 
     /**
+     * 북마크 저장
+     */
+    fun bookmarkLetter(letterId: Long) {
+        viewModelScope.launch {
+            runCatching {
+                repo.bookmarkLetter(letterId)
+            }.onSuccess {
+                Logger.d("[bookmark] success, letterId=$letterId")
+            }.onFailure { e ->
+                Logger.error("[bookmark] fail letterId=$letterId msg=${e.message} cause=${e.cause}")
+            }
+        }
+    }
+
+    /**
      * 편지 신고
      * @param reason 신고 사유(선택). 없으면 null
      */
@@ -95,21 +110,6 @@ class SharedViewModel @Inject constructor(
                 Logger.d("[report] success, letterId=$letterId, reason=$reason")
             }.onFailure { e ->
                 Logger.error("[report] fail letterId=$letterId msg=${e.message} cause=${e.cause}")
-            }
-        }
-    }
-
-    /**
-     * 북마크 저장
-     */
-    fun bookmarkLetter(letterId: Long) {
-        viewModelScope.launch {
-            runCatching {
-                repo.bookmarkLetter(letterId)
-            }.onSuccess {
-                Logger.d("[bookmark] success, letterId=$letterId")
-            }.onFailure { e ->
-                Logger.error("[bookmark] fail letterId=$letterId msg=${e.message} cause=${e.cause}")
             }
         }
     }

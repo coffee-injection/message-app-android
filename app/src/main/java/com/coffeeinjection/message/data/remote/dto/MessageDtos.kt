@@ -43,8 +43,8 @@ data class SendLetterResponse(
     @Json(name = "senderName") val senderName: String,
     @Json(name = "status") val status: String, // WAITING
     @Json(name = "createdAt") val createdAt: String,
-    @Json(name = "matchedAt") val matchedAt: String,
-    @Json(name = "readAt") val readAt: String,
+    @Json(name = "matchedAt") val matchedAt: String?,
+    @Json(name = "readAt") val readAt: String?,
 )
 
 /**

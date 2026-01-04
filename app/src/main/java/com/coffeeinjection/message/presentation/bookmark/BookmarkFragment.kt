@@ -66,6 +66,7 @@ class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>(FragmentBookmarkB
 
                         // 북마크가 비었을 때 처리
                         layoutEmpty.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
+                        rvBookmarks.visibility = if (list.isEmpty()) View.GONE else View.VISIBLE
                     }
                 }
 
