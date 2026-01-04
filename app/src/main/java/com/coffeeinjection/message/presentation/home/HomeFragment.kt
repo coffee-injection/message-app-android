@@ -91,10 +91,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         btnSendMsg.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToMessageDialogFragment(
                 letterId = -1L,
-                content = "",
-                senderName = "",
                 readOnly = false,   // 쓰기 모드
-                receiverNickname = "도마도"
             )
             findNavController().navigate(action)
         }
@@ -179,11 +176,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                     setOnClickListener {
                         val action =
                             HomeFragmentDirections.actionHomeFragmentToMessageDialogFragment(
-                                letterId   = msg.letterId,
-                                content    = msg.content,
-                                senderName = msg.senderName,
-                                readOnly   = true   , // 읽기 모드
-                                receiverNickname = "도마도"
+                                letterId = msg.letterId,
+                                readOnly = true
                             )
                         findNavController().navigate(action)
                     }

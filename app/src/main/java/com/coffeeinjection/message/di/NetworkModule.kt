@@ -1,9 +1,11 @@
 package com.coffeeinjection.message.di
 
+import com.coffeeinjection.message.BuildConfig
 import com.coffeeinjection.message.data.remote.api.AuthApi
 import com.coffeeinjection.message.data.remote.api.MessageApi
 import com.coffeeinjection.message.data.remote.interceptor.AuthInterceptor
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,68 +17,74 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
-/**
- * - Retrofit/OkHttp/AuthApi를 싱글톤으로 제공
- * - 개발 환경에서는 BODY 로깅을 ON.
- */
-
-@Qualifier
-annotation class BaseUrl
+// -------------------------
+// Qualifier 정의
+// -------------------------
+@Qualifier annotation class NoAuthClient
+@Qualifier annotation class AuthClient
+@Qualifier annotation class NoAuthRetrofit
+@Qualifier annotation class AuthRetrofit
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    @BaseUrl
-    @Provides
-    fun provideBaseUrl(): String =
-        "http://15.164.112.136:8080/api/v1/" //"http://localhost:8080/api/v1/auth/"
+    @Provides @Singleton
+    fun provideMoshi(): Moshi =
+        Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
-
-    @Provides
-    @Singleton
-    fun provideOkHttp(
-        authInterceptor: AuthInterceptor
-    ): OkHttpClient {
-        val logging = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+    @Provides @Singleton
+    fun provideLogging(): HttpLoggingInterceptor =
+        HttpLoggingInterceptor().apply {
+            level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
+            else HttpLoggingInterceptor.Level.NONE
         }
 
-        return OkHttpClient.Builder()
-            // ★ 여기서 토큰 추가
-            .addInterceptor(authInterceptor)
-            // ★ 로그 인터셉터
+    @Provides @Singleton @NoAuthClient
+    fun provideNoAuthOkHttp(logging: HttpLoggingInterceptor): OkHttpClient =
+        OkHttpClient.Builder()
             .addInterceptor(logging)
             .build()
-    }
 
-    @Provides
-    @Singleton
-    fun provideMoshi(): Moshi = Moshi.Builder()
-        .add(com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory())
-        .build()
-
-    @Provides
-    @Singleton
-    fun provideRetrofit(
-        okHttpClient: OkHttpClient,
-        moshi: Moshi,
-        @BaseUrl baseUrl: String
-    ): Retrofit =
-        Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .client(okHttpClient)
+    @Provides @Singleton @AuthClient
+    fun provideAuthOkHttp(
+        authInterceptor: AuthInterceptor,
+        logging: HttpLoggingInterceptor
+    ): OkHttpClient =
+        OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
+            .addInterceptor(logging)
             .build()
 
-    @Provides
-    @Singleton
-    fun provideAuthApi(retrofit: Retrofit): AuthApi = retrofit.create(AuthApi::class.java)
+    @Provides @Singleton @NoAuthRetrofit
+    fun provideNoAuthRetrofit(
+        moshi: Moshi,
+        @NoAuthClient client: OkHttpClient
+    ): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(BuildConfig.BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(client)
+            .build()
 
-    @Provides
-    @Singleton
-    fun provideMessageApi(
-        retrofit: Retrofit
-    ): MessageApi =
+    @Provides @Singleton @AuthRetrofit
+    fun provideAuthRetrofit(
+        moshi: Moshi,
+        @AuthClient client: OkHttpClient
+    ): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(BuildConfig.BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(client)
+            .build()
+
+    // ✅ 여기만 중요: AuthApi는 토큰 없는 Retrofit로 생성
+    @Provides @Singleton
+    fun provideAuthApi(@NoAuthRetrofit retrofit: Retrofit): AuthApi =
+        retrofit.create(AuthApi::class.java)
+
+    // ✅ MessageApi는 토큰 있는 Retrofit로 생성
+    @Provides @Singleton
+    fun provideMessageApi(@AuthRetrofit retrofit: Retrofit): MessageApi =
         retrofit.create(MessageApi::class.java)
 }

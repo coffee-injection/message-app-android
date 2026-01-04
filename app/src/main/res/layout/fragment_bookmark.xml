@@ -47,8 +47,8 @@
             app:layout_constraintTop_toBottomOf="@+id/btn_island1" />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/list_view"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_bookmarks"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="50dp"

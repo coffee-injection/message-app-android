@@ -24,17 +24,17 @@ android {
         debug {
             // 디버그 전용 식별자/버전 꼬리표
             applicationIdSuffix = ".debug"
-
             // 난독화/리소스 축소 비활성화(기본값이지만 명시해두면 좋습니다)
             isMinifyEnabled = false
+            buildConfigField("String", "BASE_URL", "\"http://15.164.112.136:8080/api/v1/\"")
         }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             applicationIdSuffix = ".release"
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "BASE_URL", "\"http://15.164.112.136:8080/api/v1/\"")
         }
     }
     compileOptions {

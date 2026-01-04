@@ -3,10 +3,10 @@ package com.coffeeinjection.message.data.repository
 import com.coffeeinjection.message.data.local.AuthDataStore
 import com.coffeeinjection.message.data.local.UserInfo
 import com.coffeeinjection.message.data.remote.api.AuthApi
+import com.coffeeinjection.message.data.remote.dto.KakaoLoginRequest
 import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateRequest
 import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateResponse
-import com.coffeeinjection.message.data.remote.requireDataOrThrow
-import com.coffeeinjection.message.data.remote.dto.KakaoLoginRequest
+import com.coffeeinjection.message.data.remote.base.requireDataOrThrow
 import com.coffeeinjection.message.data.remote.dto.KakaoLoginUrlResponse
 import com.coffeeinjection.message.data.remote.dto.LoginResponse
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteRequest

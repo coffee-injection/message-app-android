@@ -1,6 +1,4 @@
-package com.coffeeinjection.message.data.remote
-
-import com.coffeeinjection.message.data.remote.dto.ApiEnvelope
+package com.coffeeinjection.message.data.remote.base
 
 /**
  * 공통 ApiEnvelope 언래핑 확장 함수
