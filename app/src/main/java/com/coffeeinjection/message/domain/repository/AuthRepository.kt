@@ -1,6 +1,7 @@
 package com.coffeeinjection.message.domain.repository
 
 import com.coffeeinjection.message.data.local.UserInfo
+import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateResponse
 import com.coffeeinjection.message.data.remote.dto.KakaoLoginUrlResponse
 import com.coffeeinjection.message.data.remote.dto.LoginResponse
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteResponse
@@ -13,6 +14,7 @@ interface AuthRepository {
     suspend fun getKakaoLoginUrl(): KakaoLoginUrlResponse
     suspend fun exchangeCodeToJwt(code: String): LoginResponse
     suspend fun completeSignup(userinfo: UserInfo): SignupCompleteResponse
+    suspend fun checkNicknameDuplicate(nickname: String): CheckNicknameDuplicateResponse
     suspend fun saveAccessToken(token: String)
     suspend fun saveUserInfo(userinfo: UserInfo)
 }

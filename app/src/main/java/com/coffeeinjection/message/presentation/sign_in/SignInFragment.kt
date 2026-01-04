@@ -135,8 +135,7 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
                 viewModel.uiState.collectLatest { state ->
                     Logger.d("[uistate check!!] : $state")
                     state.errorMessage?.let {
-                        // Toast 등으로 알림
-                        // Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
                         viewModel.clearError()
                     }
                     if (state.loginUrl != null && webView.url != state.loginUrl) {

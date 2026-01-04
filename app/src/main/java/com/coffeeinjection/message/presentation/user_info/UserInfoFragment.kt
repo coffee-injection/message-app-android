@@ -2,6 +2,7 @@ package com.coffeeinjection.message.presentation.user_info
 
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
@@ -19,7 +20,10 @@ import com.coffeeinjection.message.data.local.UserInfo
 import com.coffeeinjection.message.databinding.FragmentUserInfoBinding
 import com.coffeeinjection.message.presentation.BaseFragment
 import com.coffeeinjection.message.presentation.activity.SharedViewModel
+import com.coffeeinjection.message.util.Logger
+import com.coffeeinjection.presentation.sign_in.SignInFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 /**
@@ -65,17 +69,6 @@ class UserInfoFragment : BaseFragment<FragmentUserInfoBinding>(FragmentUserInfoB
 
         // 초기 상태 세팅(디폴트 선택)
         setupDefaultState()
-
-        // sharedViewModel 프로필 uri가 오면 프리뷰 이미지에 반영(원하실 때만 사용)
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                sharedViewModel.profileUri.collect { uri ->
-                    uri ?: return@collect
-                    // 사진 선택이 들어오면 프리뷰를 사진으로 바꿈 (원치 않으면 이 블록 제거하세요)
-                    binding.ivPreviewImg.setImageURI(uri)
-                }
-            }
-        }
     }
 
     override fun setupListeners() = with(binding) {
@@ -133,6 +126,27 @@ class UserInfoFragment : BaseFragment<FragmentUserInfoBinding>(FragmentUserInfoB
             else {
                 // 회원 가입의 경우
                 viewModel.completeSignup(userInfo)
+            }
+        }
+    }
+
+    override fun setupCollectors() {
+        super.setupCollectors()
+        with(binding) {
+            // 상태 관찰
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.uiState.collectLatest { state ->
+                    Logger.d("[uistate check!!] : $state")
+                    state.errorMessage?.let {
+                        Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                        viewModel.clearError()
+                    }
+                    if (state.navigateToMain) {
+                        findNavController().navigate(
+                            SignInFragmentDirections.actionSignInFragmentToHomeFragment()
+                        )
+                    }
+                }
             }
         }
     }

@@ -1,10 +1,12 @@
 package com.coffeeinjection.message.domain.usecase
 
 import com.coffeeinjection.message.data.local.UserInfo
+import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateResponse
 import com.coffeeinjection.message.data.remote.dto.KakaoLoginUrlResponse
 import com.coffeeinjection.message.data.remote.dto.LoginResponse
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteResponse
 import com.coffeeinjection.message.domain.repository.AuthRepository
+import javax.annotation.meta.TypeQualifierNickname
 import javax.inject.Inject
 
 class GetKakaoLoginUrlUseCase @Inject constructor(
@@ -44,5 +46,13 @@ class CompleteSignupUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(userInfo: UserInfo): SignupCompleteResponse {
         return authRepository.completeSignup(userInfo)
+    }
+}
+
+class CheckNicknameDuplicateUseCase @Inject constructor(
+    private val authRepository: AuthRepository
+){
+    suspend operator fun invoke(nickname: String): CheckNicknameDuplicateResponse {
+        return authRepository.checkNicknameDuplicate(nickname)
     }
 }

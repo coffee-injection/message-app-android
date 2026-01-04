@@ -59,6 +59,18 @@ data class SignupCompleteResponse(
     @Json(name = "profileImageIndex") val profileImageIndex: Int
 )
 
+// ------------------------------------
+// 4) POST /member/check-nickname 요청/응답
+// ------------------------------------
+data class CheckNicknameDuplicateRequest(
+    @Json(name = "nickname") val nickname: String
+)
+
+data class CheckNicknameDuplicateResponse(
+    @Json(name = "message") val message: String,
+    @Json(name = "available") val available: Boolean
+)
+
 /**
  * Base Result class (서버 응답을 감싸는 공통 래퍼 클래스)
  */

@@ -3,6 +3,8 @@ package com.coffeeinjection.message.data.repository
 import com.coffeeinjection.message.data.local.AuthDataStore
 import com.coffeeinjection.message.data.local.UserInfo
 import com.coffeeinjection.message.data.remote.api.AuthApi
+import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateRequest
+import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateResponse
 import com.coffeeinjection.message.data.remote.requireDataOrThrow
 import com.coffeeinjection.message.data.remote.dto.KakaoLoginRequest
 import com.coffeeinjection.message.data.remote.dto.KakaoLoginUrlResponse
@@ -26,17 +28,22 @@ class AuthRepositoryImpl @Inject constructor(
     //[kakao] /kakao/login-url raw = {"status":200,"data":{"loginUrl":"https://kauth.kakao.com/oauth/authorize?client_id=fcdef606075e13512243c022e5a852f8&redirect_uri=http://localhost:8080/auth/kakao/callback&response_type=code&prompt=login"},"success":true,"timeStamp":"2025-11-18T22:11:26.466044"}, code=200
     override suspend fun getKakaoLoginUrl(): KakaoLoginUrlResponse {
         val env = api.getKakaoLoginUrl()
-        return env.requireDataOrThrow("kakao/login-url")
+        return env.requireDataOrThrow("auth/kakao/login-url")
     }
 
     override suspend fun exchangeCodeToJwt(code: String): LoginResponse {
         val env = api.kakaoLogin(KakaoLoginRequest(code))
-        return env.requireDataOrThrow("kakao/exchangeCodeToJwt")
+        return env.requireDataOrThrow("auth/login")
     }
 
     override suspend fun completeSignup(userInfo: UserInfo): SignupCompleteResponse {
         val env =  api.completeSignup(SignupCompleteRequest(userInfo.nickName, userInfo.islandName, userInfo.profileImageIndex))
-        return env.requireDataOrThrow("kakao/completeSignup")
+        return env.requireDataOrThrow("auth/signup/complete")
+    }
+
+    override suspend fun checkNicknameDuplicate(nickname : String) : CheckNicknameDuplicateResponse {
+        val env = api.checkNicknameDuplicate(CheckNicknameDuplicateRequest(nickname))
+        return env.requireDataOrThrow("member/check-nickname")
     }
 
     override suspend fun saveAccessToken(token: String) {

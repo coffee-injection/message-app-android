@@ -1,6 +1,8 @@
 package com.coffeeinjection.message.data.remote.api
 
 import com.coffeeinjection.message.data.remote.dto.ApiEnvelope
+import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateRequest
+import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateResponse
 import com.coffeeinjection.message.data.remote.dto.KakaoLoginRequest
 import com.coffeeinjection.message.data.remote.dto.KakaoLoginUrlResponse
 import com.coffeeinjection.message.data.remote.dto.LoginResponse
@@ -30,4 +32,11 @@ interface AuthApi {
     suspend fun completeSignup(
         @Body req: SignupCompleteRequest
     ): ApiEnvelope<SignupCompleteResponse>
+
+    /** 2) 인가 코드 → JWT 교환 (토큰 필요 없음) */
+    @Headers("No-Auth: true")
+    @POST("member/check-nickname")
+    suspend fun checkNicknameDuplicate(
+        @Body req: CheckNicknameDuplicateRequest
+    ): ApiEnvelope<CheckNicknameDuplicateResponse>
 }
