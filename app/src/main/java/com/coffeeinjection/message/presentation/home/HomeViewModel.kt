@@ -43,8 +43,6 @@ class HomeViewModel @Inject constructor(
                     SeaMessageUiModel(
                         letterId = letter.letterId,
                         zone = zone,
-                        content = letter.content,
-                        senderName = letter.senderName
                     )
                 }
 

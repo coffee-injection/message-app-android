@@ -1,6 +1,6 @@
 package com.coffeeinjection.message.data.remote.api
 
-import com.coffeeinjection.message.data.remote.dto.ApiEnvelope
+import com.coffeeinjection.message.data.remote.base.ApiEnvelope
 import com.coffeeinjection.message.data.remote.dto.KakaoLoginRequest
 import com.coffeeinjection.message.data.remote.dto.KakaoLoginUrlResponse
 import com.coffeeinjection.message.data.remote.dto.LoginResponse

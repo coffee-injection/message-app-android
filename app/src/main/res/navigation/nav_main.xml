@@ -73,21 +73,10 @@
             app:argType="long" />
 
         <argument
-            android:name="content"
-            app:argType="string" />
-
-        <argument
-            android:name="senderName"
-            app:argType="string" />
-
-        <argument
             android:name="readOnly"
             android:defaultValue="false"
             app:argType="boolean" />
 
-        <argument
-            android:name="receiverNickname"
-            app:argType="string" />
     </dialog>
     <fragment
         android:id="@+id/userInfoFragment"

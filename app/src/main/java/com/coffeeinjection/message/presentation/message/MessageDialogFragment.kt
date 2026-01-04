@@ -16,6 +16,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.coffeeinjection.message.R
@@ -23,6 +26,7 @@ import com.coffeeinjection.message.databinding.DialogFragmentMessageReadBinding
 import com.coffeeinjection.message.databinding.DialogFragmentMessageWriteBinding
 import com.coffeeinjection.message.presentation.activity.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 /**
  * 다이얼로그 메세지 프레그먼트
@@ -73,8 +77,10 @@ class MessageDialogFragment : DialogFragment() {
                 _readBinding = DialogFragmentMessageReadBinding.inflate(inflater, container, false)
                 readBinding.root
             }
+
             Mode.WRITE -> {
-                _writeBinding = DialogFragmentMessageWriteBinding.inflate(inflater, container, false)
+                _writeBinding =
+                    DialogFragmentMessageWriteBinding.inflate(inflater, container, false)
                 writeBinding.root
             }
         }
@@ -99,63 +105,56 @@ class MessageDialogFragment : DialogFragment() {
         // 닫기
         ivClose.setOnClickListener { dismiss() }
 
-        // ----------------------------
-        // 1) 화면 데이터 바인딩
-        // ----------------------------
-        // nav_graph argument 기준으로 들어오는 값들
-        tvNickname.text = args.senderName
-        tvReceivedMsg.text = args.content
+        // 1) 상세 조회 호출
+        sharedViewModel.readLetter(args.letterId)
 
-        // 현재 nav_graph에 islandName / receivedDate가 없으니 필요하면:
-        // - args에 추가하거나
-        // - letterId로 서버/DB 조회해서 VM에서 가져와 세팅하세요.
-        // tvIslandName.text = ...
-        // tvReceivedDate.text = ...
+        // 2) 상세 데이터 구독 → UI 바인딩
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    sharedViewModel.letterDetail.collect { letter ->
+                        if (letter == null) return@collect
+                        tvNickname.text = letter.senderName
+                        // todo -> 섬 이름 추가되어야함
+                        tvReceivedMsg.text = letter.content
+                    }
+                }
 
-        // ----------------------------
-        // 2) 저장(북마크)
-        // ----------------------------
+                // (선택) 에러 토스트
+                launch {
+                    sharedViewModel.letterDetailError.collect { msg ->
+                        if (!msg.isNullOrBlank()) {
+                            Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        }
+
+        // 3) 저장(북마크)
         btnSave.setOnClickListener {
-            // TODO: 실제 북마크 로직으로 교체
-            // 예) sharedViewModel.toggleBookmark(args.letterId)
+            sharedViewModel.bookmarkLetter(args.letterId)
             Toast.makeText(requireContext(), "저장했습니다.", Toast.LENGTH_SHORT).show()
         }
 
-        // ----------------------------
-        // 3) 답장하기
-        // ----------------------------
+        // 4) 답장하기 → 쓰기 모드로 다시 열기
         btnReply.setOnClickListener {
-            // 현재 네비게이션 그래프에는 "dialog -> dialog self action"이 없습니다.
-            // 그래서 action 기반 SafeArgs 대신, destinationId + args bundle 방식이 가장 확실합니다.
-
-            // 답장 모드 = write 모드로 같은 messageDialogFragment를 다시 띄움
-            // - receiverNickname: 답장 대상(= 보낸 사람)
-            // - letterId/content/senderName: write 모드에서 필요 없으면 더미 값 전달(필수 args라서)
             val bundle = MessageDialogFragmentArgs(
                 letterId = 0L,
-                content = "",
-                senderName = "",
-                readOnly = false,
-                receiverNickname = args.senderName
+                readOnly = false
             ).toBundle()
 
-            // 새 다이얼로그 열기
             findNavController().navigate(R.id.messageDialogFragment, bundle)
-
-            // 기존 읽기 다이얼로그 닫기(스택에 다이얼로그 2개 쌓이는 것 방지)
             dismiss()
         }
 
-        // ----------------------------
-        // 4) 신고하기
-        // ----------------------------
+        // 5) 신고하기
         btnReport.setOnClickListener {
             AlertDialog.Builder(requireContext())
                 .setTitle("신고하기")
                 .setMessage("해당 메시지를 신고하시겠습니까?")
                 .setPositiveButton("신고") { _, _ ->
-                    // TODO: 실제 신고 로직으로 교체
-                    // 예) sharedViewModel.reportLetter(args.letterId)
+                    sharedViewModel.reportLetter(args.letterId, reason = null)
                     Toast.makeText(requireContext(), "신고가 접수되었습니다.", Toast.LENGTH_SHORT).show()
                     dismiss()
                 }
@@ -177,7 +176,9 @@ class MessageDialogFragment : DialogFragment() {
 
         // 글자수 카운트 업데이트
         etMessage.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
+                Unit
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
             override fun afterTextChanged(s: Editable?) {
                 val length = s?.length ?: 0
@@ -200,7 +201,6 @@ class MessageDialogFragment : DialogFragment() {
                 .setPositiveButton("전송") { _, _ ->
                     // receiverNickname 은 nav args로 전달받음
                     sharedViewModel.sendLetter(
-                        receiverNickname = args.receiverNickname,
                         content = message
                     )
                     dismiss()

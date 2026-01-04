@@ -12,6 +12,4 @@ enum class SeaZone {
 data class SeaMessageUiModel(
     val letterId: Long,
     val zone: SeaZone,
-    val content: String,
-    val senderName: String,
 )

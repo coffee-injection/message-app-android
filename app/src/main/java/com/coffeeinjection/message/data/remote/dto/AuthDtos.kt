@@ -53,14 +53,3 @@ data class SignupCompleteResponse(
     @Json(name = "email") val email: String?,
     @Json(name = "isNewMember") val isNewMember: Boolean
 )
-
-/**
- * Base Result class (서버 응답을 감싸는 공통 래퍼 클래스)
- */
-@JsonClass(generateAdapter = true)
-data class ApiEnvelope<T>(
-    @Json(name = "status") val status: Int,
-    @Json(name = "data") val data: T?,
-    @Json(name = "success") val success: Boolean?,
-    @Json(name = "timeStamp") val timeStamp: String?
-)
