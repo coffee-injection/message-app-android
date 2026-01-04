@@ -34,8 +34,8 @@ class AuthRepositoryImpl @Inject constructor(
         return env.requireDataOrThrow("kakao/exchangeCodeToJwt")
     }
 
-    override suspend fun completeSignup(nickname: String): SignupCompleteResponse {
-        val env =  api.completeSignup(SignupCompleteRequest(nickname))
+    override suspend fun completeSignup(userInfo: UserInfo): SignupCompleteResponse {
+        val env =  api.completeSignup(SignupCompleteRequest(userInfo.nickName, userInfo.islandName, userInfo.profileImageIndex))
         return env.requireDataOrThrow("kakao/completeSignup")
     }
 

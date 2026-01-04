@@ -8,7 +8,6 @@ data class AuthUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val loginUrl: String? = null,
-    val tempToken: String? = null,   // 신규회원 로그인 시 받은 임시 JWT
     val navigateToNickname: Boolean = false,
     val navigateToMain: Boolean = false
 )

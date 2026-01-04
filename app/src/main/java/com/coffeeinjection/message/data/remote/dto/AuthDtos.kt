@@ -28,8 +28,8 @@ data class KakaoLoginRequest(
 data class LoginResponse(
     @Json(name = "accessToken") val accessToken: String,
     @Json(name = "tokenType") val tokenType: String,
-    @Json(name = "expiresIn") val expiresIn: Long,
-    @Json(name = "memberId") val memberId: Long?,
+    @Json(name = "expiresIn") val expiresIn: Int,
+    @Json(name = "memberId") val memberId: Int?,
     @Json(name = "email") val email: String?,
     @Json(name = "isNewMember") val isNewMember: Boolean
 )
@@ -42,14 +42,19 @@ data class SignupCompleteRequest(
      * [닉네임]
      * - 2~20자 제약이 있음(서버 검증 기준).
      */
-    @Json(name = "nickname") val nickname: String
+    @Json(name = "nickname") val nickname: String,
+    @Json(name = "islandName") val islandName: String,
+    @Json(name = "profileImageIndex") val profileImageIndex: Int
 )
 
 data class SignupCompleteResponse(
     @Json(name = "accessToken") val accessToken: String,
     @Json(name = "tokenType") val tokenType: String,
-    @Json(name = "expiresIn") val expiresIn: Long,
-    @Json(name = "memberId") val memberId: Long?,
+    @Json(name = "expiresIn") val expiresIn: Int,
+    @Json(name = "memberId") val memberId: Int,
     @Json(name = "email") val email: String?,
-    @Json(name = "isNewMember") val isNewMember: Boolean
+    @Json(name = "isNewMember") val isNewMember: Boolean,
+    @Json(name = "nickname") val nickname: String,
+    @Json(name = "islandName") val islandName: String,
+    @Json(name = "profileImageIndex") val profileImageIndex: Int
 )

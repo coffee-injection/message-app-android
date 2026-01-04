@@ -42,7 +42,7 @@ class SaveUserInfoUseCase @Inject constructor(
 class CompleteSignupUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
-    suspend operator fun invoke(nickname: String): SignupCompleteResponse {
-        return authRepository.completeSignup(nickname)
+    suspend operator fun invoke(userInfo: UserInfo): SignupCompleteResponse {
+        return authRepository.completeSignup(userInfo)
     }
 }
