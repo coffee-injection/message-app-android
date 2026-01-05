@@ -103,8 +103,15 @@ class MessageDialogFragment : DialogFragment() {
     // READ MODE (읽기 레이아웃: dialog_fragment_message_read.xml)
     // ---------------------------------------------------------------------------------------------
     private fun setupReadMode() = with(readBinding) {
-        // 닫기
-        ivClose.setOnClickListener { dismiss() }
+
+        ivClose.setOnClickListener {
+            showWarningDialog(
+                title = getString(R.string.dialog_fragment_message_title2),
+                subTitle = getString(R.string.dialog_fragment_message_sub2)
+            ) {
+                dismiss()
+            }
+        }
 
         // 1) 상세 조회 호출
         sharedViewModel.readLetter(args.letterId)
@@ -135,12 +142,14 @@ class MessageDialogFragment : DialogFragment() {
         }
 
         // 3) 저장(북마크)
+        btnSave.setCenterIconWithText(true)
         btnSave.setOnClickListener {
             sharedViewModel.bookmarkLetter(args.letterId)
             Toast.makeText(requireContext(), "저장했습니다.", Toast.LENGTH_SHORT).show()
         }
 
         // 4) 답장하기 → 쓰기 모드로 다시 열기
+        btnReply.setCenterIconWithText(true)
         btnReply.setOnClickListener {
             val bundle = MessageDialogFragmentArgs(
                 letterId = 0L,
@@ -152,18 +161,18 @@ class MessageDialogFragment : DialogFragment() {
         }
 
         // 5) 신고하기
+        btnReport.setCenterIconWithText(true)
         btnReport.setOnClickListener {
-            AlertDialog.Builder(requireContext())
-                .setTitle("신고하기")
-                .setMessage("해당 메시지를 신고하시겠습니까?")
-                .setPositiveButton("신고") { _, _ ->
-                    sharedViewModel.reportLetter(args.letterId, reason = "Bad Request")
-                    Toast.makeText(requireContext(), "신고가 접수되었습니다.", Toast.LENGTH_SHORT).show()
-                    dismiss()
-                }
-                .setNegativeButton("취소", null)
-                .show()
+            showWarningDialog(
+                title = getString(R.string.dialog_fragment_message_title3),
+                subTitle = getString(R.string.dialog_fragment_message_sub3)
+            ) {
+                sharedViewModel.reportLetter(args.letterId, reason = "Bad Request")
+                Toast.makeText(requireContext(), "신고가 접수되었습니다.", Toast.LENGTH_SHORT).show()
+                dismiss()
+            }
         }
+
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -190,6 +199,7 @@ class MessageDialogFragment : DialogFragment() {
         })
 
         // 전송 버튼
+        btnSend.setCenterIconWithText(true)
         btnSend.setOnClickListener {
             val message = etMessage.text?.toString()?.trim().orEmpty()
             if (message.isBlank()) {
@@ -236,6 +246,20 @@ class MessageDialogFragment : DialogFragment() {
             // 쓰기모드에서 키보드 올라올 때 레이아웃이 잘 보이도록
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         }
+    }
+
+    /**
+     * 경고 다이얼로그 공통함수
+     */
+    private fun showWarningDialog(
+        title: String,
+        subTitle: String,
+        onConfirm: () -> Unit
+    ) {
+        val warning = WarningDialogFragment.newInstance(title, subTitle).apply {
+            onConfirmClose = { onConfirm() } // btn_close 눌렀을 때만 실행
+        }
+        warning.show(childFragmentManager, "warning_dialog")
     }
 
     /**

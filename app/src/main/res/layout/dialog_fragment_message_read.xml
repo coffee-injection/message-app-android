@@ -138,6 +138,7 @@
         android:background="@drawable/btn_bg_bookmarks"
         android:text="@string/dialog_fragment_message_save"
         android:textColor="@color/bg_yellow"
+        android:drawableStart="@drawable/ic_bookmark_select"
         app:layout_constraintEnd_toEndOf="@+id/card_container"
         app:layout_constraintStart_toStartOf="@+id/card_container"
         app:layout_constraintTop_toBottomOf="@+id/card_container" />
@@ -148,6 +149,7 @@
         android:layout_height="55dp"
         android:layout_marginTop="8dp"
         android:text="@string/dialog_fragment_message_reply"
+        android:drawableStart="@drawable/ic_reply"
         app:layout_constraintEnd_toEndOf="@+id/btn_save"
         app:layout_constraintStart_toStartOf="@+id/btn_save"
         app:layout_constraintTop_toBottomOf="@+id/btn_save" />
@@ -160,6 +162,7 @@
         android:background="@drawable/bg_white_round12"
         android:text="@string/dialog_fragment_message_report"
         android:textColor="@color/stroke_dark"
+        android:drawableStart="@drawable/ic_report"
         app:layout_constraintEnd_toEndOf="@+id/btn_reply"
         app:layout_constraintStart_toStartOf="@+id/btn_reply"
         app:layout_constraintTop_toBottomOf="@+id/btn_reply" />
