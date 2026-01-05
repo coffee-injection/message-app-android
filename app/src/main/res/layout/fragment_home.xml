@@ -19,16 +19,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <!-- 아이콘 뿌릴 레이어 (투명) -->
-    <FrameLayout
-        android:id="@+id/bg_SeaLayer"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="@id/iv_background"
-        app:layout_constraintBottom_toBottomOf="@id/iv_background"
-        app:layout_constraintStart_toStartOf="@id/iv_background"
-        app:layout_constraintEnd_toEndOf="@id/iv_background"/>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_island"
         android:layout_width="wrap_content"
@@ -116,5 +106,16 @@
         android:src="@drawable/fab_write"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 아이콘 뿌릴 레이어 (투명) -->
+    <FrameLayout
+        android:id="@+id/bg_SeaLayer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="300dp"
+        app:layout_constraintTop_toTopOf="@id/layout_island"
+        app:layout_constraintBottom_toTopOf="@id/btn_send_msg"
+        app:layout_constraintStart_toStartOf="@id/iv_background"
+        app:layout_constraintEnd_toEndOf="@id/iv_background"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
