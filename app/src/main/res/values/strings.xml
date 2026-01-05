@@ -1,8 +1,7 @@
 <resources>
-    <string name="app_name">돛단배</string>
+    <string name="app_name">띄움</string>
     <!-- TODO: Remove or change this placeholder text -->
     <!--  Splash  -->
-    <string name="SAILBOAT">SAILBOAT</string>
     <string name="Tium">Tium</string>
 
     <!--  Guide  -->
@@ -55,6 +54,11 @@
     <string name="dialog_fragment_warning_sub_title">북마크되지 않은 메시지는 바다로 떠내려가요</string>
     <string name="dialog_fragment_warning_close">닫기</string>
     <string name="dialog_fragment_warning_cancel">취소</string>
+    <string name="dialog_fragment_message_title2">메시지를 닫으시겠어요?</string>
+    <string name="dialog_fragment_message_sub2">북마크되지 않은 메시지는 바다로 떠내려가요</string>
+    <string name="dialog_fragment_message_title3">정말 신고하시겠어요?</string>
+    <string name="dialog_fragment_message_sub3">신고가 접수되면 취소하거나 되돌릴 수 없어요</string>
+
 
     <!--Title-->
     <string name="title_mypage">마이페이지</string>

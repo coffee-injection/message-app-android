@@ -3,13 +3,18 @@
     android:height="24dp"
     android:viewportWidth="24"
     android:viewportHeight="24">
-
-    <!-- 도형을 약간 가운데로 이동 -->
-    <group
-        android:translateX="2.5"
-        android:translateY="4">
-        <path
-            android:fillColor="#F3F3F3"
-            android:pathData="M0,16V0L19,8L0,16ZM2,13L13.85,8L2,3V6.5L8,8L2,9.5V13Z"/>
-    </group>
+  <path
+      android:pathData="M14.312,21.354C14.349,21.447 14.414,21.527 14.498,21.582C14.582,21.637 14.681,21.665 14.781,21.663C14.882,21.66 14.979,21.627 15.06,21.568C15.141,21.508 15.202,21.425 15.234,21.33L21.635,2.621C21.666,2.534 21.673,2.439 21.652,2.349C21.632,2.258 21.587,2.175 21.521,2.11C21.455,2.044 21.372,1.999 21.282,1.979C21.191,1.958 21.097,1.964 21.01,1.996L2.3,8.396C2.205,8.429 2.123,8.49 2.063,8.571C2.004,8.652 1.971,8.749 1.968,8.849C1.965,8.95 1.994,9.049 2.049,9.133C2.104,9.217 2.184,9.282 2.277,9.319L10.085,12.45C10.332,12.549 10.557,12.697 10.745,12.885C10.933,13.073 11.081,13.297 11.18,13.543L14.312,21.354Z"
+      android:strokeLineJoin="round"
+      android:strokeWidth="1.96939"
+      android:fillColor="#00000000"
+      android:strokeColor="#ffffff"
+      android:strokeLineCap="round"/>
+  <path
+      android:pathData="M21.518,2.114L10.745,12.886"
+      android:strokeLineJoin="round"
+      android:strokeWidth="1.96939"
+      android:fillColor="#00000000"
+      android:strokeColor="#ffffff"
+      android:strokeLineCap="round"/>
 </vector>
