@@ -10,7 +10,6 @@
         android:layout_width="130dp"
         android:layout_height="130dp"
         android:src="@drawable/ic_wave"
-        app:layout_constraintBottom_toTopOf="@id/tv_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -19,24 +18,24 @@
 
     <TextView
         android:id="@+id/tv_title"
+        style="@style/black_title_bold18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:gravity="center"
         android:text="@string/guide_step1_title"
-        style="@style/black_title_bold18"
-        app:layout_constraintBottom_toTopOf="@id/tv_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_element" />
+        app:layout_constraintTop_toBottomOf="@+id/iv_element" />
 
     <TextView
         android:id="@+id/tv_description"
+        style="@style/grey_second_title_normal16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:gravity="center"
-        style="@style/grey_second_title_normal16"
         android:text="@string/guide_step1_description"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title" />

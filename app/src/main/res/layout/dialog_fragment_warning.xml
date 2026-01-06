@@ -72,30 +72,39 @@
     </androidx.cardview.widget.CardView>
 
 
+    <!-- 가운데 분할용 가이드라인(50%) -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
     <com.coffeeinjection.message.util.GradientTextButton
         android:id="@+id/btn_cancel"
-        android:layout_width="165dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
         android:layout_marginTop="8dp"
-        android:layout_weight="0.5"
+        android:layout_marginEnd="5dp"
         android:background="@drawable/bg_white_round12"
         android:text="@string/dialog_fragment_warning_cancel"
         android:textColor="@color/text_secondary"
-        app:layout_constraintStart_toStartOf="@+id/card_container"
-        app:layout_constraintTop_toBottomOf="@+id/card_container" />
+        app:layout_constraintStart_toStartOf="@id/card_container"
+        app:layout_constraintEnd_toStartOf="@id/guideline_center"
+        app:layout_constraintTop_toBottomOf="@id/card_container" />
 
     <com.coffeeinjection.message.util.GradientTextButton
         android:id="@+id/btn_close"
-        android:layout_width="165dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="10dp"
-        android:layout_weight="0.5"
+        android:layout_marginStart="5dp"
         android:background="@drawable/bg_red_gradient"
         android:text="@string/dialog_fragment_warning_close"
         android:textColor="@color/color_white"
-        app:layout_constraintEnd_toEndOf="@+id/card_container"
-        app:layout_constraintTop_toBottomOf="@+id/card_container" />
+        app:layout_constraintStart_toEndOf="@id/guideline_center"
+        app:layout_constraintEnd_toEndOf="@id/card_container"
+        app:layout_constraintTop_toBottomOf="@id/card_container" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

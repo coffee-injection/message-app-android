@@ -63,19 +63,19 @@
     </style>
 
     <!-- 소 제목 -->
-    <style name="grey_second_title_normal12" parent="TextAppearance.AppCompat.Title">
+    <style name="grey_second_title_normal12" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textSize">@dimen/text_size_12</item>
         <item name="android:textColor">@color/stroke_dark</item>
         <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="grey_second_title_normal14" parent="TextAppearance.AppCompat.Title">
+    <style name="grey_second_title_normal14" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textSize">@dimen/text_size_14</item>
         <item name="android:textColor">@color/stroke_dark</item>
         <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="grey_second_title_normal16" parent="TextAppearance.AppCompat.Title">
+    <style name="grey_second_title_normal16" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textSize">@dimen/text_size_16</item>
         <item name="android:textColor">@color/stroke_dark</item>
         <item name="android:textStyle">normal</item>
