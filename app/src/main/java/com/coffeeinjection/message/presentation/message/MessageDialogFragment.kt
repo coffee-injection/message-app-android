@@ -159,11 +159,9 @@ class MessageDialogFragment : DialogFragment() {
         btnSave.setCenterIconWithText(true)
         btnSave.setOnClickListener {
             val next = !isBookmarked
-
-            // UI 먼저
             isBookmarked = next
-            btnSave.isSelected = next
-            btnSave.refreshDrawableState()
+            // UI 반영(아이콘+텍스트)
+            updateBookmarkUi(isBookmarked)
 
             // API 분기
             if (next) {
@@ -249,6 +247,22 @@ class MessageDialogFragment : DialogFragment() {
                 .show()
         }
     }
+
+    /**
+     * 북마크 버튼 토글 text settings
+     */
+    private fun updateBookmarkUi(isOn: Boolean) = with(readBinding.btnSave) {
+        isSelected = isOn
+        refreshDrawableState()
+
+        // 텍스트도 토글에 따라 변경
+        text = if (isOn) {
+            getString(R.string.dialog_fragment_message_cancel)
+        } else {
+            getString(R.string.dialog_fragment_message_save)
+        }
+    }
+
 
     // ---------------------------------------------------------------------------------------------
     // Dialog Window 공통 설정 (크기/배경/중앙정렬/딤/키보드)
