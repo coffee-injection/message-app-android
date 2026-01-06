@@ -28,7 +28,8 @@ class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>(FragmentBookmarkB
             onClickItem = { item ->
                 val bundle = MessageDialogFragmentArgs(
                     letterId = item.letterId,
-                    readOnly = true
+                    readOnly = true,
+                    entry = "bookmark"
                 ).toBundle()
                 findNavController().navigate(R.id.messageDialogFragment, bundle)
             },

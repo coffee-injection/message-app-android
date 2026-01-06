@@ -77,6 +77,12 @@
             android:defaultValue="false"
             app:argType="boolean" />
 
+        <!--  진입 경로 -->
+        <argument
+            android:name="entry"
+            app:argType="string"
+            android:defaultValue="home" />
+
     </dialog>
     <fragment
         android:id="@+id/userInfoFragment"

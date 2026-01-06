@@ -217,7 +217,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                         val action =
                             HomeFragmentDirections.actionHomeFragmentToMessageDialogFragment(
                                 letterId = msg.letterId,
-                                readOnly = true
+                                readOnly = true,
+                                entry = "home"
                             )
                         findNavController().navigate(action)
                     }

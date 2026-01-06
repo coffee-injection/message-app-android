@@ -57,6 +57,13 @@ class MessageDialogFragment : DialogFragment() {
 
     private enum class Mode { READ, WRITE }
 
+    private var isBookmarked: Boolean = false
+
+    /** 화면 진입 경로 */
+    private val initialBookmarked: Boolean
+        get() = args.entry == "bookmark" // bookmark 진입이면 true, home이면 false
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Dialog 스타일 적용
@@ -103,13 +110,20 @@ class MessageDialogFragment : DialogFragment() {
     // READ MODE (읽기 레이아웃: dialog_fragment_message_read.xml)
     // ---------------------------------------------------------------------------------------------
     private fun setupReadMode() = with(readBinding) {
+    // 진입 타입 기반 초기 상태 고정
+        isBookmarked = initialBookmarked
+        btnSave.isSelected = isBookmarked
+        btnSave.refreshDrawableState()
 
+        // 닫기(X)
         ivClose.setOnClickListener {
-            showWarningDialog(
-                title = getString(R.string.dialog_fragment_message_title2),
-                subTitle = getString(R.string.dialog_fragment_message_sub2)
-            ) {
+            if (isBookmarked) {
                 dismiss()
+            } else {
+                showWarningDialog(
+                    title = getString(R.string.dialog_fragment_message_title2),
+                    subTitle = getString(R.string.dialog_fragment_message_sub2)
+                ) { dismiss() }
             }
         }
 
@@ -126,7 +140,7 @@ class MessageDialogFragment : DialogFragment() {
                         tvReceivedMsg.text = letter.content
                         // todo -> 섬 이름 추가되어야함
 //                        tvIslandName.text =letter.senderName
-                        tvReceivedDate.text =letter.matchedAt.toKoreanDateHourFast()
+                        tvReceivedDate.text = letter.matchedAt.toKoreanDateHourFast()
                     }
                 }
 
@@ -141,11 +155,24 @@ class MessageDialogFragment : DialogFragment() {
             }
         }
 
-        // 3) 저장(북마크)
+        // 3) 저장(북마크) 북마크 토글
         btnSave.setCenterIconWithText(true)
         btnSave.setOnClickListener {
-            sharedViewModel.bookmarkLetter(args.letterId)
-            Toast.makeText(requireContext(), "저장했습니다.", Toast.LENGTH_SHORT).show()
+            val next = !isBookmarked
+
+            // UI 먼저
+            isBookmarked = next
+            btnSave.isSelected = next
+            btnSave.refreshDrawableState()
+
+            // API 분기
+            if (next) {
+                sharedViewModel.bookmarkLetter(args.letterId)
+                Toast.makeText(requireContext(), "저장했습니다.", Toast.LENGTH_SHORT).show()
+            } else {
+//                sharedViewModel.unbookmarkLetter(args.letterId)
+                Toast.makeText(requireContext(), "저장을 해제했습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         // 4) 답장하기 → 쓰기 모드로 다시 열기
