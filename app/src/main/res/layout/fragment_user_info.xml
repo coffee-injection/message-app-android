@@ -444,6 +444,7 @@
                 android:maxLength="8"
                 android:textColorHint="@color/text_tertiary"
                 android:textSize="@dimen/text_size_16"
+                android:textColor="@color/text_black"
                 app:layout_constraintEnd_toEndOf="@+id/layout_parent_emoji12"
                 app:layout_constraintStart_toStartOf="@+id/tv_island_name"
                 app:layout_constraintTop_toBottomOf="@+id/tv_island_name" />
@@ -512,6 +513,7 @@
                 android:textColorHint="@color/text_tertiary"
                 android:maxLength="12"
                 android:textSize="@dimen/text_size_16"
+                android:textColor="@color/text_black"
                 app:layout_constraintEnd_toEndOf="@+id/btn_island2"
                 app:layout_constraintStart_toStartOf="@+id/tv_user_name"
                 app:layout_constraintTop_toBottomOf="@+id/tv_user_name" />
