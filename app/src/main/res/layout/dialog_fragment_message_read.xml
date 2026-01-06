@@ -149,6 +149,7 @@
         android:layout_height="55dp"
         android:layout_marginTop="8dp"
         android:text="@string/dialog_fragment_message_reply"
+        android:visibility="gone"
         android:drawableStart="@drawable/ic_reply"
         app:layout_constraintEnd_toEndOf="@+id/btn_save"
         app:layout_constraintStart_toStartOf="@+id/btn_save"

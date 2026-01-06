@@ -12,6 +12,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -99,11 +100,15 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
 
     override fun setupListeners() = with(binding) {
         super.setupListeners()
+        btnGoogle.setStartIcon(context?.let { ContextCompat.getDrawable(it, R.drawable.ic_google) }, 30f)
+        btnGoogle.setCenterIconWithText(true)
         btnGoogle.setOnClickListener {
             this@SignInFragment.findNavController().navigate(
                 SignInFragmentDirections.actionSignInFragmentToHomeFragment()
             )
         }
+
+        btnKakao.setStartIcon(context?.let { ContextCompat.getDrawable(it, R.drawable.ic_kakao) }, 30f)
         btnKakao.setOnClickListener {
             if (webView.url.isNullOrBlank()) {
                 Logger.d("[카카오 로그인] Btn Click")

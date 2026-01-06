@@ -123,4 +123,20 @@ class GradientTextButton @JvmOverloads constructor(
         centerIconWithText = enable
         requestLayout()
     }
+
+    fun setStartIcon(drawable: Drawable?, sizeDp: Float = 20f) {
+        if (drawable == null) {
+            setCompoundDrawablesRelative(null, null, null, null)
+            return
+        }
+
+        val d = DrawableCompat.wrap(drawable).mutate()
+        val sizePx = dp(sizeDp).coerceAtLeast(1)
+        d.setBounds(0, 0, sizePx, sizePx) // 핵심: 사이즈 고정
+
+        setCompoundDrawablesRelative(d, null, null, null)
+        compoundDrawablePadding = iconPaddingPx
+        requestLayout()
+    }
+
 }
