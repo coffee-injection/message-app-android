@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -25,8 +24,8 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.FragmentHomeBinding
-import com.coffeeinjection.message.presentation.activity.SharedViewModel
 import com.coffeeinjection.message.presentation.BaseFragment
+import com.coffeeinjection.message.presentation.activity.SharedViewModel
 import com.coffeeinjection.message.presentation.dialog.PermissionDialogFragment
 import com.coffeeinjection.message.util.Logger
 import com.coffeeinjection.presentation.home.HomeViewModel
