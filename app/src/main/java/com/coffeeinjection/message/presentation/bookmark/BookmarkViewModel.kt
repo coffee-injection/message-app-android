@@ -2,7 +2,6 @@ package com.coffeeinjection.message.presentation.bookmark
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.coffeeinjection.message.data.remote.dto.LoadBookmarkResponse
 import com.coffeeinjection.message.domain.repository.MessageRepository
 import com.coffeeinjection.message.presentation.bookmark.model.BookmarkModel
 import com.coffeeinjection.message.presentation.bookmark.model.toUiModel

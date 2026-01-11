@@ -6,9 +6,9 @@ import com.coffeeinjection.message.R
 data class BookmarkModel(
     val letterId: Long,
     val title: String,       // senderName 또는 닉네임 등
-    val subtitle: String,    // 예: 지역/섬이름 없으면 빈값
+    val subtitle: String?,    // 예: 지역/섬이름 없으면 빈값
     val preview: String,     // content
-    val timeText: String,    // "5시간 전" 같은 표시 문자열?
+    val timeText: String,    // 매칭 시간 보여주기
     val isBookmarked: Boolean,
     @ColorRes val accentColorRes: Int
 )

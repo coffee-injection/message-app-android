@@ -37,7 +37,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- 상단 아이콘(봉투) -->
+            <!-- 상단 아이콘(보낸 사람의 img index 값) -->
             <ImageView
                 android:id="@+id/iv_icon"
                 android:layout_width="60dp"

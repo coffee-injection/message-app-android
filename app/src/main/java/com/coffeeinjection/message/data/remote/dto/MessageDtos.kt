@@ -19,6 +19,8 @@ data class Letter(
     @Json(name = "letterId") val letterId: Long,
     @Json(name = "content") val content: String,
     @Json(name = "senderName") val senderName: String,
+    @Json(name = "senderIslandName") val senderIslandName: String?,
+    @Json(name = "senderProfileImageIndex") val senderProfileImageIndex: Int?,
     @Json(name = "status") val status: String, // WAITING
     @Json(name = "createdAt") val createdAt: String,
     @Json(name = "matchedAt") val matchedAt: String?,
@@ -51,7 +53,15 @@ data class SendLetterResponse(
  * 편지 북마크 Request
  */
 @JsonClass(generateAdapter = true)
-data class BookmarkLetterRequest(
+data class AddBookmarkRequest(
+    @Json(name = "letterId") val letterId: Long
+)
+
+/**
+ * 북마크 삭제 Request
+ */
+@JsonClass(generateAdapter = true)
+data class DeleteBookmarkRequest(
     @Json(name = "letterId") val letterId: Long
 )
 
@@ -63,6 +73,8 @@ data class LoadBookmarkResponse(
     @Json(name = "letterId") val letterId: Long,
     @Json(name = "content") val content: String,
     @Json(name = "senderName") val senderName: String,
+    @Json(name = "senderIslandName") val senderIslandName: String?,
+    @Json(name = "senderProfileImageIndex") val senderProfileImageIndex: Int?,
     @Json(name = "status") val status: String, // WAITING
     @Json(name = "createdAt") val createdAt: String,
     @Json(name = "matchedAt") val matchedAt: String,
@@ -77,3 +89,4 @@ data class ReportLetterRequest(
     @Json(name = "letterId") val letterId: Long,
     @Json(name = "reason") val reason: String?
 )
+

@@ -6,9 +6,9 @@ fun LoadBookmarkResponse.toUiModel(): BookmarkModel {
     return BookmarkModel(
         letterId = letterId,
         title = senderName,
-        subtitle = "추가해야함",
+        subtitle = senderIslandName,
         preview = content,
-        timeText = createdAt,
+        timeText = matchedAt, // 매칭시간
         isBookmarked = true,
         accentColorRes = accentColorById(letterId)
     )

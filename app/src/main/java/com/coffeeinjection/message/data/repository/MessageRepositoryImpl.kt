@@ -3,7 +3,8 @@ package com.coffeeinjection.message.data.repository
 import com.coffeeinjection.message.data.remote.api.MessageApi
 import com.coffeeinjection.message.data.remote.base.ensureSuccessOrThrow
 import com.coffeeinjection.message.data.remote.base.requireDataOrThrow
-import com.coffeeinjection.message.data.remote.dto.BookmarkLetterRequest
+import com.coffeeinjection.message.data.remote.dto.AddBookmarkRequest
+import com.coffeeinjection.message.data.remote.dto.DeleteBookmarkRequest
 import com.coffeeinjection.message.data.remote.dto.Letter
 import com.coffeeinjection.message.data.remote.dto.LetterSummary
 import com.coffeeinjection.message.data.remote.dto.LoadBookmarkResponse
@@ -29,8 +30,13 @@ class MessageRepositoryImpl @Inject constructor(
         api.sendLetter(SendLetterRequest(content = content))
             .requireDataOrThrow("letter/send")
 
-    override suspend fun bookmarkLetter(letterId: Long) {
-        api.bookmarkLetter(BookmarkLetterRequest(letterId))
+    override suspend fun addBookmark(letterId: Long) {
+        api.addBookmark(AddBookmarkRequest(letterId))
+            .ensureSuccessOrThrow("bookmark")
+    }
+
+    override suspend fun deleteBookmark(letterId: Long) {
+        api.deleteBookmark(DeleteBookmarkRequest(letterId))
             .ensureSuccessOrThrow("bookmark")
     }
 

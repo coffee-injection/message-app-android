@@ -11,7 +11,7 @@ import com.coffeeinjection.message.data.remote.dto.SendLetterResponse
 interface MessageRepository {
 
     /** 수신한 편지 목록 조회 */
-    suspend fun fetchLetterList(): List<LetterSummary>
+    suspend fun fetchLetterList(): List<LetterSummary>// 유즈케이스로 빼기
 
     /** 편지 상세 조회 */
     suspend fun fetchLetterDetail(letterId: Long): Letter
@@ -22,7 +22,10 @@ interface MessageRepository {
     ): SendLetterResponse
 
     /** 편지 북마크 */
-    suspend fun bookmarkLetter(letterId: Long)
+    suspend fun addBookmark(letterId: Long)
+
+    /** 북마크 삭제*/
+    suspend fun deleteBookmark(letterId: Long)
 
     /** 북마크 리스트 조회*/
     suspend fun loadBookmarksList(): List<LoadBookmarkResponse>

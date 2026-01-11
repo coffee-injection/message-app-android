@@ -7,8 +7,10 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.ItemBookmakBinding
 import com.coffeeinjection.message.presentation.bookmark.model.BookmarkModel
+import com.coffeeinjection.message.util.setProfileImageByIndex
 import com.coffeeinjection.message.util.toKoreanDateHourFast
 
 class BookmarkAdapter(

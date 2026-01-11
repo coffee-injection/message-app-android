@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -25,6 +24,7 @@ import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.DialogFragmentMessageReadBinding
 import com.coffeeinjection.message.databinding.DialogFragmentMessageWriteBinding
 import com.coffeeinjection.message.presentation.activity.SharedViewModel
+import com.coffeeinjection.message.util.setProfileImageByIndex
 import com.coffeeinjection.message.util.toKoreanDateHourFast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -110,8 +110,9 @@ class MessageDialogFragment : DialogFragment() {
     // READ MODE (읽기 레이아웃: dialog_fragment_message_read.xml)
     // ---------------------------------------------------------------------------------------------
     private fun setupReadMode() = with(readBinding) {
-    // 진입 타입 기반 초기 상태 고정
+        // 진입 타입 기반 초기 상태 고정
         isBookmarked = initialBookmarked
+        updateBookmarkUi(isBookmarked) // 아이콘+텍스트 같이 세팅
         btnSave.isSelected = isBookmarked
         btnSave.refreshDrawableState()
 
@@ -122,7 +123,8 @@ class MessageDialogFragment : DialogFragment() {
             } else {
                 showWarningDialog(
                     title = getString(R.string.dialog_fragment_message_title2),
-                    subTitle = getString(R.string.dialog_fragment_message_sub2)
+                    subTitle = getString(R.string.dialog_fragment_message_sub2),
+                    closeText = getString(R.string.dialog_fragment_warning_close)
                 ) { dismiss() }
             }
         }
@@ -138,9 +140,12 @@ class MessageDialogFragment : DialogFragment() {
                         if (letter == null) return@collect
                         tvNickname.text = letter.senderName
                         tvReceivedMsg.text = letter.content
-                        // todo -> 섬 이름 추가되어야함
-//                        tvIslandName.text =letter.senderName
-                        tvReceivedDate.text = letter.matchedAt.toKoreanDateHourFast()
+                        tvIslandName.text = letter.senderIslandName
+                        tvReceivedDate.text = letter.createdAt.toKoreanDateHourFast()
+                        ivIcon.setProfileImageByIndex(
+                            letter.senderProfileImageIndex,
+                            fallback = R.drawable.ic_profile1
+                        )
                     }
                 }
 
@@ -163,12 +168,15 @@ class MessageDialogFragment : DialogFragment() {
             // UI 반영(아이콘+텍스트)
             updateBookmarkUi(isBookmarked)
 
-            // API 분기
             if (next) {
-                sharedViewModel.bookmarkLetter(args.letterId)
+                // 북마크 저장
+                sharedViewModel.addBookmark(args.letterId)
                 Toast.makeText(requireContext(), "저장했습니다.", Toast.LENGTH_SHORT).show()
             } else {
-//                sharedViewModel.unbookmarkLetter(args.letterId)
+                // 북마크 삭제
+                sharedViewModel.unBookmark(args.letterId)
+                // 북마크 화면 갱신 필요 플래그
+                notifyBookmarkRefresh()
                 Toast.makeText(requireContext(), "저장을 해제했습니다.", Toast.LENGTH_SHORT).show()
             }
         }
@@ -182,7 +190,6 @@ class MessageDialogFragment : DialogFragment() {
             ).toBundle()
 
             findNavController().navigate(R.id.messageDialogFragment, bundle)
-            dismiss()
         }
 
         // 5) 신고하기
@@ -190,9 +197,12 @@ class MessageDialogFragment : DialogFragment() {
         btnReport.setOnClickListener {
             showWarningDialog(
                 title = getString(R.string.dialog_fragment_message_title3),
-                subTitle = getString(R.string.dialog_fragment_message_sub3)
+                subTitle = getString(R.string.dialog_fragment_message_sub3),
+                closeText = getString(R.string.dialog_fragment_message_report),
             ) {
                 sharedViewModel.reportLetter(args.letterId, reason = "Bad Request")
+                // 북마크 화면 갱신 필요 플래그
+                notifyBookmarkRefresh()
                 Toast.makeText(requireContext(), "신고가 접수되었습니다.", Toast.LENGTH_SHORT).show()
                 dismiss()
             }
@@ -295,13 +305,19 @@ class MessageDialogFragment : DialogFragment() {
     private fun showWarningDialog(
         title: String,
         subTitle: String,
+        closeText: String,
         onConfirm: () -> Unit
     ) {
-        val warning = WarningDialogFragment.newInstance(title, subTitle).apply {
-            onConfirmClose = { onConfirm() } // btn_close 눌렀을 때만 실행
+        val warning = WarningDialogFragment.newInstance(
+            title = title,
+            subTitle = subTitle,
+            closeText = closeText
+        ).apply {
+            onConfirmClose = { onConfirm() }
         }
         warning.show(childFragmentManager, "warning_dialog")
     }
+
 
     /**
      * 모드에 따라 inflate 된 binding만 정리합니다.
@@ -312,4 +328,17 @@ class MessageDialogFragment : DialogFragment() {
         _readBinding = null
         _writeBinding = null
     }
+
+    /**
+     * 북마크 화면 갱신
+     */
+    private fun notifyBookmarkRefresh() {
+        runCatching {
+            findNavController()
+                .getBackStackEntry(R.id.bookmarkFragment)
+                .savedStateHandle
+                .set("refresh_bookmarks", System.currentTimeMillis())
+        }
+    }
+
 }

@@ -1,7 +1,8 @@
 package com.coffeeinjection.message.data.remote.api
 
 import com.coffeeinjection.message.data.remote.base.ApiEnvelope
-import com.coffeeinjection.message.data.remote.dto.BookmarkLetterRequest
+import com.coffeeinjection.message.data.remote.dto.AddBookmarkRequest
+import com.coffeeinjection.message.data.remote.dto.DeleteBookmarkRequest
 import com.coffeeinjection.message.data.remote.dto.Letter
 import com.coffeeinjection.message.data.remote.dto.LetterSummary
 import com.coffeeinjection.message.data.remote.dto.LoadBookmarkResponse
@@ -10,6 +11,7 @@ import com.coffeeinjection.message.data.remote.dto.SendLetterRequest
 import com.coffeeinjection.message.data.remote.dto.SendLetterResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -34,17 +36,24 @@ interface MessageApi {
 
     /** 4) 북마크 저장 */
     @POST("bookmark")
-    suspend fun bookmarkLetter(
-        @Body body: BookmarkLetterRequest
+    suspend fun addBookmark(
+        @Body body: AddBookmarkRequest
     ): ApiEnvelope<Any?>
 
-    /** 4) 북마크 리스트 불러오기 */
+    /** 5) 북마크 삭제*/
+    @HTTP(method = "DELETE", path = "bookmark", hasBody = true)
+    suspend fun deleteBookmark(
+        @Body body: DeleteBookmarkRequest
+    ): ApiEnvelope<Any?>
+
+    /** 6) 북마크 리스트 불러오기 */
     @GET("bookmark/list")
     suspend fun loadBookmarksList(): ApiEnvelope<List<LoadBookmarkResponse>>
 
-    /** 5) 수신 편지 신고 */
+    /** 7) 수신 편지 신고 */
     @POST("report")
     suspend fun reportLetter(
         @Body body: ReportLetterRequest
     ): ApiEnvelope<Any?>
+
 }
