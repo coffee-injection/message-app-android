@@ -223,21 +223,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                         findNavController().navigate(action)
                     }
                 }
-//                val iv = ImageView(requireContext()).apply {
-//                    setImageResource(R.drawable.ic_bottle)
-//                    layoutParams = FrameLayout.LayoutParams(iconSize, iconSize)
-//                    translationX = x.toFloat()
-//                    translationY = y.toFloat()
-//
-//                    setOnClickListener {
-//                        val action =
-//                            HomeFragmentDirections.actionHomeFragmentToMessageDialogFragment(
-//                                letterId = msg.letterId,
-//                                readOnly = true
-//                            )
-//                        findNavController().navigate(action)
-//                    }
-//                }
+
                 // 애니메이션 적용
                 val distance = (6..12).random().toFloat()      // dp
                 val duration = (900L..1600L).random()          // ms
