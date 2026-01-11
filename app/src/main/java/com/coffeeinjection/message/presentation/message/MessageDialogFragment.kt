@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -115,6 +116,12 @@ class MessageDialogFragment : DialogFragment() {
         updateBookmarkUi(isBookmarked) // 아이콘+텍스트 같이 세팅
         btnSave.isSelected = isBookmarked
         btnSave.refreshDrawableState()
+
+        if (isBookmarked){
+            btnReport.visibility = View.GONE
+        }else{
+            btnReport.visibility = View.VISIBLE
+        }
 
         // 닫기(X)
         ivClose.setOnClickListener {

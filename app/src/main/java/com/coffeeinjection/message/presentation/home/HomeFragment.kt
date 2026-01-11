@@ -115,6 +115,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 // 바다 위 메시지 아이콘
                 launch {
                     homeViewModel.seaMessages.collect { messages ->
+                        binding.tvCurrentState.text = buildCurrentStateText(messages.size)
                         renderMessageIcons(messages)
                     }
                 }
@@ -316,4 +317,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         (getTag(R.id.tag_float_anim) as? ObjectAnimator)?.cancel()
         setTag(R.id.tag_float_anim, null)
     }
+
+    private fun todayKoreanMd(): String {
+        val cal = Calendar.getInstance()
+        val m = cal.get(Calendar.MONTH) + 1
+        val d = cal.get(Calendar.DAY_OF_MONTH)
+        return "${m}월 ${d}일"
+    }
+
+    private fun buildCurrentStateText(messageCount: Int): String {
+        return "${todayKoreanMd()} \u2022 받은 메시지 ${messageCount}개"
+    }
+
 }

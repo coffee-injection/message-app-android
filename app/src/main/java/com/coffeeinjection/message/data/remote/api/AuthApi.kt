@@ -6,6 +6,8 @@ import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateRespons
 import com.coffeeinjection.message.data.remote.dto.KakaoLoginRequest
 import com.coffeeinjection.message.data.remote.dto.KakaoLoginUrlResponse
 import com.coffeeinjection.message.data.remote.dto.LoginResponse
+import com.coffeeinjection.message.data.remote.dto.ModifyUserProfileRequest
+import com.coffeeinjection.message.data.remote.dto.ModifyUserProfileResponse
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteRequest
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteResponse
 import retrofit2.http.*
@@ -33,10 +35,17 @@ interface AuthApi {
         @Body req: SignupCompleteRequest
     ): ApiEnvelope<SignupCompleteResponse>
 
-    /** 2) 인가 코드 → JWT 교환 (토큰 필요 없음) */
+    /** 4) 닉네임 중복 체크 */
     @Headers("No-Auth: true")
     @POST("member/check-nickname")
     suspend fun checkNicknameDuplicate(
         @Body req: CheckNicknameDuplicateRequest
     ): ApiEnvelope<CheckNicknameDuplicateResponse>
+
+    /** 5) 프로필 정보 수정 */
+    @Headers("No-Auth: true")
+    @PATCH("member/profile")
+    suspend fun modifyUserProfile(
+        @Body req: ModifyUserProfileRequest
+    ): ApiEnvelope<ModifyUserProfileResponse>
 }
