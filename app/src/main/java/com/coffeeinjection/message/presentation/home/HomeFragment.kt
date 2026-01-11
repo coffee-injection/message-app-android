@@ -148,7 +148,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             val height = container.height
             if (width <= 0 || height <= 0) return@post
 
-            val iconSize = dpToPx(56)
+            val iconSize = dpToPx(60)
 
             val maxX = (width - iconSize).coerceAtLeast(0)
             val maxY = (height - iconSize).coerceAtLeast(0)

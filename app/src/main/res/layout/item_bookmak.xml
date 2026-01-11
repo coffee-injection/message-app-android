@@ -78,18 +78,9 @@
                     android:layout_marginEnd="8dp"
                     android:includeFontPadding="false"
                     android:text="5시간 전"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_bookmark"
-                    app:layout_constraintEnd_toStartOf="@+id/iv_bookmark"
-                    app:layout_constraintTop_toTopOf="@+id/iv_bookmark" />
-
-                <!-- 우측 상단: 북마크 -->
-                <ImageView
-                    android:id="@+id/iv_bookmark"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:src="@drawable/ic_bookmark_select"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
 
                 <!-- 제목 -->
                 <TextView

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp">
@@ -21,18 +20,16 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/bg_neutral"
-            android:paddingStart="22dp"
-            android:paddingTop="18dp"
-            android:paddingEnd="22dp"
-            android:paddingBottom="18dp">
+            android:background="@color/bg_neutral">
 
             <!-- 닫기(X) -->
             <ImageView
                 android:id="@+id/iv_close"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:contentDescription="@null"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:padding="12dp"
                 android:src="@drawable/ic_close"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -42,7 +39,7 @@
                 android:id="@+id/iv_icon"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="28dp"
                 android:contentDescription="@null"
                 android:src="@drawable/ic_bottle"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -80,9 +77,10 @@
                 style="@style/context_normal14"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="22dp"
                 android:layout_marginTop="24dp"
+                android:layout_marginRight="22dp"
                 android:maxLength="500"
-                android:padding="0dp"
                 android:text="바다를 바라보며 커피를 마시고 있어요. 이 평화로운 순간을 누군가와 나누고 싶었어요."
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -94,6 +92,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="24dp"
+                android:layout_marginLeft="@dimen/text_size_18"
+                android:layout_marginRight="@dimen/text_size_18"
                 android:background="@color/divider_grey400"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -104,7 +104,8 @@
                 android:id="@+id/layout_bottom"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="@dimen/text_size_12"
+                android:layout_marginBottom="@dimen/text_size_12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -130,11 +131,13 @@
         android:id="@+id/btn_save"
         android:layout_width="match_parent"
         android:layout_height="55dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="5dp"
         android:background="@drawable/btn_bg_bookmarks"
-        android:text="@string/dialog_fragment_message_save"
-        android:textColor="@color/bg_yellow"
         android:drawableStart="@drawable/ic_bookmark_toggle"
+        android:text="@string/dialog_fragment_message_cancel"
+        android:textColor="@color/bg_yellow"
         app:layout_constraintEnd_toEndOf="@+id/card_container"
         app:layout_constraintStart_toStartOf="@+id/card_container"
         app:layout_constraintTop_toBottomOf="@+id/card_container" />
@@ -145,25 +148,29 @@
         android:id="@+id/btn_reply"
         android:layout_width="match_parent"
         android:layout_height="55dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="5dp"
+        android:drawableStart="@drawable/ic_reply"
         android:text="@string/dialog_fragment_message_reply"
         android:visibility="gone"
-        android:drawableStart="@drawable/ic_reply"
         app:layout_constraintEnd_toEndOf="@+id/btn_save"
         app:layout_constraintStart_toStartOf="@+id/btn_save"
         app:layout_constraintTop_toBottomOf="@+id/btn_save" />
 
-<!--    신고 버튼-->
+    <!--    신고 버튼-->
     <com.coffeeinjection.message.util.GradientTextButton
         android:id="@+id/btn_report"
         android:layout_width="match_parent"
         android:layout_height="55dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="5dp"
         android:background="@drawable/bg_white_round12"
-        android:text="@string/dialog_fragment_message_report"
-        android:visibility="gone"
-        android:textColor="@color/stroke_dark"
         android:drawableStart="@drawable/ic_report"
+        android:text="@string/dialog_fragment_message_report"
+        android:textColor="@color/stroke_dark"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/btn_reply"
         app:layout_constraintStart_toStartOf="@+id/btn_reply"
         app:layout_constraintTop_toBottomOf="@+id/btn_reply" />

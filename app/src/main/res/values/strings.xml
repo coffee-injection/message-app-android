@@ -43,7 +43,7 @@
     <string name="dialog_fragment_message">띄우기</string>
     <string name="dialog_fragment_message_sender">From.</string>
     <string name="dialog_fragment_message_island_name">섬이름</string>
-    <string name="dialog_fragment_message_send">보내기</string>
+    <string name="dialog_fragment_message_send">띄우기</string>
     <string name="dialog_fragment_message_reply">답장하기</string>
     <string name="dialog_fragment_message_save">북마크</string>
     <string name="dialog_fragment_message_cancel">북마크 취소</string>
@@ -60,6 +60,8 @@
     <string name="dialog_fragment_message_sub2">북마크되지 않은 메시지는 바다로 떠내려가요</string>
     <string name="dialog_fragment_message_title3">정말 신고하시겠어요?</string>
     <string name="dialog_fragment_message_sub3">신고가 접수되면 취소하거나 되돌릴 수 없어요</string>
+    <string name="dialog_fragment_message_title4">정말 바다에 띄울까요?</string>
+    <string name="dialog_fragment_message_sub4">메세지 보틀이 다른 섬으로 떠내려 가요</string>
 
 
     <!--Title-->

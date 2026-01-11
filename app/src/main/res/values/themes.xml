@@ -10,6 +10,8 @@
         <item name="colorPrimaryDark">@color/color_navy_primary</item>
         <item name="colorAccent">@color/color_navy_primary</item>
         <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+        <item name="colorAccent">@color/color_navy_primary</item>
+
 
         <!-- Status bar (상단) -->
         <item name="android:statusBarColor">@color/color_navy_primary</item>

@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -69,6 +68,7 @@ class MessageDialogFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
         // Dialog 스타일 적용
         setStyle(STYLE_NORMAL, R.style.MessageDialogTheme)
+        isCancelable = false // dimm 클릭시 다이얼로그 종료되지 않도록
     }
 
     /**
@@ -117,9 +117,9 @@ class MessageDialogFragment : DialogFragment() {
         btnSave.isSelected = isBookmarked
         btnSave.refreshDrawableState()
 
-        if (isBookmarked){
+        if (isBookmarked) {
             btnReport.visibility = View.GONE
-        }else{
+        } else {
             btnReport.visibility = View.VISIBLE
         }
 
@@ -131,7 +131,9 @@ class MessageDialogFragment : DialogFragment() {
                 showWarningDialog(
                     title = getString(R.string.dialog_fragment_message_title2),
                     subTitle = getString(R.string.dialog_fragment_message_sub2),
-                    closeText = getString(R.string.dialog_fragment_warning_close)
+                    closeText = getString(R.string.dialog_fragment_warning_close),
+                    closeButtonBgRes = R.drawable.btn_gradient_red,
+                    iconRes = R.drawable.ic_warning
                 ) { dismiss() }
             }
         }
@@ -206,6 +208,8 @@ class MessageDialogFragment : DialogFragment() {
                 title = getString(R.string.dialog_fragment_message_title3),
                 subTitle = getString(R.string.dialog_fragment_message_sub3),
                 closeText = getString(R.string.dialog_fragment_message_report),
+                closeButtonBgRes = R.drawable.btn_gradient_red,
+                iconRes = R.drawable.ic_warning
             ) {
                 sharedViewModel.reportLetter(args.letterId, reason = "Bad Request")
                 // 북마크 화면 갱신 필요 플래그
@@ -241,7 +245,6 @@ class MessageDialogFragment : DialogFragment() {
         })
 
         // 전송 버튼
-        btnSend.setCenterIconWithText(true)
         btnSend.setOnClickListener {
             val message = etMessage.text?.toString()?.trim().orEmpty()
             if (message.isBlank()) {
@@ -249,19 +252,19 @@ class MessageDialogFragment : DialogFragment() {
                 return@setOnClickListener
             }
 
-            // 전송 확인
-            AlertDialog.Builder(requireContext())
-                .setTitle("메세지 보틀 띄우기")
-                .setMessage("메세지를 바다에 띄우시겠습니까?")
-                .setPositiveButton("전송") { _, _ ->
-                    // receiverNickname 은 nav args로 전달받음
-                    sharedViewModel.sendLetter(
-                        content = message
-                    )
-                    dismiss()
-                }
-                .setNegativeButton("취소", null)
-                .show()
+            showWarningDialog(
+                title = getString(R.string.dialog_fragment_message_title4),
+                subTitle = getString(R.string.dialog_fragment_message_sub4),
+                closeText = getString(R.string.dialog_fragment_message_send),
+                closeButtonBgRes = R.drawable.btn_gradient_blue,
+                iconRes = R.drawable.ic_bottle
+            ) {
+                // receiverNickname 은 nav args로 전달받음
+                sharedViewModel.sendLetter(
+                    content = message
+                )
+                dismiss()
+            }
         }
     }
 
@@ -313,12 +316,17 @@ class MessageDialogFragment : DialogFragment() {
         title: String,
         subTitle: String,
         closeText: String,
+        closeButtonBgRes: Int = R.drawable.btn_gradient_red,
+        iconRes: Int = R.drawable.ic_warning,
         onConfirm: () -> Unit
+
     ) {
         val warning = WarningDialogFragment.newInstance(
             title = title,
             subTitle = subTitle,
-            closeText = closeText
+            closeText = closeText,
+            closeButtonBgRes = closeButtonBgRes,
+            iconRes = iconRes
         ).apply {
             onConfirmClose = { onConfirm() }
         }

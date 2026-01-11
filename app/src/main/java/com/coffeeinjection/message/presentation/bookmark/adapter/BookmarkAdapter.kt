@@ -11,7 +11,7 @@ import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.ItemBookmakBinding
 import com.coffeeinjection.message.presentation.bookmark.model.BookmarkModel
 import com.coffeeinjection.message.util.setProfileImageByIndex
-import com.coffeeinjection.message.util.toKoreanDateHourFast
+import com.coffeeinjection.message.util.toKoreanRelativeOrMdH
 
 class BookmarkAdapter(
     private val onClickItem: (BookmarkModel) -> Unit,
@@ -45,10 +45,7 @@ class BookmarkAdapter(
             tvTitle.text = item.title
             tvSubtitle.text = item.subtitle
             tvPreview.text = item.preview
-            tvTime.text = item.timeText.toKoreanDateHourFast()
-
-            ivBookmark.setOnClickListener { onClickBookmark(item) }
-
+            tvTime.text = item.timeText.toKoreanRelativeOrMdH()
 
             // 점 표시 및 메세지 색상 랜덤 적용 필요하면 여기서 제어
             val color = ContextCompat.getColor(root.context, item.accentColorRes)
