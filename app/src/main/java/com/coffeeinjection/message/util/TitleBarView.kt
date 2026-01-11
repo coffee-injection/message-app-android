@@ -57,7 +57,16 @@ class TitleBarView @JvmOverloads constructor(
         binding.btnBack.setOnClickListener(listener)
     }
 
+    fun setOnCloseClickListener(listener: (View) -> Unit){
+        binding.btnClose.setOnClickListener(listener)
+    }
+
     fun showBack(show: Boolean) {
-        binding.btnBack.visibility = if (show) View.VISIBLE else View.GONE
+        binding.btnBack.visibility = if (show) VISIBLE else GONE
+        binding.marginView.visibility = if (show) GONE else VISIBLE
+    }
+
+    fun showClose(show: Boolean) {
+        binding.btnClose.visibility = if (show) VISIBLE else GONE
     }
 }

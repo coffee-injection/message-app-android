@@ -2,6 +2,7 @@ package com.coffeeinjection.message.data.local
 
 import android.content.Context
 import android.net.Uri
+import android.os.Parcelable
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import androidx.core.net.toUri
+import kotlinx.parcelize.Parcelize
 
 /**
  * - 액세스 토큰을 DataStore에 저장/조회
@@ -75,8 +77,9 @@ class AuthDataStore @Inject constructor(
     }
 }
 
+@Parcelize
 data class UserInfo(
     val nickName: String,
     val islandName: String,
     val profileImageIndex: Int = 1
-)
+) : Parcelable

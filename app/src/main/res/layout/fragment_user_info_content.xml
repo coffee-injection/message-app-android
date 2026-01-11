@@ -1,0 +1,698 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_second_gradient"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:fitsSystemWindows="true"
+    tools:context=".presentation.user_info.UserInfoContentFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingBottom="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleBar">
+
+        <!-- 스크롤될 실제 컨텐츠 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_island"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="50dp"
+                android:src="@drawable/ic_island_daytime"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                style="@style/black_title_normal16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="@string/user_info_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_island" />
+
+            <TextView
+                android:id="@+id/tv_sub"
+                style="@style/grey_second_title_normal16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/user_info_sub"
+                app:layout_constraintEnd_toEndOf="@+id/tv_title"
+                app:layout_constraintStart_toStartOf="@+id/tv_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+
+            <TextView
+                android:id="@+id/tv_profile_emoji"
+                style="@style/primary_body_normal16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="30dp"
+                android:text="@string/user_info_profile_emoji"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_sub" />
+
+            <!-- 1번째 줄: emoji1 ~ emoji6 -->
+            <androidx.cardview.widget.CardView
+            android:id="@+id/layout_parent_emoji1"
+            style="@style/cardView_corner_radius"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toStartOf="@id/layout_parent_emoji2"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_emoji">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_emoji_bg1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:duplicateParentState="true">
+
+                <ImageView
+                    android:id="@+id/iv_emoji1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_profile1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/layout_parent_emoji2"
+                style="@style/cardView_corner_radius"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintBottom_toBottomOf="@id/layout_parent_emoji1"
+                app:layout_constraintEnd_toStartOf="@id/layout_parent_emoji3"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/layout_parent_emoji1"
+                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji1">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_emoji_bg2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/emoji_bg_selector"
+                    android:duplicateParentState="true">
+
+                    <ImageView
+                        android:id="@+id/iv_emoji2"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_profile2"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/layout_parent_emoji3"
+                style="@style/cardView_corner_radius"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintBottom_toBottomOf="@id/layout_parent_emoji1"
+                app:layout_constraintEnd_toStartOf="@id/layout_parent_emoji4"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/layout_parent_emoji2"
+                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji1">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_emoji_bg3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/emoji_bg_selector"
+                    android:duplicateParentState="true">
+
+                    <ImageView
+                        android:id="@+id/iv_emoji3"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_profile3"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/layout_parent_emoji4"
+                style="@style/cardView_corner_radius"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintBottom_toBottomOf="@id/layout_parent_emoji1"
+                app:layout_constraintEnd_toStartOf="@id/layout_parent_emoji5"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/layout_parent_emoji3"
+                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji1">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_emoji_bg4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/emoji_bg_selector"
+                    android:duplicateParentState="true">
+
+                    <ImageView
+                        android:id="@+id/iv_emoji4"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_profile4"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/layout_parent_emoji5"
+                style="@style/cardView_corner_radius"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintBottom_toBottomOf="@id/layout_parent_emoji1"
+                app:layout_constraintEnd_toStartOf="@id/layout_parent_emoji6"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/layout_parent_emoji4"
+                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji1">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_emoji_bg5"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/emoji_bg_selector"
+                    android:duplicateParentState="true">
+
+                    <ImageView
+                        android:id="@+id/iv_emoji5"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_profile5"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/layout_parent_emoji6"
+                style="@style/cardView_corner_radius"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintBottom_toBottomOf="@id/layout_parent_emoji1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/layout_parent_emoji5"
+                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji1">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_emoji_bg6"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/emoji_bg_selector"
+                    android:duplicateParentState="true">
+
+                    <ImageView
+                        android:id="@+id/iv_emoji6"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_profile6"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- 2번째 줄: emoji7 ~ emoji12 -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/layout_parent_emoji7"
+                style="@style/cardView_corner_radius"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintEnd_toStartOf="@id/layout_parent_emoji8"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="@+id/layout_parent_emoji1"
+                app:layout_constraintTop_toBottomOf="@id/layout_parent_emoji1">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_emoji_bg7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/emoji_bg_selector"
+                    android:duplicateParentState="true">
+
+                    <ImageView
+                        android:id="@+id/iv_emoji7"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_profile7"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/layout_parent_emoji8"
+                style="@style/cardView_corner_radius"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintBottom_toBottomOf="@id/layout_parent_emoji7"
+                app:layout_constraintEnd_toStartOf="@id/layout_parent_emoji9"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/layout_parent_emoji7"
+                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji7">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_emoji_bg8"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/emoji_bg_selector"
+                    android:duplicateParentState="true">
+
+                    <ImageView
+                        android:id="@+id/iv_emoji8"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_profile8"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/layout_parent_emoji9"
+                style="@style/cardView_corner_radius"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintBottom_toBottomOf="@id/layout_parent_emoji7"
+                app:layout_constraintEnd_toStartOf="@id/layout_parent_emoji10"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/layout_parent_emoji8"
+                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji7">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_emoji_bg9"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/emoji_bg_selector"
+                    android:duplicateParentState="true">
+
+                    <ImageView
+                        android:id="@+id/iv_emoji9"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_profile9"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/layout_parent_emoji10"
+                style="@style/cardView_corner_radius"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintBottom_toBottomOf="@id/layout_parent_emoji7"
+                app:layout_constraintEnd_toStartOf="@id/layout_parent_emoji11"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/layout_parent_emoji9"
+                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji7">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_emoji_bg10"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/emoji_bg_selector"
+                    android:duplicateParentState="true">
+
+                    <ImageView
+                        android:id="@+id/iv_emoji10"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_profile10"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/layout_parent_emoji11"
+                style="@style/cardView_corner_radius"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintBottom_toBottomOf="@id/layout_parent_emoji7"
+                app:layout_constraintEnd_toStartOf="@id/layout_parent_emoji12"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/layout_parent_emoji10"
+                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji7">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_emoji_bg11"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/emoji_bg_selector"
+                    android:duplicateParentState="true">
+
+                    <ImageView
+                        android:id="@+id/iv_emoji11"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_profile11"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/layout_parent_emoji12"
+                style="@style/cardView_corner_radius"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintBottom_toBottomOf="@id/layout_parent_emoji7"
+                app:layout_constraintEnd_toEndOf="@+id/layout_parent_emoji6"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/layout_parent_emoji11"
+                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji7">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_emoji_bg12"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/emoji_bg_selector"
+                    android:duplicateParentState="true">
+
+                    <ImageView
+                        android:id="@+id/iv_emoji12"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_profile12"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tv_island_name"
+                style="@style/primary_body_normal16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/user_island_name"
+                app:layout_constraintStart_toStartOf="@+id/tv_profile_emoji"
+                app:layout_constraintTop_toBottomOf="@+id/layout_parent_emoji7" />
+
+            <EditText
+                android:id="@+id/et_island_name"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/et_bg_selector"
+                android:hint="@string/user_island_name_text_hint"
+                android:padding="@dimen/text_size_16"
+                android:maxLength="8"
+                android:textColorHint="@color/text_tertiary"
+                android:textSize="@dimen/text_size_16"
+                android:textColor="@color/text_black"
+                app:layout_constraintEnd_toEndOf="@+id/layout_parent_emoji12"
+                app:layout_constraintStart_toStartOf="@+id/tv_island_name"
+                app:layout_constraintTop_toBottomOf="@+id/tv_island_name" />
+
+            <TextView
+                android:id="@+id/tv_island_division"
+                style="@style/primary_body_normal16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_size_16"
+                android:text="@string/user_island_division"
+                app:layout_constraintStart_toStartOf="@+id/et_island_name"
+                app:layout_constraintTop_toBottomOf="@+id/et_island_name" />
+
+            <Button
+                android:id="@+id/btn_island1"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/btn_bg_selector"
+                android:stateListAnimator="@null"
+                android:text="@string/user_island1"
+                android:textColor="@color/btn_text_selector"
+                android:textSize="@dimen/text_size_16"
+                app:layout_constraintEnd_toStartOf="@+id/btn_island2"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="@+id/tv_island_division"
+                app:layout_constraintTop_toBottomOf="@+id/tv_island_division" />
+
+            <Button
+                android:id="@+id/btn_island2"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/btn_bg_selector"
+                android:stateListAnimator="@null"
+                android:text="@string/user_island2"
+                android:textColor="@color/btn_text_selector"
+                android:textSize="@dimen/text_size_16"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_island1"
+                app:layout_constraintEnd_toEndOf="@+id/et_island_name"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/btn_island1"
+                app:layout_constraintTop_toTopOf="@+id/btn_island1" />
+
+            <TextView
+                android:id="@+id/tv_user_name"
+                style="@style/primary_body_normal16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/user_nickname1"
+                app:layout_constraintStart_toStartOf="@+id/btn_island1"
+                app:layout_constraintTop_toBottomOf="@+id/btn_island1" />
+
+            <EditText
+                android:id="@+id/et_user_name"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/et_bg_selector"
+                android:hint="@string/user_name_text_hint"
+                android:padding="@dimen/text_size_16"
+                android:textColorHint="@color/text_tertiary"
+                android:maxLength="12"
+                android:textSize="@dimen/text_size_16"
+                android:textColor="@color/text_black"
+                app:layout_constraintEnd_toEndOf="@+id/btn_island2"
+                app:layout_constraintStart_toStartOf="@+id/tv_user_name"
+                app:layout_constraintTop_toBottomOf="@+id/tv_user_name" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_preview"
+                android:visibility="gone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_size_16"
+                android:background="@drawable/view_bg_gradient_blue"
+                android:padding="@dimen/text_size_16"
+                app:layout_constraintEnd_toEndOf="@+id/et_user_name"
+                app:layout_constraintStart_toStartOf="@+id/et_user_name"
+                app:layout_constraintTop_toBottomOf="@+id/et_user_name">
+
+                <TextView
+                    android:id="@+id/tv_preview"
+                    style="@style/white_body_normal14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:alpha="0.8"
+                    android:text="@string/user_profile_preview"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_preview_img"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:src="@drawable/ic_profile1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/tv_preview"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_preview" />
+
+                <TextView
+                    android:id="@+id/tv_preview_island_name"
+                    style="@style/white_body_normal20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="도마도"
+                    app:layout_constraintStart_toEndOf="@+id/iv_preview_img"
+                    app:layout_constraintTop_toTopOf="@+id/iv_preview_img" />
+
+                <TextView
+                    android:id="@+id/tv_preview_island_division"
+                    style="@style/white_body_normal20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="섬"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_preview_island_name"
+                    app:layout_constraintStart_toEndOf="@+id/tv_preview_island_name"
+                    app:layout_constraintTop_toTopOf="@+id/tv_preview_island_name" />
+
+                <TextView
+                    android:id="@+id/tv_preview_nickname"
+                    style="@style/white_body_normal14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.8"
+                    android:text="@string/user_nickname2"
+                    app:layout_constraintStart_toStartOf="@+id/tv_preview_island_name"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_preview_island_name" />
+
+                <TextView
+                    android:id="@+id/tv_preview_user_name"
+                    style="@style/white_body_normal14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:alpha="0.8"
+                    android:text="@string/user_profile_preview"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_preview_nickname"
+                    app:layout_constraintStart_toEndOf="@+id/tv_preview_nickname"
+                    app:layout_constraintTop_toTopOf="@+id/tv_preview_nickname" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier_after_preview"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="et_user_name,layout_preview"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_preview_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                android:background="@drawable/bg_primary"
+                android:padding="@dimen/text_size_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barrier_after_preview">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/ic_electric_bulb"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    style="@style/blue700_body_normal16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/user_preview_description_title"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                    app:layout_constraintStart_toEndOf="@+id/imageView"
+                    app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+                <TextView
+                    style="@style/blue600_body_normal14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/user_preview_description_body"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/imageView"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.coffeeinjection.message.util.GradientTextButton
+                android:id="@+id/btn_start"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="32dp"
+                android:gravity="center"
+                android:text="@string/user_start"
+                android:textColor="@color/color_white"
+                app:layout_constraintEnd_toEndOf="@+id/layout_preview_description"
+                app:layout_constraintStart_toStartOf="@+id/layout_preview_description"
+                app:layout_constraintTop_toBottomOf="@+id/layout_preview_description" />
+
+            <View
+                android:id="@+id/bottom_spacer"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                app:layout_constraintTop_toBottomOf="@id/btn_start"
+                app:layout_constraintStart_toStartOf="@id/btn_start"
+                app:layout_constraintEnd_toEndOf="@id/btn_start"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.coffeeinjection.message.util.TitleBarView
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleText="@string/title_user_information" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

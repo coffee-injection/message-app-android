@@ -107,6 +107,9 @@ abstract class BaseFragment<VB : ViewBinding>(
         this.setOnBackClickListener {
             findNavController().navigateUp()
         }
+        this.setOnCloseClickListener {
+            findNavController().navigateUp()
+        }
     }
 
 }

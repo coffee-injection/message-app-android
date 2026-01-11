@@ -42,7 +42,7 @@ class SignInViewModel @Inject constructor(
         runCatching { exchangeCodeToJwt(code) }
             .onSuccess { res ->
                 saveAccessToken(res.accessToken)
-                if (res.isNewMember && res.memberId == null) {
+//                if (res.isNewMember && res.memberId == null) {
                     Logger.d("[kakao] exchangeCode success -> new user")
 
                     // 신규 회원: 닉네임 입력 화면으로 이동
@@ -50,11 +50,11 @@ class SignInViewModel @Inject constructor(
                         isLoading = false,
                         navigateToNickname = true
                     )
-                } else {
-                    // 기존 회원: 액세스 토큰 저장 후 메인 이동
-                    Logger.d("[kakao] exchangeCode success -> old user")
-                    _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
-                }
+//                } else {
+//                    // 기존 회원: 액세스 토큰 저장 후 메인 이동
+//                    Logger.d("[kakao] exchangeCode success -> old user")
+//                    _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
+//                }
             }
             .onFailure { e ->
                 Logger.error("[kakao] exchangeCode fail errorMsg(${e.message}) cause(${e.cause})")
