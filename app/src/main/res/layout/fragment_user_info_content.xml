@@ -462,6 +462,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_island_name" />
 
             <TextView
+                android:id="@+id/tv_guide_island"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_14"
+                android:text="@string/user_toast_island_name"
+                android:textColor="@color/text_quaternary"
+                app:layout_constraintTop_toBottomOf="@id/et_island_name"
+                app:layout_constraintStart_toStartOf="@id/et_island_name"
+                android:layout_marginTop="5dp"/>
+
+            <TextView
                 android:id="@+id/tv_island_division"
                 style="@style/primary_body_normal16"
                 android:layout_width="wrap_content"
@@ -469,7 +480,7 @@
                 android:layout_marginTop="@dimen/text_size_16"
                 android:text="@string/user_island_division"
                 app:layout_constraintStart_toStartOf="@+id/et_island_name"
-                app:layout_constraintTop_toBottomOf="@+id/et_island_name" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_guide_island" />
 
             <Button
                 android:id="@+id/btn_island1"
@@ -523,12 +534,35 @@
                 android:hint="@string/user_name_text_hint"
                 android:padding="@dimen/text_size_16"
                 android:textColorHint="@color/text_tertiary"
-                android:maxLength="12"
+                android:maxLength="10"
                 android:textSize="@dimen/text_size_16"
                 android:textColor="@color/text_black"
                 app:layout_constraintEnd_toEndOf="@+id/btn_island2"
                 app:layout_constraintStart_toStartOf="@+id/tv_user_name"
                 app:layout_constraintTop_toBottomOf="@+id/tv_user_name" />
+
+            <com.coffeeinjection.message.util.GradientTextButton
+                android:id="@+id/btn_check_duplicate"
+                android:layout_width="100dp"
+                android:layout_height="46dp"
+                android:gravity="center"
+                android:text="@string/user_check_modify"
+                android:textColor="@color/color_white"
+                app:layout_constraintTop_toTopOf="@id/et_user_name"
+                app:layout_constraintBottom_toBottomOf="@id/et_user_name"
+                app:layout_constraintEnd_toEndOf="@id/et_user_name"
+                android:layout_marginEnd="7dp" />
+
+            <TextView
+                android:id="@+id/tv_guide_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_14"
+                android:text="@string/user_toast_nick_name"
+                android:textColor="@color/text_quaternary"
+                app:layout_constraintTop_toBottomOf="@id/et_user_name"
+                app:layout_constraintStart_toStartOf="@id/et_user_name"
+                android:layout_marginTop="5dp"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_preview"
@@ -540,7 +574,7 @@
                 android:padding="@dimen/text_size_16"
                 app:layout_constraintEnd_toEndOf="@+id/et_user_name"
                 app:layout_constraintStart_toStartOf="@+id/et_user_name"
-                app:layout_constraintTop_toBottomOf="@+id/et_user_name">
+                app:layout_constraintTop_toBottomOf="@+id/tv_guide_nickname">
 
                 <TextView
                     android:id="@+id/tv_preview"

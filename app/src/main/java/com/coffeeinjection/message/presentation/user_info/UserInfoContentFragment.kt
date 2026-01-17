@@ -72,6 +72,7 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
 
     override fun setupViews(savedInstanceState: Bundle?) = with(binding){
         titleBar.setupDefault(getString(R.string.title_user_information))
+        btnStart.isEnabled = false
         when (mode) {
             UserInfoModeEnum.SIGNUP -> {
                 root.setBackgroundResource(R.drawable.bg_second_gradient)
@@ -92,10 +93,13 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
                 tvSub.visibility = View.GONE
                 titleBar.showBack(false)
                 titleBar.showClose(true)
+                btnStart.setText(R.string.user_modify)
                 sharedViewModel.userInfoUiState.value.apply {
                     etUserName.setText(nickName)
+                    tvPreviewUserName.text = nickName
                     selectDivision(islandName.last() == '도')
                     etIslandName.setText(islandName.dropLast(1))
+                    tvPreviewIslandName.text = islandName.dropLast(1)
                     selectEmoji(emojiCards[profileImageIndex-1].first, emojiCards[profileImageIndex-1].second)
                 }
             }
@@ -122,6 +126,8 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
         // 3) 유저 이름 입력 -> 미리보기 텍스트 반영 + visible/gone 갱신
         etUserName.doAfterTextChanged { editable ->
             tvPreviewUserName.text = editable?.toString().orEmpty()
+            if (mode == UserInfoModeEnum.MODIFY) { viewModel.updateDuplicateEnable((editable.toString() != sharedViewModel.userInfoUiState.value.nickName) && (editable?.length in 2..10)) }
+            else viewModel.updateDuplicateEnable((editable?.length in 2..10))
             updatePreviewVisibility()
         }
 
@@ -136,7 +142,7 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
 
         btnStart.setOnClickListener {
             when {
-                etUserName.text?.length !in 2..12 -> {
+                etUserName.text?.length !in 2..10 -> {
                     Toast.makeText(requireContext(), R.string.user_toast_nick_name, Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
@@ -144,6 +150,11 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
                     Toast.makeText(requireContext(), R.string.user_toast_island_name, Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
+            }
+
+            if(etUserName.text.toString() != sharedViewModel.userInfoUiState.value.nickName && !viewModel.isChecked()){
+                // todo guide작성
+                //  tv_guide_nickname 빨간글씨로 중복 ~ 입력 및 해당 버튼으로 스크롤.
             }
 
             val userInfo = UserInfo(
@@ -186,6 +197,9 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
                     }
                 }
             }
+            viewModel.duplicateEnable.observe(viewLifecycleOwner) { isEnable ->
+                btnCheckDuplicate.isEnabled = isEnable
+            }
         }
     }
 
@@ -194,10 +208,13 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
      */
     private fun updatePreviewVisibility() = with(binding) {
         val hasIsland = etIslandName.text?.toString()?.trim().orEmpty().isNotEmpty()
-        val hasUser = etUserName.text?.toString()?.trim().orEmpty().isNotEmpty()
+        val hasUser = etUserName.text?.toString()?.trim().orEmpty().isNotEmpty() && etUserName.length() >= 2
 
         // preview만 숨김/표시
-        layoutPreview.isVisible = hasIsland && hasUser
+        (hasIsland && hasUser).let {
+            layoutPreview.isVisible = it
+            btnStart.isEnabled = it
+        }
     }
 
     /**

@@ -33,7 +33,7 @@ class SharedViewModel @Inject constructor(
     fun initForTest() {
         viewModelScope.launch {
             Logger.i("[choochoo] initForTest")
-            saveUserInfo(UserInfo("testNick", "testIsland섬", 5))
+            saveUserInfo(UserInfo("나마비루", "딤섬", 5))
         }
     }
 
