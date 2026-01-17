@@ -3,17 +3,21 @@ package com.coffeeinjection.message.presentation.activity
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import androidx.fragment.app.activityViewModels
 import com.coffeeinjection.message.databinding.ActivityMainBinding
 import com.coffeeinjection.message.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.getValue
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val viewModel: SharedViewModel by viewModels()
 
     companion object {
         private const val TAG = "MainActivity"
@@ -29,6 +33,7 @@ class MainActivity : AppCompatActivity() {
             window.navigationBarColor = Color.TRANSPARENT // 하단바도 투명 (제조사 커스텀에 따라 차이)
         }
         setContentView(binding.root)
+        viewModel.initForTest()
     }
 
     override fun onStart() {
@@ -53,6 +58,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         Logger.d("onDestroy")
+        viewModel.clearForTest()
         super.onDestroy()
     }
 }

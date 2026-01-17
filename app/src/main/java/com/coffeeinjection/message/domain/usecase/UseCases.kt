@@ -4,10 +4,18 @@ import com.coffeeinjection.message.data.local.UserInfo
 import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateResponse
 import com.coffeeinjection.message.data.remote.dto.KakaoLoginUrlResponse
 import com.coffeeinjection.message.data.remote.dto.LoginResponse
+import com.coffeeinjection.message.data.remote.dto.ModifyUserProfileResponse
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteResponse
 import com.coffeeinjection.message.domain.repository.AuthRepository
+import kotlinx.coroutines.flow.Flow
 import javax.annotation.meta.TypeQualifierNickname
 import javax.inject.Inject
+
+class ObserveUserInfoUseCase @Inject constructor(
+    private val authRepository: AuthRepository
+) {
+    operator fun invoke(): Flow<UserInfo?> = authRepository.userInfoFlow
+}
 
 class GetKakaoLoginUrlUseCase @Inject constructor(
     private val authRepository: AuthRepository
@@ -41,6 +49,15 @@ class SaveUserInfoUseCase @Inject constructor(
     }
 }
 
+class ClearUserInfoUseCase @Inject constructor(
+    private val authRepository: AuthRepository
+) {
+    suspend operator fun invoke() {
+        authRepository.clearUserInfo()
+    }
+}
+
+
 class CompleteSignupUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
@@ -54,5 +71,13 @@ class CheckNicknameDuplicateUseCase @Inject constructor(
 ){
     suspend operator fun invoke(nickname: String): CheckNicknameDuplicateResponse {
         return authRepository.checkNicknameDuplicate(nickname)
+    }
+}
+
+class ModifyUserProfileUseCase @Inject constructor(
+    private val authRepository: AuthRepository
+){
+    suspend operator fun invoke(userInfo: UserInfo): ModifyUserProfileResponse {
+        return authRepository.modifyUserProfile(userInfo)
     }
 }

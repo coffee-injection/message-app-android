@@ -12,6 +12,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import androidx.core.net.toUri
+import androidx.datastore.preferences.core.emptyPreferences
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -33,19 +36,25 @@ class AuthDataStore @Inject constructor(
     }
 
     /** 현재 저장된 액세스 토큰 */
-    val accessTokenFlow: Flow<String?> = context.authDataStore.data.map {
-        it[KEY_ACCESS_TOKEN]
-    }
+    val accessTokenFlow: Flow<String?> = context.authDataStore.data.catch { e ->
+        if (e is java.io.IOException) emit(emptyPreferences()) else throw e
+    }.map { it[KEY_ACCESS_TOKEN] }.distinctUntilChanged()
 
     /** 유저 정보 Flow (모두 있을 때만 UserInfo 반환, 아니면 null) */
-    val userInfoFlow: Flow<UserInfo?> = context.authDataStore.data.map { prefs ->
+    val userInfoFlow: Flow<UserInfo?> = context.authDataStore.data.catch { e ->
+        if (e is java.io.IOException) emit(emptyPreferences()) else throw e
+    }.map { prefs ->
         val nickName = prefs[KEY_USER_NICKNAME]
         val islandName = prefs[KEY_USER_ISLAND_NAME]
-        val profileImageIndex = prefs[KEY_USER_IMG_IDX]
+        val profileIdx = prefs[KEY_USER_IMG_IDX]?.toIntOrNull()
 
-        if (islandName == null || nickName == null || profileImageIndex == null) null
-        else UserInfo(nickName = nickName, islandName = islandName, profileImageIndex = profileImageIndex.toInt())
-    }
+        Logger.i("[choochoo] userInfoFlow observing")
+
+        if (nickName != null && islandName != null && profileIdx != null) {
+            UserInfo(nickName = nickName, islandName = islandName, profileImageIndex = profileIdx)
+        } else null
+    }.distinctUntilChanged()
+
 
     /** 액세스 토큰 저장/갱신 */
     suspend fun saveAccessToken(token: String) {
@@ -56,6 +65,7 @@ class AuthDataStore @Inject constructor(
     }
 
     suspend fun saveUserInfo(userinfo: UserInfo) {
+        Logger.i("[choochoo] saveUserInfo userinfo : $userinfo")
         Logger.d("[AuthDataStore] saveUserInfo init --> userinfo : $userinfo")
         context.authDataStore.edit { prefs ->
             prefs[KEY_USER_NICKNAME] = userinfo.nickName

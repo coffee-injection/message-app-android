@@ -9,9 +9,12 @@ import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateRespons
 import com.coffeeinjection.message.data.remote.base.requireDataOrThrow
 import com.coffeeinjection.message.data.remote.dto.KakaoLoginUrlResponse
 import com.coffeeinjection.message.data.remote.dto.LoginResponse
+import com.coffeeinjection.message.data.remote.dto.ModifyUserProfileRequest
+import com.coffeeinjection.message.data.remote.dto.ModifyUserProfileResponse
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteRequest
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteResponse
 import com.coffeeinjection.message.domain.repository.AuthRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 /**
@@ -23,6 +26,7 @@ class AuthRepositoryImpl @Inject constructor(
     private val api: AuthApi,
     private val authStore: AuthDataStore
 ) : AuthRepository {
+    override val userInfoFlow: Flow<UserInfo?> = authStore.userInfoFlow
 
     // 서버 응답이 래핑 구조기 때문에 응답 래퍼를 만들어 url 추출
     //[kakao] /kakao/login-url raw = {"status":200,"data":{"loginUrl":"https://kauth.kakao.com/oauth/authorize?client_id=fcdef606075e13512243c022e5a852f8&redirect_uri=http://localhost:8080/auth/kakao/callback&response_type=code&prompt=login"},"success":true,"timeStamp":"2025-11-18T22:11:26.466044"}, code=200
@@ -46,11 +50,20 @@ class AuthRepositoryImpl @Inject constructor(
         return env.requireDataOrThrow("member/check-nickname")
     }
 
+    override suspend fun modifyUserProfile(userInfo: UserInfo) : ModifyUserProfileResponse {
+        val env = api.modifyUserProfile(ModifyUserProfileRequest(userInfo.nickName, userInfo.islandName, userInfo.profileImageIndex))
+        return env.requireDataOrThrow("member/profile")
+    }
+
     override suspend fun saveAccessToken(token: String) {
         authStore.saveAccessToken(token)
     }
 
     override suspend fun saveUserInfo(userinfo: UserInfo) {
         authStore.saveUserInfo(userinfo)
+    }
+
+    override suspend fun clearUserInfo() {
+        authStore.clearAll()
     }
 }

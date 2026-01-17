@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.coffeeinjection.message.data.local.UserInfo
 import com.coffeeinjection.message.domain.usecase.CheckNicknameDuplicateUseCase
 import com.coffeeinjection.message.domain.usecase.CompleteSignupUseCase
+import com.coffeeinjection.message.domain.usecase.ModifyUserProfileUseCase
 import com.coffeeinjection.message.domain.usecase.SaveAccessTokenUseCase
 import com.coffeeinjection.message.domain.usecase.SaveUserInfoUseCase
 import com.coffeeinjection.message.presentation.sign_in.model.AuthUiState
@@ -22,7 +23,8 @@ class UserInfoViewModel @Inject constructor(
     private val complete: CompleteSignupUseCase,
     private val saveAccessToken : SaveAccessTokenUseCase,
     private val saveUserInfo : SaveUserInfoUseCase,
-    private val checkDuplicate : CheckNicknameDuplicateUseCase
+    private val checkDuplicate : CheckNicknameDuplicateUseCase,
+    private val modifyUserInfo: ModifyUserProfileUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AuthUiState())
@@ -30,15 +32,35 @@ class UserInfoViewModel @Inject constructor(
 
     private var isAvailable =false
 
-    /** 3) 신규회원 닉네임 완료 */
+    fun modifyUserInfo(userInfo: UserInfo, needNicknameCheck : Boolean) = viewModelScope.launch {
+        if (needNicknameCheck) checkNickNameAvailable(userInfo.nickName)
+        else isAvailable = true
+
+        if(!isAvailable) return@launch
+        _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+        runCatching { modifyUserInfo(userInfo) }
+            .onSuccess { res ->
+                Logger.d("[kakao] modifyUserInfo success")
+                saveUserInfo(userInfo)
+                _uiState.value = _uiState.value.copy(isLoading = false, closeModifyDialog = true)
+            }
+            .onFailure { e ->
+                printError(e, "completeSignup")
+                isAvailable = false
+                _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "유저 정보 수정에 실패했습니다")
+            }
+
+    }
+
+    /** 신규회원 닉네임 완료 */
     fun completeSignup(userInfo: UserInfo) = viewModelScope.launch {
         checkNickNameAvailable(userInfo.nickName)
         if (!isAvailable) {
             Logger.d("[kakao] isNotAvailable")
             return@launch
-        } else{
-            Logger.d("[kakao] isAvailable")
         }
+
+        Logger.d("[kakao] isAvailable")
 
         _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
         runCatching { complete(userInfo) }
@@ -52,6 +74,7 @@ class UserInfoViewModel @Inject constructor(
             }
             .onFailure { e ->
                 printError(e, "completeSignup")
+                isAvailable = false
                 _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "회원가입 완료 처리에 실패했습니다")
             }
     }

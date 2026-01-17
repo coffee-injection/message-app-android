@@ -41,8 +41,7 @@ class ModifyUserInfoBottomSheetFragment : BottomSheetDialogFragment() {
         super.onStart()
 
         val dialog = dialog as? BottomSheetDialog ?: return
-        val bottomSheet = dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
-                ?: return
+        val bottomSheet = dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet) ?: return
 
         val screenHeight = Resources.getSystem().displayMetrics.heightPixels
         val targetHeight = (screenHeight * 0.8f).toInt()

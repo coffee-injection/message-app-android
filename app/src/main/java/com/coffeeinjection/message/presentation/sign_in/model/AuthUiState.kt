@@ -9,5 +9,6 @@ data class AuthUiState(
     val errorMessage: String? = null,
     val loginUrl: String? = null,
     val navigateToNickname: Boolean = false,
-    val navigateToMain: Boolean = false
+    val navigateToMain: Boolean = false,
+    val closeModifyDialog: Boolean = false
 )

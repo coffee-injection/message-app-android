@@ -28,7 +28,6 @@ class UserInfoFragment : Fragment(R.layout.fragment_user_info) {
             viewLifecycleOwner
         ) { _, bundle ->
             val userInfo = bundle.getParcelable<UserInfo>(UserInfoContentFragment.RES_KEY)!!
-            // todo user 정보 저장
             findNavController().navigate(
                 SignInFragmentDirections.actionSignInFragmentToHomeFragment()
             )

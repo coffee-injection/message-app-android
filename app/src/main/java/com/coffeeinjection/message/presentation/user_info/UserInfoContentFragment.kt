@@ -50,6 +50,7 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
     }
 
     private val viewModel: UserInfoViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     // 이모지 카드 리스트 (cardView, 프리뷰에 넣을 drawableRes)
     private val emojiCards: List<Pair<CardView, Int>> by lazy {
@@ -71,9 +72,12 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
 
     override fun setupViews(savedInstanceState: Bundle?) = with(binding){
         titleBar.setupDefault(getString(R.string.title_user_information))
-
         when (mode) {
-            UserInfoModeEnum.SIGNUP -> root.setBackgroundResource(R.drawable.bg_second_gradient)
+            UserInfoModeEnum.SIGNUP -> {
+                root.setBackgroundResource(R.drawable.bg_second_gradient)
+                // 초기 상태 세팅(디폴트 선택)
+                setupDefaultState()
+            }
             UserInfoModeEnum.MODIFY -> {
                 root.setBackgroundResource(R.color.color_transparent)
                 listOf(
@@ -85,11 +89,15 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
                 tvSub.visibility = View.GONE
                 titleBar.showBack(false)
                 titleBar.showClose(true)
+                sharedViewModel.userInfoUiState.value.apply {
+                    etUserName.setText(nickName)
+                    selectDivision(islandName.last() == '도')
+                    etIslandName.setText(islandName.dropLast(1))
+                    selectEmoji(emojiCards[profileImageIndex-1].first, emojiCards[profileImageIndex-1].second)
+                }
             }
         }
-
-        // 초기 상태 세팅(디폴트 선택)
-        setupDefaultState()
+        return@with
     }
 
     override fun setupListeners() = with(binding) {
@@ -141,9 +149,12 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
                 profileImageIndex = checkProfileSelected()
             )
 
-            when(mode){
+            when (mode) {
                 UserInfoModeEnum.SIGNUP -> viewModel.completeSignup(userInfo)
-                UserInfoModeEnum.MODIFY -> TODO()
+                UserInfoModeEnum.MODIFY -> viewModel.modifyUserInfo(
+                    userInfo,
+                    (sharedViewModel.userInfoUiState.value.nickName != userInfo.nickName)
+                )
             }
         }
     }
@@ -159,7 +170,7 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
                         Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
                         viewModel.clearError()
                     }
-                    if (state.navigateToMain) {
+                    if (state.navigateToMain || state.closeModifyDialog) {
                         val userInfo = UserInfo(
                             islandName = etIslandName.text.toString() + checkIslandDivision(),
                             nickName = etUserName.text.toString(),

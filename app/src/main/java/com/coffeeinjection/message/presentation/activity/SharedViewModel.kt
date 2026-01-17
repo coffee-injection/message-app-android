@@ -3,19 +3,51 @@ package com.coffeeinjection.message.presentation.activity
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.coffeeinjection.message.data.local.UserInfo
 import com.coffeeinjection.message.data.remote.dto.Letter
 import com.coffeeinjection.message.domain.repository.MessageRepository
+import com.coffeeinjection.message.domain.usecase.ClearUserInfoUseCase
+import com.coffeeinjection.message.domain.usecase.ObserveUserInfoUseCase
+import com.coffeeinjection.message.domain.usecase.SaveUserInfoUseCase
 import com.coffeeinjection.message.util.Logger
+import com.coffeeinjection.message.util.UserInfoUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SharedViewModel @Inject constructor(
-    private val repo: MessageRepository
+    private val repo: MessageRepository,
+    private val saveUserInfo: SaveUserInfoUseCase,
+    private val clearUserInfo : ClearUserInfoUseCase,
+    observeUserInfoUseCase: ObserveUserInfoUseCase
 ) : ViewModel() {
+
+    fun initForTest() {
+        viewModelScope.launch {
+            Logger.i("[choochoo] initForTest")
+            saveUserInfo(UserInfo("testNick", "testIsland섬", 5))
+        }
+    }
+
+    fun clearForTest() {
+        viewModelScope.launch {
+            clearUserInfo()
+        }
+    }
+
+    val userInfoUiState: StateFlow<UserInfoUiState> = observeUserInfoUseCase().map { userInfo ->
+        userInfo?.toUiState() ?: UserInfoUiState(nickName = "default", islandName = "default섬", profileImageIndex = 5)
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = UserInfoUiState("default", "default섬", 5)
+    )
 
     private val _profileUri = MutableStateFlow<Uri?>(null)
     val profileUri : StateFlow<Uri?> = _profileUri
@@ -129,5 +161,9 @@ class SharedViewModel @Inject constructor(
         }
     }
 
-
+    fun UserInfo.toUiState(): UserInfoUiState = UserInfoUiState(
+        nickName = nickName,
+        islandName = islandName,
+        profileImageIndex = profileImageIndex
+    )
 }
