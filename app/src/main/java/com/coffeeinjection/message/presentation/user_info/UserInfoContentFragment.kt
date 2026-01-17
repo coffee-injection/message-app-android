@@ -78,12 +78,15 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
                 // 초기 상태 세팅(디폴트 선택)
                 setupDefaultState()
             }
+
             UserInfoModeEnum.MODIFY -> {
                 root.setBackgroundResource(R.color.color_transparent)
-                listOf(
-                    layoutEmojiBg1, layoutEmojiBg2, layoutEmojiBg3, layoutEmojiBg4, layoutEmojiBg5, layoutEmojiBg6,
-                    layoutEmojiBg7, layoutEmojiBg8, layoutEmojiBg9, layoutEmojiBg10, layoutEmojiBg11, layoutEmojiBg12,
-                ).forEach { it.setBackgroundResource(R.drawable.emoji_bg_selector_grey) }
+
+                // 카드뷰 리스트로 배경 적용
+                emojiCards.forEach { (card, _) ->
+                    card.setBackgroundResource(R.drawable.emoji_bg_selector_grey)
+                }
+
                 ivIsland.visibility = View.GONE
                 tvTitle.visibility = View.GONE
                 tvSub.visibility = View.GONE

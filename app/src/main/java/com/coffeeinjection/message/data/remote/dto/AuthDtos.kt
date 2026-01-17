@@ -10,21 +10,25 @@ import com.squareup.moshi.JsonClass
 // ------------------------------------
 // 1) GET /kakao/login-url 응답
 // ------------------------------------
-data class KakaoLoginUrlResponse(
+data class LoginUrlResponse(
     @Json(name = "loginUrl") val loginUrl: String
 )
 
 // ------------------------------------
 // 2) POST /login 요청/응답
 // ------------------------------------
-data class KakaoLoginRequest(
+data class LoginRequest(
     /**
      * [인가코드]
      * - WebView 리다이렉트 URL (…/auth/kakao/callback?code=XXX) 에서 추출한 code
+     * - WebView 리다이렉트 URL (…/auth/google/callback?code=XXX) 에서 추출한 code
      */
     @Json(name = "code") val code: String
 )
 
+/**
+ * kakao,google common Response
+ */
 data class LoginResponse(
     @Json(name = "accessToken") val accessToken: String,
     @Json(name = "tokenType") val tokenType: String,
@@ -33,6 +37,7 @@ data class LoginResponse(
     @Json(name = "email") val email: String?,
     @Json(name = "isNewMember") val isNewMember: Boolean
 )
+
 
 // ------------------------------------
 // 3) POST /signup/complete 요청/응답

@@ -8,6 +8,6 @@
     <item android:state_pressed="true" android:drawable="@drawable/cv_bg_gradient_blue" />
 
     <!-- 기본 -->
-    <item android:drawable="@color/divider_grey" />
+    <item android:drawable="@drawable/cv_bg_grey" />
 
 </selector>

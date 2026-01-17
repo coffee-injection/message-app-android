@@ -1,5 +1,6 @@
 package com.coffeeinjection.message.presentation.message
 
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -63,6 +64,13 @@ class MessageDialogFragment : DialogFragment() {
     private val initialBookmarked: Boolean
         get() = args.entry == "bookmark" // bookmark 진입이면 true, home이면 false
 
+    private var homeShouldRefresh: Boolean = false
+
+    // 화면이 닫힐때마다 홈화면 메세지 리스트 새로고침
+    override fun onDismiss(dialog: DialogInterface) {
+        sharedViewModel.requestHomeRefresh()
+        super.onDismiss(dialog)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -17,6 +17,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.coffeeinjection.message.BuildConfig
 import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.FragmentSignInBinding
 import com.coffeeinjection.message.presentation.BaseFragment
@@ -50,6 +51,7 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
             }
         }
     }
+
     override fun setupViews(savedInstanceState: Bundle?) = with(binding) {
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner, // viewLifecycleOwner로 걸면 onDestroyView 때 자동 해제
@@ -75,20 +77,30 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 return handleCallbackUrl(url)
             }
+
             override fun shouldOverrideUrlLoading(
                 view: WebView?, request: WebResourceRequest?
             ): Boolean {
                 return handleCallbackUrl(request?.url?.toString())
             }
+
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
             }
+
             private fun handleCallbackUrl(url: String?): Boolean {
                 if (url.isNullOrBlank()) return false
                 if (url.startsWith("http://15.164.112.136/auth/kakao/callback")) {
                     val code = Uri.parse(url).getQueryParameter("code")
                     if (!code.isNullOrBlank()) {
-                        viewModel.exchangeCode(code)
+                        viewModel.exchangeKakaoCode(code)
+                    }
+                    return true
+                }
+                if (url.startsWith("http://15.164.112.136/auth/google/callback")) {
+                    val code = Uri.parse(url).getQueryParameter("code")
+                    if (!code.isNullOrBlank()) {
+                        viewModel.exchangeGoogleCode(code)
                     }
                     return true
                 }
@@ -103,11 +115,16 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
         btnGoogle.setStartIcon(context?.let { ContextCompat.getDrawable(it, R.drawable.ic_google) }, 30f)
         btnGoogle.setCenterIconWithText(true)
         btnGoogle.setOnClickListener {
-            this@SignInFragment.findNavController().navigate(
-                SignInFragmentDirections.actionSignInFragmentToHomeFragment()
-            )
+//            if (BuildConfig.DEBUG) {
+//                // 개발시 구글 로그인 버튼으로 by - pass
+//                this@SignInFragment.findNavController().navigate(
+//                    SignInFragmentDirections.actionSignInFragmentToHomeFragment()
+//                )
+//            } else {
+                Logger.d("[구글 로그인] Btn Click")
+                viewModel.loadGoogleLoginUrl()
+//            }
         }
-
         btnKakao.setStartIcon(context?.let { ContextCompat.getDrawable(it, R.drawable.ic_kakao) }, 30f)
         btnKakao.setOnClickListener {
             if (webView.url.isNullOrBlank()) {
@@ -164,7 +181,7 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
         }
     }
 
-    private fun clearWebView(){
+    private fun clearWebView() {
         viewModel.consumedNavigation()
         binding.webView.apply {
             stopLoading()
@@ -181,7 +198,8 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
         super.onSaveInstanceState(outState)
         try {
             binding.webView.saveState(outState)
-        } catch (_: Throwable) { /* 필요 시 로그 */ }
+        } catch (_: Throwable) { /* 필요 시 로그 */
+        }
     }
 
     override fun onDestroyView() {

@@ -2,13 +2,12 @@ package com.coffeeinjection.message.domain.usecase
 
 import com.coffeeinjection.message.data.local.UserInfo
 import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateResponse
-import com.coffeeinjection.message.data.remote.dto.KakaoLoginUrlResponse
 import com.coffeeinjection.message.data.remote.dto.LoginResponse
+import com.coffeeinjection.message.data.remote.dto.LoginUrlResponse
 import com.coffeeinjection.message.data.remote.dto.ModifyUserProfileResponse
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteResponse
 import com.coffeeinjection.message.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.Flow
-import javax.annotation.meta.TypeQualifierNickname
 import javax.inject.Inject
 
 class ObserveUserInfoUseCase @Inject constructor(
@@ -20,16 +19,32 @@ class ObserveUserInfoUseCase @Inject constructor(
 class GetKakaoLoginUrlUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
-    suspend operator fun invoke(): KakaoLoginUrlResponse {
+    suspend operator fun invoke(): LoginUrlResponse {
         return authRepository.getKakaoLoginUrl()
     }
 }
 
-class ExchangeCodeToJwtUseCase @Inject constructor(
+class GetGoogleLoginUrlUseCase @Inject constructor(
+    private val authRepository: AuthRepository
+) {
+    suspend operator fun invoke(): LoginUrlResponse {
+        return authRepository.getGoogleLoginUrl()
+    }
+}
+
+class ExchangeKakaoCodeToJwtUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
     suspend operator fun invoke(code: String): LoginResponse {
-        return authRepository.exchangeCodeToJwt(code)
+        return authRepository.exchangeKakaoCodeToJwt(code)
+    }
+}
+
+class ExchangeGoogleCodeToJwtUseCase @Inject constructor(
+    private val authRepository: AuthRepository
+) {
+    suspend operator fun invoke(code: String): LoginResponse {
+        return authRepository.exchangeGoogleCodeToJwt(code)
     }
 }
 

@@ -2,7 +2,9 @@ package com.coffeeinjection.presentation.sign_in
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.coffeeinjection.message.domain.usecase.ExchangeCodeToJwtUseCase
+import com.coffeeinjection.message.domain.usecase.ExchangeGoogleCodeToJwtUseCase
+import com.coffeeinjection.message.domain.usecase.ExchangeKakaoCodeToJwtUseCase
+import com.coffeeinjection.message.domain.usecase.GetGoogleLoginUrlUseCase
 import com.coffeeinjection.message.domain.usecase.GetKakaoLoginUrlUseCase
 import com.coffeeinjection.message.domain.usecase.SaveAccessTokenUseCase
 import com.coffeeinjection.message.presentation.sign_in.model.AuthUiState
@@ -16,13 +18,15 @@ import javax.inject.Inject
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     private val getKakaoLoginUrl : GetKakaoLoginUrlUseCase,
-    private val exchangeCodeToJwt : ExchangeCodeToJwtUseCase,
+    private val getGoogleLoginUrl : GetGoogleLoginUrlUseCase,
+    private val exchangeKakaoCodeToJwt : ExchangeKakaoCodeToJwtUseCase,
+    private val exchangeGoogleCodeToJwt : ExchangeGoogleCodeToJwtUseCase,
     private val saveAccessToken : SaveAccessTokenUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(AuthUiState())
     val uiState: StateFlow<AuthUiState> = _uiState
 
-    /** 1) 로그인 URL 요청 */
+    /** 1) kakao 로그인 URL 요청 */
     fun loadKakaoLoginUrl() = viewModelScope.launch {
         _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
         runCatching { getKakaoLoginUrl() }
@@ -36,10 +40,24 @@ class SignInViewModel @Inject constructor(
             }
     }
 
-    /** 2) code → JWT 교환 */
-    fun exchangeCode(code: String) = viewModelScope.launch {
+    /** 1) google 로그인 URL 요청 */
+    fun loadGoogleLoginUrl() = viewModelScope.launch {
         _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
-        runCatching { exchangeCodeToJwt(code) }
+        runCatching { getGoogleLoginUrl() }
+            .onSuccess {
+                Logger.d("[google] loadGoogleLoginUrl success!! url(${it.loginUrl})")
+                _uiState.value = _uiState.value.copy(isLoading = false, loginUrl = it.loginUrl)
+            }
+            .onFailure { e ->
+                Logger.error("[google] loadGoogleLoginUrl fail error.message(${e.message}) error.cause(${e.cause})")
+                _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "로그인 URL을 불러오지 못했습니다.")
+            }
+    }
+
+    /** 2) kakao code → JWT 교환 */
+    fun exchangeKakaoCode(code: String) = viewModelScope.launch {
+        _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+        runCatching { exchangeKakaoCodeToJwt(code) }
             .onSuccess { res ->
                 saveAccessToken(res.accessToken)
                 if (res.isNewMember && res.memberId == null) {
@@ -59,6 +77,32 @@ class SignInViewModel @Inject constructor(
             .onFailure { e ->
                 Logger.error("[kakao] exchangeCode fail errorMsg(${e.message}) cause(${e.cause})")
                 _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "카카오 로그인 처리 중 오류가 발생했습니다")
+            }
+    }
+
+    /** 2) google code → JWT 교환 */
+    fun exchangeGoogleCode(code: String) = viewModelScope.launch {
+        _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+        runCatching { exchangeGoogleCodeToJwt(code) }
+            .onSuccess { res ->
+                saveAccessToken(res.accessToken)
+                if (res.isNewMember && res.memberId == null) {
+                    Logger.d("[google] exchangeCode success -> new user")
+
+                    // 신규 회원: 닉네임 입력 화면으로 이동
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        navigateToNickname = true
+                    )
+                } else {
+                    // 기존 회원: 액세스 토큰 저장 후 메인 이동
+                    Logger.d("[google] exchangeCode success -> old user")
+                    _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
+                }
+            }
+            .onFailure { e ->
+                Logger.error("[google] exchangeCode fail errorMsg(${e.message}) cause(${e.cause})")
+                _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "구글 로그인 처리 중 오류가 발생했습니다")
             }
     }
 

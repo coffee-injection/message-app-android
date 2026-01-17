@@ -2,9 +2,9 @@ package com.coffeeinjection.message.domain.repository
 
 import com.coffeeinjection.message.data.local.UserInfo
 import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateResponse
-import com.coffeeinjection.message.data.remote.dto.KakaoLoginUrlResponse
 import com.coffeeinjection.message.data.remote.dto.LoginResponse
 import com.coffeeinjection.message.data.remote.dto.ModifyUserProfileResponse
+import com.coffeeinjection.message.data.remote.dto.LoginUrlResponse
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteResponse
 import kotlinx.coroutines.flow.Flow
 
@@ -14,8 +14,10 @@ import kotlinx.coroutines.flow.Flow
  */
 interface AuthRepository {
     val userInfoFlow: Flow<UserInfo?>
-    suspend fun getKakaoLoginUrl(): KakaoLoginUrlResponse
-    suspend fun exchangeCodeToJwt(code: String): LoginResponse
+    suspend fun getKakaoLoginUrl(): LoginUrlResponse
+    suspend fun getGoogleLoginUrl(): LoginUrlResponse
+    suspend fun exchangeKakaoCodeToJwt(code: String): LoginResponse
+    suspend fun exchangeGoogleCodeToJwt(code: String): LoginResponse
     suspend fun completeSignup(userinfo: UserInfo): SignupCompleteResponse
     suspend fun checkNicknameDuplicate(nickname: String): CheckNicknameDuplicateResponse
     suspend fun modifyUserProfile(userInfo: UserInfo) : ModifyUserProfileResponse

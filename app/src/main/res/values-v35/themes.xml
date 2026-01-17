@@ -3,16 +3,15 @@
 
     <style name="Theme.MessageApp" parent="Base.Theme.MessageApp">
         <item name="colorPrimary">@color/color_white</item>
-        <item name="colorPrimaryDark">@color/color_navy_primary</item>
+        <item name="colorPrimaryDark">@color/color_black</item>
         <item name="colorAccent">@color/color_navy_primary</item>
-        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
 
         <!-- Status bar (상단) -->
-        <item name="android:statusBarColor">@color/color_white</item>
+<!--        <item name="android:statusBarColor">@color/color_white</item>-->
         <item name="android:windowLightStatusBar">true</item> <!-- 아이콘 어두운색 -->
 
         <!-- Navigation bar (하단, 제스처/버튼 영역) -->
-        <item name="android:navigationBarColor">@color/color_white</item>
+<!--        <item name="android:navigationBarColor">@color/color_white</item>-->
         <item name="android:windowLightNavigationBar">true</item> <!-- 아이콘 어두운색 -->
     </style>
 </resources>
