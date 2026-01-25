@@ -1,4 +1,4 @@
-package com.coffeeinjection.message.presentation.message
+package com.coffeeinjection.message.presentation.dialog
 
 import android.content.DialogInterface
 import android.graphics.Color
@@ -25,6 +25,7 @@ import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.DialogFragmentMessageReadBinding
 import com.coffeeinjection.message.databinding.DialogFragmentMessageWriteBinding
 import com.coffeeinjection.message.presentation.activity.SharedViewModel
+import com.coffeeinjection.message.presentation.message.WarningDialogFragment
 import com.coffeeinjection.message.util.setProfileImageByIndex
 import com.coffeeinjection.message.util.toKoreanDateHourFast
 import dagger.hilt.android.AndroidEntryPoint

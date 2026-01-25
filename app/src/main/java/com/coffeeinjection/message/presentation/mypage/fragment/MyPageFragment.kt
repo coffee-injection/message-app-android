@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.coffeeinjection.message.BuildConfig
@@ -18,6 +19,7 @@ import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.FragmentMypageBinding
 import com.coffeeinjection.message.presentation.BaseFragment
 import com.coffeeinjection.message.presentation.activity.SharedViewModel
+import com.coffeeinjection.message.presentation.message.WarningDialogFragment
 import com.coffeeinjection.message.presentation.mypage.viewmodel.MyPageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -90,6 +92,19 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
                 }
             }
         }
+
+        // ✅ 로그아웃 이벤트 수집 → 로그인 화면으로 전환(백스택 정리)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.logoutEvent.collect {
+                    val options = NavOptions.Builder()
+                        .setPopUpTo(R.id.homeFragment, true) // 홈 포함 백스택 제거
+                        .setLaunchSingleTop(true)
+                        .build()
+                    findNavController().navigate(R.id.signInFragment, null, options)
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -120,11 +135,13 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
                 MyPageFragmentDirections.actionMyPageFragmentToSettingFragment(docType = "TERMS")
             )
         }
+
+        // ✅ 로그아웃: 경고 다이얼로그로 확인 후 진행
         layoutLogout.setOnClickListener {
-            Toast.makeText(requireContext(), "정말 로그아웃 하시겠습니까?", Toast.LENGTH_SHORT).show()
+            showLogoutConfirm()
         }
 
-        // ✅ 토글 클릭 시: 즉시 원상복구 + 적절한 설정 경로만 열기
+        // 토글 클릭 시: 즉시 원상복구 + 적절한 설정 경로만 열기
         switchNotification.setOnCheckedChangeListener { _, userWantsEnable ->
             if (suppressToggleCallback) return@setOnCheckedChangeListener
 
@@ -135,7 +152,7 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
             switchNotification.isChecked = s.effectiveEnabled
             suppressToggleCallback = false
 
-            // 2) 사용 의도 저장(분석/UX 용, 서버 반영은 별도 플로우라면 유지)
+            // 2) 사용 의도 저장
             viewModel.setDesiredEnabled(userWantsEnable)
 
             // 3) 사용자 의도에 맞는 "단 하나"의 진입 지점으로 안내
@@ -193,5 +210,18 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
         }
         openSettings.launch(intent)
     }
-}
 
+    /** 로그아웃 확인 다이얼로그 */
+    private fun showLogoutConfirm() {
+        val dialog = WarningDialogFragment.newInstance(
+            title = getString(R.string.dialog_fragment_message_title5),
+            subTitle = getString(R.string.dialog_fragment_message_sub5), // “자동로그인 정보가 삭제되고 푸시 토큰이 해제됩니다.”
+            closeText = getString(R.string.dialog_fragment_warning_logout), // “로그아웃”
+            closeButtonBgRes = R.drawable.btn_gradient_red,
+            iconRes = R.drawable.ic_warning
+        ).apply {
+            onConfirmClose = { viewModel.logout() }
+        }
+        dialog.show(childFragmentManager, "logout_confirm_dialog")
+    }
+}

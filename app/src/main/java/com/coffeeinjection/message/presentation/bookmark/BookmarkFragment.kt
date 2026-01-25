@@ -16,7 +16,7 @@ import com.coffeeinjection.message.presentation.BaseFragment
 import com.coffeeinjection.message.presentation.activity.SharedViewModel
 import com.coffeeinjection.message.presentation.bookmark.adapter.BookmarkAdapter
 import kotlinx.coroutines.launch
-import com.coffeeinjection.message.presentation.message.MessageDialogFragmentArgs
+import com.coffeeinjection.message.presentation.dialog.MessageDialogFragmentArgs
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

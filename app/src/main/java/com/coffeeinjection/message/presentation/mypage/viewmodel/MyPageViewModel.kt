@@ -13,13 +13,19 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.coffeeinjection.message.data.local.AuthDataStore
+import com.coffeeinjection.message.domain.usecase.DeleteFCMTokenUseCase
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 /**
@@ -43,6 +49,8 @@ data class PushUiState(
 class MyPageViewModel @Inject constructor(
     @ApplicationContext private val mContext: Context,
     private val dataStore: DataStore<Preferences>,
+    private val authDataStore: AuthDataStore,
+    private val deleteFCMTokenUseCase: DeleteFCMTokenUseCase,
 ) : ViewModel() {
 
     companion object {
@@ -52,6 +60,10 @@ class MyPageViewModel @Inject constructor(
 
     private val _ui = MutableStateFlow(PushUiState())
     val ui: StateFlow<PushUiState> = _ui
+
+    // 로그아웃 완료 이벤트(프래그먼트에서 수집하여 로그인 화면으로 이동)
+    private val _logoutEvent = Channel<Unit>(Channel.BUFFERED)
+    val logoutEvent = _logoutEvent.receiveAsFlow()
 
     /** 초기 로드: 사용자 선호 + 시스템 상태 동기화 */
     fun load() = viewModelScope.launch {
@@ -78,6 +90,26 @@ class MyPageViewModel @Inject constructor(
             channelEnabled = isChannelEnabled(),
             permissionGranted = isPostNotificationsGranted()
         )
+    }
+
+    /** 로그아웃: 서버 토큰 해제 → 디바이스 토큰 삭제 → 로컬 정리 → 이벤트 발행 */
+    fun logout() = viewModelScope.launch {
+        runCatching {
+            // 1) 서버에 등록된 FCM 토큰 해제
+            val currentFcm = authDataStore.getFcmToken()
+            if (!currentFcm.isNullOrBlank()) {
+                runCatching { deleteFCMTokenUseCase(currentFcm) }
+            }
+
+            // 2) 디바이스 FCM 토큰 삭제(다음 로그인 시 새 토큰 발급 유도)
+            runCatching { FirebaseMessaging.getInstance().deleteToken().await() }
+
+            // 3) 로컬 자격/유저정보/lastRegistered 정리
+            authDataStore.clearAll()
+        }.also {
+            // 4) 화면 전환(프래그먼트에서 수집하여 SignIn으로 네비게이션)
+            _logoutEvent.trySend(Unit)
+        }
     }
 
     /** (API 26+) 기본 채널 미존재 시 생성 */
