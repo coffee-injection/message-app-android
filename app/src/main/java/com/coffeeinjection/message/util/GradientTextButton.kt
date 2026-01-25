@@ -43,7 +43,7 @@ class GradientTextButton @JvmOverloads constructor(
 
         // XML에 android:background가 없으면 기본 배경 적용
         if (!hasAndroidAttribute(attrs, android.R.attr.background)) {
-            setBackgroundResource(R.drawable.btn_gradient_blue)
+            setBackgroundResource(R.drawable.btn_selector_gradient)
         }
 
         // 텍스트 정렬
@@ -52,6 +52,7 @@ class GradientTextButton @JvmOverloads constructor(
         }
 
         compoundDrawablePadding = iconPaddingPx
+        isEnabled = true
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

@@ -1,5 +1,6 @@
 package com.coffeeinjection.message.presentation.user_info
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.coffeeinjection.message.data.local.UserInfo
@@ -29,6 +30,18 @@ class UserInfoViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(AuthUiState())
     val uiState: StateFlow<AuthUiState> = _uiState
+
+    private val _duplicateEnable = MutableLiveData<Boolean>(false)
+    val duplicateEnable get() = _duplicateEnable
+
+    private var isNickNameChecked = false
+
+    fun updateIsChecked( isChecked: Boolean) { isNickNameChecked = isChecked }
+    fun isChecked() = isNickNameChecked
+
+    fun updateDuplicateEnable(isEnable : Boolean){
+        _duplicateEnable.value = isEnable
+    }
 
     private var isAvailable =false
 
