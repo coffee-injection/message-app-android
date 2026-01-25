@@ -1,11 +1,14 @@
 package com.coffeeinjection.message.presentation.mypage.fragment
 
-import android.net.Uri
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
@@ -13,105 +16,182 @@ import com.bumptech.glide.Glide
 import com.coffeeinjection.message.BuildConfig
 import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.FragmentMypageBinding
-import com.coffeeinjection.message.presentation.activity.SharedViewModel
 import com.coffeeinjection.message.presentation.BaseFragment
+import com.coffeeinjection.message.presentation.activity.SharedViewModel
 import com.coffeeinjection.message.presentation.mypage.viewmodel.MyPageViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 /**
- * 마이페이지 화면
+ * 마이페이지 화면.
+ * - 알림 스위치: 사용자가 ON/OFF 할 때마다 시스템 설정 화면(앱/채널/권한)으로 이동
+ * - 설정 화면/권한 요청에서 복귀 시 상태를 자동으로 갱신하여 스위치에 반영
+ * - FCM 등록/해제는 로그인 플로우에서만 처리 (이 화면에서는 관여하지 않음)
  */
+@AndroidEntryPoint
 class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding::inflate) {
 
     private val viewModel: MyPageViewModel by viewModels()
-
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
-    // 포토 피커 (이미지 전용). 구버전은 자동으로 기본 이미지 선택기로 폴백됨.
-    private val pickPhoto = registerForActivityResult(
-        ActivityResultContracts.PickVisualMedia()
-    ) { uri: Uri? ->
-        uri ?: return@registerForActivityResult
-        // 내 화면에 즉시 반영
-        loadIntoProfile(uri)
-        // 다른 프래그먼트와 공유
-        sharedViewModel.setPhoto(uri)
+    /** 프로그램적 동기화로 인한 리스너 트리거 무시용 플래그 */
+    private var suppressToggleCallback = false
+
+    /** Android 13+ POST_NOTIFICATIONS 권한 요청 */
+    private val requestPostNotifications = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) {
+        // 권한 응답 후 최신 상태 갱신
+        viewModel.refreshState()
+    }
+
+    /** 앱/채널 알림 설정 화면 오픈 (복귀 시 상태 갱신) */
+    private val openSettings = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        viewModel.refreshState()
     }
 
     override fun setupViews(savedInstanceState: Bundle?) {
-
         binding.apply {
-            // TitleBar
             titleBar.setupDefault(getString(R.string.title_mypage))
-            // 현재 앱 버전 표시
-            val versionName = BuildConfig.VERSION_NAME
-            tvVersionNumber.text = getString(R.string.mypage_version, versionName)
+            tvVersionNumber.text = getString(R.string.mypage_version, BuildConfig.VERSION_NAME)
         }
 
+        viewModel.load()
+
+        // 프로필 공유 상태
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
-                // 화면이 보이는(STARTED) 상태만 블록 실행/수집 시작 STOPPED 로 내려가면 자동으로 수집을 중단
-                sharedViewModel.profileUri
-                    .collect { uri -> uri?.let { loadIntoProfile(it) } }
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sharedViewModel.profileUri.collect { uri ->
+                    uri?.let {
+                        Glide.with(binding.root)
+                            .load(it)
+                            .centerCrop()
+                            .placeholder(R.drawable.ic_profile_placeholder)
+                            .error(R.drawable.ic_profile_placeholder)
+                            .into(binding.ivProfileImg)
+                    }
+                }
             }
         }
+
+        // 상태 수집 → 스위치 강제 동기화(표시만)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.ui.collectLatest { s ->
+                    val target = s.effectiveEnabled
+                    if (binding.switchNotification.isChecked != target) {
+                        suppressToggleCallback = true
+                        binding.switchNotification.isChecked = target
+                        suppressToggleCallback = false
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshState()
     }
 
     override fun setupListeners() = with(binding) {
         super.setupListeners()
 
-        // 프로필 편집
         layoutChildProfile.setOnClickListener {
-            this@MyPageFragment.findNavController().navigate(
+            findNavController().navigate(
                 MyPageFragmentDirections.actionMyPageFragmentToModifyUserInfoFragment()
             )
         }
-
-        // 북마크
         layoutChildBookmarks.setOnClickListener {
-            this@MyPageFragment.findNavController().navigate(
+            findNavController().navigate(
                 MyPageFragmentDirections.actionMyPageFragmentToBookmarkFragment()
             )
         }
-
-        // 알림 설정
-        layoutChildNotification.setOnClickListener {
-            // 토글 상태 반영해 api 요청해야함
-        }
-
-        // 개인정보 처리방침
         layoutChildPrivacy.setOnClickListener {
-            this@MyPageFragment.findNavController().navigate(
+            findNavController().navigate(
                 MyPageFragmentDirections.actionMyPageFragmentToSettingFragment(docType = "PRIVACY")
             )
         }
-
-        // 이용약관
         layoutChildTerms.setOnClickListener {
-            this@MyPageFragment.findNavController().navigate(
+            findNavController().navigate(
                 MyPageFragmentDirections.actionMyPageFragmentToSettingFragment(docType = "TERMS")
             )
         }
-
-        // 로그아웃
         layoutLogout.setOnClickListener {
             Toast.makeText(requireContext(), "정말 로그아웃 하시겠습니까?", Toast.LENGTH_SHORT).show()
         }
 
-//        // 프로필 사진
-//        btnEditProfile.setOnClickListener {
-//            pickPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-//        }
+        // ✅ 토글 클릭 시: 즉시 원상복구 + 적절한 설정 경로만 열기
+        switchNotification.setOnCheckedChangeListener { _, userWantsEnable ->
+            if (suppressToggleCallback) return@setOnCheckedChangeListener
+
+            val s = viewModel.ui.value
+
+            // 1) 토글 시각 상태는 즉시 실제 상태로 돌려놓음(사용자가 설정에서 바꾸게 유도)
+            suppressToggleCallback = true
+            switchNotification.isChecked = s.effectiveEnabled
+            suppressToggleCallback = false
+
+            // 2) 사용 의도 저장(분석/UX 용, 서버 반영은 별도 플로우라면 유지)
+            viewModel.setDesiredEnabled(userWantsEnable)
+
+            // 3) 사용자 의도에 맞는 "단 하나"의 진입 지점으로 안내
+            if (userWantsEnable) {
+                // 켤 때 필요한 조건 충족 절차
+                if (!s.appEnabled) {
+                    openAppNotificationSettings()
+                    return@setOnCheckedChangeListener
+                }
+                if (Build.VERSION.SDK_INT >= 33 && !s.permissionGranted) {
+                    requestPostNotifications.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                    return@setOnCheckedChangeListener
+                }
+                if (Build.VERSION.SDK_INT >= 26 && !s.channelEnabled) {
+                    openChannelSettings("default_push")
+                    return@setOnCheckedChangeListener
+                }
+                // 모두 충족 → 아무 것도 열지 않고 상태만 갱신
+                viewModel.refreshState()
+            } else {
+                // 끌 때는 채널 단위(26+)가 명확, 미만은 앱 알림 설정
+                if (Build.VERSION.SDK_INT >= 26) {
+                    openChannelSettings("default_push")
+                } else {
+                    openAppNotificationSettings()
+                }
+            }
+        }
+
+        // 행 전체 클릭 시에도 스위치 클릭과 동일한 동작(설정화면으로만 유도)
+        layoutChildNotification.setOnClickListener {
+            switchNotification.performClick()
+        }
     }
 
-    private fun loadIntoProfile(uri: Uri) = with(binding) {
-        // Glide 수명 안전: fragment view의 lifecycle에 묶기
-        Glide.with(root)
-            .load(uri)
-            .centerCrop()
-            .placeholder(R.drawable.ic_profile_placeholder) // 선택
-            .error(R.drawable.ic_profile_placeholder)       // 선택
-            .into(ivProfileImg)
+    /** 앱 알림 전체 설정 화면 */
+    private fun openAppNotificationSettings() {
+        val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+            putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
+            putExtra("app_package", requireContext().packageName) // 일부 기기 호환
+            putExtra("app_uid", requireContext().applicationInfo.uid)
+        }
+        openSettings.launch(intent)
     }
 
+    /** 특정 채널 설정 화면 (API 26+) */
+    private fun openChannelSettings(channelId: String) {
+        if (Build.VERSION.SDK_INT < 26) {
+            openAppNotificationSettings()
+            return
+        }
+        val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
+            putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
+            putExtra(Settings.EXTRA_CHANNEL_ID, channelId)
+        }
+        openSettings.launch(intent)
+    }
 }
+

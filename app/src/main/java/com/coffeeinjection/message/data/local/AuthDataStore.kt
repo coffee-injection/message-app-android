@@ -27,8 +27,8 @@ class AuthDataStore @Inject constructor(
         private val KEY_FCM_TOKEN = stringPreferencesKey("fcm_token_current")
         private val KEY_FCM_LAST_REGISTERED = stringPreferencesKey("fcm_token_last_registered")
 
-        // (선택) 최근 로그인 프로바이더 저장하고 싶을 때
-        // private val KEY_LOGIN_PROVIDER = stringPreferencesKey("login_provider")
+        // 자동 로그인
+         private val KEY_LOGIN_PROVIDER = stringPreferencesKey("login_provider")
     }
 
     // --- 공통: Preferences 안전 접근

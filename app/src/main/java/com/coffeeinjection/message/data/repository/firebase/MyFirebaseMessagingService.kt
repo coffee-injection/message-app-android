@@ -32,7 +32,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     companion object {
         private const val TAG = "MyFirebaseMessagingService"
-        private const val DEFAULT_CHANNEL_ID = "liflow_default_channel" // 고정 ID
+        private const val DEFAULT_CHANNEL_ID = "default_channel" // 고정 ID
     }
 
     /**
