@@ -98,17 +98,25 @@ class ModifyUserProfileUseCase @Inject constructor(
 }
 
 class RegisterFCMTokenUseCase @Inject constructor(
-    private val messageRepository: MessageRepository
+    private val authRepository: AuthRepository
 ) {
     suspend operator fun invoke(token: String) {
-        messageRepository.registrationFCMToken(token)
+        authRepository.registrationFCMToken(token)
     }
 }
 
 class DeleteFCMTokenUseCase @Inject constructor(
-    private val messageRepository: MessageRepository
+    private val authRepository: AuthRepository
 ) {
     suspend operator fun invoke(token: String) {
-        messageRepository.deleteFCMToken(token)
+        authRepository.deleteFCMToken(token)
+    }
+}
+
+class Withdraw @Inject constructor(
+    private val authRepository: AuthRepository
+) {
+    suspend operator fun invoke() {
+        authRepository.withdraw()
     }
 }

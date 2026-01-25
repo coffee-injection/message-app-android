@@ -76,5 +76,12 @@ data class CheckNicknameDuplicateResponse(
     @Json(name = "available") val available: Boolean
 )
 
+/**
+ * Firebase FCM token
+ */
+data class FCMTokenRequest(
+    @Json(name = "fcmToken") val fcmToken: String,
+    @Json(name = "deviceType") val deviceType: String = "ANDROID",
+)
 
 

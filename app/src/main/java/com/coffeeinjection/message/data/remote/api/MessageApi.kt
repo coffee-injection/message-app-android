@@ -67,16 +67,5 @@ interface MessageApi {
         @Body req: ModifyUserProfileRequest
     ): ApiEnvelope<ModifyUserProfileResponse>
 
-    /** Firebase FCM token 등록*/
-    @POST("fcm/token")
-    suspend fun registrationFCMToken(
-        @Body req: FCMTokenRequest
-    ): ApiEnvelope<Any?>
-
-    /** Firebase FCM token 삭제 */
-    @DELETE("fcm/token")
-    suspend fun deleteFCMToken(
-        @Query("fcmToken") fcmToken: String
-    ): ApiEnvelope<Any?>
 
 }

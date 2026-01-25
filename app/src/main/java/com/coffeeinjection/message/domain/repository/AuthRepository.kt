@@ -1,6 +1,7 @@
 package com.coffeeinjection.message.domain.repository
 
 import com.coffeeinjection.message.data.local.UserInfo
+import com.coffeeinjection.message.data.remote.base.ensureSuccessOrThrow
 import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateResponse
 import com.coffeeinjection.message.data.remote.dto.LoginResponse
 import com.coffeeinjection.message.data.remote.dto.ModifyUserProfileResponse
@@ -23,4 +24,11 @@ interface AuthRepository {
     suspend fun saveAccessToken(token: String)
     suspend fun saveUserInfo(userinfo: UserInfo)
     suspend fun clearUserInfo()
+    /** FCM 토큰 등록 */
+    suspend fun registrationFCMToken(token: String)
+    /** FCM 토큰 삭제 */
+    suspend fun deleteFCMToken(token: String)
+    /** 회원 탈퇴 */
+    suspend fun withdraw()
+
 }

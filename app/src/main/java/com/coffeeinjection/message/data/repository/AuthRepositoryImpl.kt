@@ -3,9 +3,11 @@ package com.coffeeinjection.message.data.repository
 import com.coffeeinjection.message.data.local.AuthDataStore
 import com.coffeeinjection.message.data.local.UserInfo
 import com.coffeeinjection.message.data.remote.api.AuthApi
+import com.coffeeinjection.message.data.remote.base.ensureSuccessOrThrow
 import com.coffeeinjection.message.data.remote.base.requireDataOrThrow
 import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateRequest
 import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateResponse
+import com.coffeeinjection.message.data.remote.dto.FCMTokenRequest
 import com.coffeeinjection.message.data.remote.dto.LoginRequest
 import com.coffeeinjection.message.data.remote.dto.LoginResponse
 import com.coffeeinjection.message.data.remote.dto.LoginUrlResponse
@@ -68,5 +70,19 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun clearUserInfo() {
         authStore.clearAll()
+    }
+
+    override suspend fun registrationFCMToken(token: String) {
+        api.registrationFCMToken(FCMTokenRequest(token))
+            .ensureSuccessOrThrow("fcm/token")
+    }
+
+    override suspend fun deleteFCMToken(token: String) {
+        api.deleteFCMToken(token)
+            .ensureSuccessOrThrow("fcm/token")
+    }
+
+    override suspend fun withdraw(){
+        api.withdraw().ensureSuccessOrThrow("auth/withdraw")
     }
 }

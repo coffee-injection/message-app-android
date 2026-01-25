@@ -56,6 +56,7 @@ object NetworkModule {
             .addInterceptor(logging)
             .build()
 
+    //중요: @NoAuthRetrofit는  토큰 없는 Retrofit로 생성
     @Provides @Singleton @NoAuthRetrofit
     fun provideNoAuthRetrofit(
         moshi: Moshi,
@@ -67,6 +68,7 @@ object NetworkModule {
             .client(client)
             .build()
 
+    //중요: @NoAuthRetrofit는  토큰 없는 Retrofit로 생성
     @Provides @Singleton @AuthRetrofit
     fun provideAuthRetrofit(
         moshi: Moshi,
@@ -78,12 +80,12 @@ object NetworkModule {
             .client(client)
             .build()
 
-    // ✅ 여기만 중요: AuthApi는 토큰 없는 Retrofit로 생성
+    // Bearer 토큰 있는 Retrofit로 생성
+    // Bearer 토큰 없는 Retrofit로 생성시 @NoAuthRetrofit를 선언 
     @Provides @Singleton
-    fun provideAuthApi(@NoAuthRetrofit retrofit: Retrofit): AuthApi =
+    fun provideAuthApi(@AuthRetrofit retrofit: Retrofit): AuthApi =
         retrofit.create(AuthApi::class.java)
 
-    // ✅ MessageApi는 토큰 있는 Retrofit로 생성
     @Provides @Singleton
     fun provideMessageApi(@AuthRetrofit retrofit: Retrofit): MessageApi =
         retrofit.create(MessageApi::class.java)

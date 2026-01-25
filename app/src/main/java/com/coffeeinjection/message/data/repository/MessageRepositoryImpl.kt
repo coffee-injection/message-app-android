@@ -56,14 +56,4 @@ class MessageRepositoryImpl @Inject constructor(
         val env = api.modifyUserProfile(ModifyUserProfileRequest(userInfo.nickName, userInfo.islandName, userInfo.profileImageIndex))
         return env.requireDataOrThrow("member/profile")
     }
-
-    override suspend fun registrationFCMToken(token: String) {
-        api.registrationFCMToken(FCMTokenRequest(token))
-            .ensureSuccessOrThrow("fcm/token")
-    }
-
-    override suspend fun deleteFCMToken(token: String) {
-        api.deleteFCMToken(token)
-            .ensureSuccessOrThrow("fcm/token")
-    }
 }

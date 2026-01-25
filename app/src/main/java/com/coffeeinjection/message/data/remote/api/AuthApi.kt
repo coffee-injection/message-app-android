@@ -3,15 +3,18 @@ package com.coffeeinjection.message.data.remote.api
 import com.coffeeinjection.message.data.remote.base.ApiEnvelope
 import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateRequest
 import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateResponse
+import com.coffeeinjection.message.data.remote.dto.FCMTokenRequest
 import com.coffeeinjection.message.data.remote.dto.LoginRequest
 import com.coffeeinjection.message.data.remote.dto.LoginResponse
 import com.coffeeinjection.message.data.remote.dto.LoginUrlResponse
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteRequest
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 /**
  * - 서버 인증 API를 정의
@@ -54,4 +57,19 @@ interface AuthApi {
         @Body req: CheckNicknameDuplicateRequest
     ): ApiEnvelope<CheckNicknameDuplicateResponse>
 
+    /** Firebase FCM token 등록*/
+    @POST("fcm/token")
+    suspend fun registrationFCMToken(
+        @Body req: FCMTokenRequest
+    ): ApiEnvelope<Any?>
+
+    /** Firebase FCM token 삭제 */
+    @DELETE("fcm/token")
+    suspend fun deleteFCMToken(
+        @Query("fcmToken") fcmToken: String
+    ): ApiEnvelope<Any?>
+
+    /** 회원 탈퇴 */
+    @DELETE("auth/withdraw")
+    suspend fun withdraw(): ApiEnvelope<Any?>
 }

@@ -37,11 +37,6 @@ interface MessageRepository {
         letterId: Long,
         reason: String?
     )
-
     /** 프로필 수정 */
     suspend fun modifyUserProfile(userInfo: UserInfo) : ModifyUserProfileResponse
-    /** FCM 토큰 등록 */
-    suspend fun registrationFCMToken(token: String)
-    /** FCM 토큰 삭제 */
-    suspend fun deleteFCMToken(token: String)
 }
