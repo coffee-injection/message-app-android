@@ -3,13 +3,11 @@ package com.coffeeinjection.message.data.repository
 import com.coffeeinjection.message.data.local.AuthDataStore
 import com.coffeeinjection.message.data.local.UserInfo
 import com.coffeeinjection.message.data.remote.api.AuthApi
+import com.coffeeinjection.message.data.remote.base.requireDataOrThrow
 import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateRequest
 import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateResponse
-import com.coffeeinjection.message.data.remote.base.requireDataOrThrow
 import com.coffeeinjection.message.data.remote.dto.LoginRequest
 import com.coffeeinjection.message.data.remote.dto.LoginResponse
-import com.coffeeinjection.message.data.remote.dto.ModifyUserProfileRequest
-import com.coffeeinjection.message.data.remote.dto.ModifyUserProfileResponse
 import com.coffeeinjection.message.data.remote.dto.LoginUrlResponse
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteRequest
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteResponse
@@ -46,10 +44,9 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun exchangeGoogleCodeToJwt(code: String): LoginResponse {
-        val env = api.GoogleLogin(LoginRequest(code))
+        val env = api.googleLogin(LoginRequest(code))
         return env.requireDataOrThrow("auth/google/login")
     }
-
 
     override suspend fun completeSignup(userInfo: UserInfo): SignupCompleteResponse {
         val env =  api.completeSignup(SignupCompleteRequest(userInfo.nickName, userInfo.islandName, userInfo.profileImageIndex))
@@ -59,11 +56,6 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun checkNicknameDuplicate(nickname : String) : CheckNicknameDuplicateResponse {
         val env = api.checkNicknameDuplicate(CheckNicknameDuplicateRequest(nickname))
         return env.requireDataOrThrow("member/check-nickname")
-    }
-
-    override suspend fun modifyUserProfile(userInfo: UserInfo) : ModifyUserProfileResponse {
-        val env = api.modifyUserProfile(ModifyUserProfileRequest(userInfo.nickName, userInfo.islandName, userInfo.profileImageIndex))
-        return env.requireDataOrThrow("member/profile")
     }
 
     override suspend fun saveAccessToken(token: String) {

@@ -2,12 +2,12 @@ package com.coffeeinjection.presentation.sign_in
 
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.webkit.CookieManager
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
+import android.webkit.WebStorage
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
@@ -17,7 +17,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.coffeeinjection.message.BuildConfig
 import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.FragmentSignInBinding
 import com.coffeeinjection.message.presentation.BaseFragment
@@ -25,22 +24,30 @@ import com.coffeeinjection.message.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlin.getValue
 
-/**
- * - 서버에서 받은 loginUrl을 WebView로 로드
- * - 콜백 URL에서 code를 추출하여 ViewModel로 전달
- */
 @AndroidEntryPoint
 class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding::inflate) {
 
     private val viewModel: SignInViewModel by viewModels()
-
     private var backPressedTime: Long = 0L
+    private var lastLoadedLoginUrl: String? = null
+
+    // 허용 도메인(루트 기준)
+    private val allowedSuffixes = setOf(
+        "kakao.com", "google.com", "gstatic.com", "15.164.112.136"
+    )
+
+    private val kakaoCallbackPrefix = "http://15.164.112.136/auth/kakao/callback"
+    private val googleCallbackPrefix = "http://15.164.112.136/auth/google/callback"
+
+    /** 공용 로딩 표시/숨김 */
+    private fun showLoading() { binding.progressBar?.visibility = View.VISIBLE }
+    private fun hideLoading() { binding.progressBar?.visibility = View.GONE }
+
     private val backCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             if (binding.webView.isVisible) {
-                clearWebView()
+                clearWebViewAndCookies()
                 return
             }
             if (System.currentTimeMillis() - backPressedTime <= 2000) {
@@ -53,117 +60,126 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
     }
 
     override fun setupViews(savedInstanceState: Bundle?) = with(binding) {
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner, // viewLifecycleOwner로 걸면 onDestroyView 때 자동 해제
-            backCallback
-        )
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backCallback)
 
-        // WebView 기본 설정
         with(webView.settings) {
             javaScriptEnabled = true
             domStorageEnabled = true
             loadsImagesAutomatically = true
             mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) safeBrowsingEnabled = true
+            cacheMode = WebSettings.LOAD_DEFAULT
+            safeBrowsingEnabled = true
         }
 
-        CookieManager.getInstance().setAcceptCookie(true)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true)
+        CookieManager.getInstance().apply {
+            setAcceptCookie(true)
+            setAcceptThirdPartyCookies(webView, true)
         }
 
-        // 콜백 URL 가로채기
+        // 초기엔 보이지 않게 시작 (첫 픽셀 커밋될 때 노출)
+        webView.visibility = View.GONE
+
         webView.webViewClient = object : WebViewClient() {
+
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                return handleCallbackUrl(url)
+                return handleNavigation(url)
             }
 
             override fun shouldOverrideUrlLoading(
                 view: WebView?, request: WebResourceRequest?
             ): Boolean {
-                return handleCallbackUrl(request?.url?.toString())
+                return handleNavigation(request?.url?.toString())
             }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
+                Logger.d("[signIn] onPageStarted url=$url")
+                webView.visibility = View.GONE      // 잔상 방지
+                showLoading()                       // 로딩 시작
             }
 
-            private fun handleCallbackUrl(url: String?): Boolean {
+            // 실제 픽셀이 커밋되는 순간만 노출
+            override fun onPageCommitVisible(view: WebView?, url: String?) {
+                super.onPageCommitVisible(view, url)
+                if (!url.isNullOrBlank() && url != "about:blank") {
+                    webView.visibility = View.VISIBLE
+                    hideLoading()
+                }
+            }
+
+            private fun handleNavigation(url: String?): Boolean {
                 if (url.isNullOrBlank()) return false
-                if (url.startsWith("http://15.164.112.136/auth/kakao/callback")) {
-                    val code = Uri.parse(url).getQueryParameter("code")
-                    if (!code.isNullOrBlank()) {
-                        viewModel.exchangeKakaoCode(code)
+
+                // 콜백: 즉시 교환 + WebView 정리
+                if (url.startsWith(kakaoCallbackPrefix)) {
+                    Uri.parse(url).getQueryParameter("code")?.let {
+                        clearWebView()
+                        viewModel.exchangeKakaoCode(it)
                     }
                     return true
                 }
-                if (url.startsWith("http://15.164.112.136/auth/google/callback")) {
-                    val code = Uri.parse(url).getQueryParameter("code")
-                    if (!code.isNullOrBlank()) {
-                        viewModel.exchangeGoogleCode(code)
+                if (url.startsWith(googleCallbackPrefix)) {
+                    Uri.parse(url).getQueryParameter("code")?.let {
+                        clearWebView()
+                        viewModel.exchangeGoogleCode(it)
                     }
+                    return true
+                }
+
+                // 허용 도메인만 WebView 로드 허용
+                if (!isAllowedHost(url)) {
+                    Logger.d("[signIn] blocked external url=$url")
                     return true
                 }
                 return false
             }
         }
+
         btnKakao.setCenterIconWithText(true)
     }
 
     override fun setupListeners() = with(binding) {
         super.setupListeners()
+
         btnGoogle.setStartIcon(context?.let { ContextCompat.getDrawable(it, R.drawable.ic_google) }, 30f)
         btnGoogle.setCenterIconWithText(true)
         btnGoogle.setOnClickListener {
-//            if (BuildConfig.DEBUG) {
-//                // 개발시 구글 로그인 버튼으로 by - pass
-//                this@SignInFragment.findNavController().navigate(
-//                    SignInFragmentDirections.actionSignInFragmentToHomeFragment()
-//                )
-//            } else {
-                Logger.d("[구글 로그인] Btn Click")
-                viewModel.loadGoogleLoginUrl()
-//            }
+            Logger.d("[구글 로그인] Btn Click")
+            clearWebView()              // 기존 화면/히스토리 가림
+            lastLoadedLoginUrl = null   // 강제 재로딩 유도
+            showLoading()
+            viewModel.loadGoogleLoginUrl()
         }
+
         btnKakao.setStartIcon(context?.let { ContextCompat.getDrawable(it, R.drawable.ic_kakao) }, 30f)
         btnKakao.setOnClickListener {
-            if (webView.url.isNullOrBlank()) {
-                Logger.d("[카카오 로그인] Btn Click")
-                viewModel.loadKakaoLoginUrl()
-            }
+            Logger.d("[카카오 로그인] Btn Click")
+            clearWebView()
+            lastLoadedLoginUrl = null
+            showLoading()
+            viewModel.loadKakaoLoginUrl()
         }
-//        etNickname.setOnClickListener {
-//            tvDescriptionNickname.visibility = View.GONE
-//            etNickname.setBackgroundResource(R.drawable.btn_normal_round_white)
-//        }
-//        btnConfirm.setOnClickListener {
-//            if(etNickname.text?.length in 2..12) {
-//                Logger.d("nickname check : ${etNickname.text?.length}")
-//                val nickname = etNickname.text?.toString()?.trim().orEmpty()
-//                viewModel.completeSignup(nickname)
-//            } else{
-//                Logger.d("nickname check2 : ${etNickname.text?.length}")
-//                tvDescriptionNickname.visibility = View.VISIBLE
-//                etNickname.setBackgroundResource(R.drawable.btn_normal_round_white_red_border)
-//            }
-//        }
     }
 
     override fun setupCollectors() {
         super.setupCollectors()
         with(binding) {
-            // 상태 관찰
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.uiState.collectLatest { state ->
                     Logger.d("[uistate check!!] : $state")
+
                     state.errorMessage?.let {
                         Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
                         viewModel.clearError()
                     }
-                    if (state.loginUrl != null && webView.url != state.loginUrl) {
-                        webView.visibility = View.VISIBLE
-                        webView.loadUrl(state.loginUrl)
+
+                    // URL이 들어오면 중복 로드 방지 후 로드
+                    val nextUrl = state.loginUrl
+                    if (!nextUrl.isNullOrBlank() && lastLoadedLoginUrl != nextUrl) {
+                        webView.loadUrl(nextUrl)   // 가시성은 WebViewClient가 제어
+                        lastLoadedLoginUrl = nextUrl
                     }
+
                     if (state.navigateToNickname) {
                         clearWebView()
                         findNavController().navigate(
@@ -181,28 +197,62 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
         }
     }
 
+    /** 화면만 정리 (destroy 금지) */
     private fun clearWebView() {
         viewModel.consumedNavigation()
         binding.webView.apply {
-            stopLoading()
-            loadUrl("about:blank")
-            clearHistory()
-            removeAllViews()
-            destroy()
+            try {
+                stopLoading()
+                clearHistory()
+            } catch (_: Throwable) {}
             visibility = View.GONE
         }
+        hideLoading()
+        lastLoadedLoginUrl = null
     }
 
-    // ✅ WebView 상태 저장
+    private fun isAllowedHost(url: String): Boolean {
+        val uri = runCatching { Uri.parse(url) }.getOrNull() ?: return false
+        val schemeOk = uri.scheme == "https" || uri.scheme == "http"
+        val host = uri.host ?: return false
+        val hostOk = allowedSuffixes.any { host == it || host.endsWith(".$it") }
+        return schemeOk && hostOk
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        try { binding.webView.saveState(outState) } catch (_: Throwable) {}
+    }
+
+    /** 화면/스토리지/쿠키 정리(뒤로가기 시 사용) */
+    private fun clearWebViewAndCookies() {
         try {
-            binding.webView.saveState(outState)
-        } catch (_: Throwable) { /* 필요 시 로그 */
+            CookieManager.getInstance().apply {
+                removeAllCookies(null)
+                flush()
+            }
+        } catch (_: Throwable) {}
+        try { WebStorage.getInstance().deleteAllData() } catch (_: Throwable) {}
+        binding.webView.apply {
+            try {
+                stopLoading()
+                clearCache(true)
+                clearHistory()
+            } catch (_: Throwable) {}
+            visibility = View.GONE
         }
+        hideLoading()
+        lastLoadedLoginUrl = null
     }
 
     override fun onDestroyView() {
+        clearWebViewAndCookies()
+        try {
+            binding.webView.apply {
+                try { removeAllViews() } catch (_: Throwable) {}
+                destroy()
+            }
+        } catch (_: Throwable) {}
         viewModel.clearUiState()
         super.onDestroyView()
     }

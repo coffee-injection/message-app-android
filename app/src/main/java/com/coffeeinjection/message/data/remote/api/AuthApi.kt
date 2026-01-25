@@ -6,14 +6,11 @@ import com.coffeeinjection.message.data.remote.dto.CheckNicknameDuplicateRespons
 import com.coffeeinjection.message.data.remote.dto.LoginRequest
 import com.coffeeinjection.message.data.remote.dto.LoginResponse
 import com.coffeeinjection.message.data.remote.dto.LoginUrlResponse
-import com.coffeeinjection.message.data.remote.dto.ModifyUserProfileRequest
-import com.coffeeinjection.message.data.remote.dto.ModifyUserProfileResponse
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteRequest
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
-import retrofit2.http.PATCH
 import retrofit2.http.POST
 
 /**
@@ -40,7 +37,7 @@ interface AuthApi {
     /** google 인가 코드 → JWT 교환 (토큰 필요 없음) */
     @Headers("No-Auth: true")
     @POST("auth/google/login")
-    suspend fun GoogleLogin(
+    suspend fun googleLogin(
         @Body req: LoginRequest
     ): ApiEnvelope<LoginResponse>
 
@@ -57,10 +54,4 @@ interface AuthApi {
         @Body req: CheckNicknameDuplicateRequest
     ): ApiEnvelope<CheckNicknameDuplicateResponse>
 
-    /** 5) 프로필 정보 수정 */
-    @Headers("No-Auth: true")
-    @PATCH("member/profile")
-    suspend fun modifyUserProfile(
-        @Body req: ModifyUserProfileRequest
-    ): ApiEnvelope<ModifyUserProfileResponse>
 }

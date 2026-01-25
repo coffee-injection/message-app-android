@@ -3,6 +3,7 @@ package com.coffeeinjection.message.presentation.home
 import android.Manifest
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.content.ContentValues
 import android.content.pm.PackageManager
 import android.graphics.RectF
 import android.net.Uri
@@ -29,6 +30,8 @@ import com.coffeeinjection.message.presentation.activity.SharedViewModel
 import com.coffeeinjection.message.presentation.dialog.PermissionDialogFragment
 import com.coffeeinjection.message.util.Logger
 import com.coffeeinjection.presentation.home.HomeViewModel
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -63,6 +66,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     }
 
     override fun setupViews(savedInstanceState: Bundle?) {
+        // FCM TOKEN
+        getFCMToken()
+
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             backCallback
@@ -360,4 +366,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private fun buildCurrentStateText(messageCount: Int): String {
         return "${todayKoreanMd()} \u2022 받은 메시지 ${messageCount}개"
     }
+
+    private fun getFCMToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Logger.w(ContentValues.TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            Logger.d(ContentValues.TAG, "Firebase FCM Token : $token")
+        })
+    }
+
 }

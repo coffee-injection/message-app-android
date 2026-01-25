@@ -3,15 +3,20 @@ package com.coffeeinjection.message.data.remote.api
 import com.coffeeinjection.message.data.remote.base.ApiEnvelope
 import com.coffeeinjection.message.data.remote.dto.AddBookmarkRequest
 import com.coffeeinjection.message.data.remote.dto.DeleteBookmarkRequest
+import com.coffeeinjection.message.data.remote.dto.FCMTokenRequest
 import com.coffeeinjection.message.data.remote.dto.Letter
 import com.coffeeinjection.message.data.remote.dto.LetterSummary
 import com.coffeeinjection.message.data.remote.dto.LoadBookmarkResponse
+import com.coffeeinjection.message.data.remote.dto.ModifyUserProfileRequest
+import com.coffeeinjection.message.data.remote.dto.ModifyUserProfileResponse
 import com.coffeeinjection.message.data.remote.dto.ReportLetterRequest
 import com.coffeeinjection.message.data.remote.dto.SendLetterRequest
 import com.coffeeinjection.message.data.remote.dto.SendLetterResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.HTTP
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -54,6 +59,24 @@ interface MessageApi {
     @POST("report")
     suspend fun reportLetter(
         @Body body: ReportLetterRequest
+    ): ApiEnvelope<Any?>
+
+    /** 8) 프로필 정보 수정 */
+    @PATCH("member/profile")
+    suspend fun modifyUserProfile(
+        @Body req: ModifyUserProfileRequest
+    ): ApiEnvelope<ModifyUserProfileResponse>
+
+    /** Firebase FCM token 등록*/
+    @POST("fcm/token")
+    suspend fun registrationFCMToken(
+        @Body req: FCMTokenRequest
+    ): ApiEnvelope<Any?>
+
+    /** Firebase FCM token 삭제 */
+    @DELETE("fcm/token")
+    suspend fun deleteFCMToken(
+        @Query("fcmToken") fcmToken: String
     ): ApiEnvelope<Any?>
 
 }

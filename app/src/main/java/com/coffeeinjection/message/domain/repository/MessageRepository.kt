@@ -1,8 +1,10 @@
 package com.coffeeinjection.message.domain.repository
 
+import com.coffeeinjection.message.data.local.UserInfo
 import com.coffeeinjection.message.data.remote.dto.Letter
 import com.coffeeinjection.message.data.remote.dto.LetterSummary
 import com.coffeeinjection.message.data.remote.dto.LoadBookmarkResponse
+import com.coffeeinjection.message.data.remote.dto.ModifyUserProfileResponse
 import com.coffeeinjection.message.data.remote.dto.SendLetterResponse
 
 /**
@@ -35,4 +37,11 @@ interface MessageRepository {
         letterId: Long,
         reason: String?
     )
+
+    /** 프로필 수정 */
+    suspend fun modifyUserProfile(userInfo: UserInfo) : ModifyUserProfileResponse
+    /** FCM 토큰 등록 */
+    suspend fun registrationFCMToken(token: String)
+    /** FCM 토큰 삭제 */
+    suspend fun deleteFCMToken(token: String)
 }

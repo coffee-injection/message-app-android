@@ -1,72 +1,86 @@
 package com.coffeeinjection.message.data.local
 
 import android.content.Context
-import android.net.Uri
 import android.os.Parcelable
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.coffeeinjection.message.util.Logger
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
-import androidx.core.net.toUri
 import androidx.datastore.preferences.core.emptyPreferences
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.parcelize.Parcelize
 
-/**
- * - 액세스 토큰을 DataStore에 저장/조회
- * - 신규 회원의 "임시 토큰"도 동일 키에 저장하고, 가입 완료 후 "최종 토큰"으로 갱신
- * - Hilt 주입을 위해 @Inject 생성자를 제공
- */
-
-private val Context.authDataStore by preferencesDataStore(name = "auth_prefs") // 확장 프로퍼티 : Context.dataStore를 참조하면 auth_pref라는 이름의 PreferencesDataStore를 가져옴
+private val Context.authDataStore by preferencesDataStore(name = "auth_prefs")
 
 class AuthDataStore @Inject constructor(
-    @ApplicationContext private val context: Context // application 범위의 Context를 DI로 부터 주입 받아 사용
+    @ApplicationContext private val context: Context
 ) {
     companion object {
         private val KEY_ACCESS_TOKEN   = stringPreferencesKey("access_token")
         private val KEY_USER_NICKNAME  = stringPreferencesKey("user_nickname")
         private val KEY_USER_ISLAND_NAME  = stringPreferencesKey("user_island_name")
         private val KEY_USER_IMG_IDX      = stringPreferencesKey("user_img_idx")
+
+        // FCM 토큰 & 마지막 등록된 토큰
+        private val KEY_FCM_TOKEN = stringPreferencesKey("fcm_token_current")
+        private val KEY_FCM_LAST_REGISTERED = stringPreferencesKey("fcm_token_last_registered")
+
+        // (선택) 최근 로그인 프로바이더 저장하고 싶을 때
+        // private val KEY_LOGIN_PROVIDER = stringPreferencesKey("login_provider")
     }
 
-    /** 현재 저장된 액세스 토큰 */
-    val accessTokenFlow: Flow<String?> = context.authDataStore.data.catch { e ->
-        if (e is java.io.IOException) emit(emptyPreferences()) else throw e
-    }.map { it[KEY_ACCESS_TOKEN] }.distinctUntilChanged()
+    // --- 공통: Preferences 안전 접근
+    private val dataFlow = context.authDataStore.data
+        .catch { e -> if (e is java.io.IOException) emit(emptyPreferences()) else throw e }
 
-    /** 유저 정보 Flow (모두 있을 때만 UserInfo 반환, 아니면 null) */
-    val userInfoFlow: Flow<UserInfo?> = context.authDataStore.data.catch { e ->
-        if (e is java.io.IOException) emit(emptyPreferences()) else throw e
-    }.map { prefs ->
-        val nickName = prefs[KEY_USER_NICKNAME]
-        val islandName = prefs[KEY_USER_ISLAND_NAME]
-        val profileIdx = prefs[KEY_USER_IMG_IDX]?.toIntOrNull()
+    /** 액세스 토큰 Flow */
+    val accessTokenFlow: Flow<String?> = dataFlow
+        .map { it[KEY_ACCESS_TOKEN] }
+        .distinctUntilChanged()
 
-        Logger.i("[choochoo] userInfoFlow observing")
+    /** 유저 정보 Flow (모두 있을 때만 UserInfo 반환) */
+    val userInfoFlow: Flow<UserInfo?> = dataFlow
+        .map { prefs ->
+            val nickName = prefs[KEY_USER_NICKNAME]
+            val islandName = prefs[KEY_USER_ISLAND_NAME]
+            val profileIdx = prefs[KEY_USER_IMG_IDX]?.toIntOrNull()
 
-        if (nickName != null && islandName != null && profileIdx != null) {
-            UserInfo(nickName = nickName, islandName = islandName, profileImageIndex = profileIdx)
-        } else null
-    }.distinctUntilChanged()
+            Logger.i("[choochoo] userInfoFlow observing")
 
+            if (nickName != null && islandName != null && profileIdx != null) {
+                UserInfo(nickName = nickName, islandName = islandName, profileImageIndex = profileIdx)
+            } else null
+        }
+        .distinctUntilChanged()
+
+    // --- 추가: FCM 관련 Flow/Getter/Setter
+
+    /** 현재 기기의 FCM 토큰 Flow (getToken()/onNewToken 에서 저장) */
+    private val fcmTokenFlow: Flow<String?> = dataFlow
+        .map { it[KEY_FCM_TOKEN] }
+        .distinctUntilChanged()
+
+    /** 마지막으로 서버에 등록 완료한 FCM 토큰 Flow (중복 전송 방지용) */
+    private val lastRegisteredFcmTokenFlow: Flow<String?> = dataFlow
+        .map { it[KEY_FCM_LAST_REGISTERED] }
+        .distinctUntilChanged()
 
     /** 액세스 토큰 저장/갱신 */
     suspend fun saveAccessToken(token: String) {
-        Logger.d("[AuthDataStore] saveAccessToken init --> token : $token")
+        Logger.d("[AuthDataStore] saveAccessToken --> token : $token")
         context.authDataStore.edit { prefs ->
             prefs[KEY_ACCESS_TOKEN] = token
         }
     }
 
+    /** 단발 조회가 필요할 때 사용 (예: 로그인 직후) */
+    suspend fun getAccessToken(): String? = accessTokenFlow.firstOrNull()
+
+    /** 유저 정보 저장 */
     suspend fun saveUserInfo(userinfo: UserInfo) {
-        Logger.i("[choochoo] saveUserInfo userinfo : $userinfo")
-        Logger.d("[AuthDataStore] saveUserInfo init --> userinfo : $userinfo")
+        Logger.i("[choochoo] saveUserInfo : $userinfo")
         context.authDataStore.edit { prefs ->
             prefs[KEY_USER_NICKNAME] = userinfo.nickName
             prefs[KEY_USER_ISLAND_NAME] = userinfo.islandName
@@ -74,15 +88,53 @@ class AuthDataStore @Inject constructor(
         }
     }
 
-    /** 액세스 토큰 제거 (로그아웃 등)
-     * todo -> ClearAll 시 토큰을 삭제하기 때문에 재 로그인 시 새로운 토큰이 갱신되면 서버 상의 정보랄 달라질 우려 있음 -> 확인 필요
-     * */
+    /** FCM: 현재 토큰 저장 (onNewToken / FirebaseMessaging.getInstance().token 성공 시 호출) */
+    suspend fun saveFcmToken(token: String) {
+        Logger.d("[AuthDataStore] saveFcmToken --> $token")
+        context.authDataStore.edit { prefs ->
+            prefs[KEY_FCM_TOKEN] = token
+        }
+    }
+
+    /** FCM: 현재 토큰 단발 조회 */
+    suspend fun getFcmToken(): String? = fcmTokenFlow.firstOrNull()
+
+    /** FCM: 마지막 서버 등록 성공한 토큰 저장 */
+    suspend fun saveLastRegisteredFcmToken(token: String) {
+        Logger.d("[AuthDataStore] saveLastRegisteredFcmToken --> $token")
+        context.authDataStore.edit { prefs ->
+            prefs[KEY_FCM_LAST_REGISTERED] = token
+        }
+    }
+
+    /** FCM: 마지막 서버 등록 토큰 단발 조회 */
+    suspend fun getLastRegisteredFcmToken(): String? = lastRegisteredFcmTokenFlow.firstOrNull()
+
+    /**
+     * 로그인 상태 && FCM 토큰 존재 && 마지막 등록 토큰과 다르면 true
+     * -> ViewModel에서 collect 해서 자동 등록 트리거로 사용 가능
+     */
+    val needsFcmRegistrationFlow: Flow<Boolean> =
+        combine(accessTokenFlow, fcmTokenFlow, lastRegisteredFcmTokenFlow) { access, current, last ->
+            !access.isNullOrBlank() && !current.isNullOrBlank() && current != last
+        }.distinctUntilChanged()
+
+    /** 로그아웃 등 전체 정리
+     *
+     * 정책:
+     * - access/user 정보 삭제
+     * - **마지막 등록 토큰은 삭제** → 다음 로그인 시 재등록 유도
+     * - **현재 FCM 토큰은 유지**(디바이스 고유 토큰은 계속 쓸 수 있게)
+     *   (필요 시 아래 주석 해제로 완전 초기화 가능)
+     */
     suspend fun clearAll() {
         context.authDataStore.edit { prefs ->
             prefs.remove(KEY_ACCESS_TOKEN)
             prefs.remove(KEY_USER_NICKNAME)
             prefs.remove(KEY_USER_ISLAND_NAME)
             prefs.remove(KEY_USER_IMG_IDX)
+            prefs.remove(KEY_FCM_LAST_REGISTERED)
+            // prefs.remove(KEY_FCM_TOKEN) // 토큰까지 지우고 싶다면 주석 해제
         }
     }
 }

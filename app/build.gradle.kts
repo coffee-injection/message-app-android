@@ -6,6 +6,7 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.dagger.hilt.android")
     id("kotlin-parcelize")
+    id("com.google.gms.google-services")
 }
 android {
     namespace = "com.coffeeinjection.message"
@@ -13,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.coffeeinjection.message"
-        minSdk = 21
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0.0"
@@ -21,20 +22,25 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("../coffeeInjection.keystore")
+            storePassword = "coffee!!"
+            keyAlias = "coffeeInjection"
+            keyPassword = "coffee!!"
+        }
+    }
+
     buildTypes {
         debug {
-            // 디버그 전용 식별자/버전 꼬리표
-            applicationIdSuffix = ".debug"
             // 난독화/리소스 축소 비활성화(기본값이지만 명시해두면 좋습니다)
             isMinifyEnabled = false
             buildConfigField("String", "BASE_URL", "\"http://15.164.112.136:8080/api/v1/\"")
         }
         release {
-            isMinifyEnabled = true
-            applicationIdSuffix = ".release"
-            proguardFiles(
-                "proguard-rules.pro"
-            )
+            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = false
+            proguardFiles("proguard-rules.pro")
             buildConfigField("String", "BASE_URL", "\"http://15.164.112.136:8080/api/v1/\"")
         }
     }
@@ -60,6 +66,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.firebase.messaging.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -98,10 +105,13 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation("com.squareup.moshi:moshi-kotlin:1.15.1")
 
-    // DataStore
-    implementation("androidx.datastore:datastore-preferences:1.1.1")
-
     // indicator
     implementation("com.tbuonomo:dotsindicator:4.3")
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:34.8.0"))
+    implementation(libs.firebase.analytics)
+    implementation(libs.com.google.firebase.firebase.messaging.ktx)
+
 
 }

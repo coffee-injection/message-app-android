@@ -90,3 +90,28 @@ data class ReportLetterRequest(
     @Json(name = "reason") val reason: String?
 )
 
+// ------------------------------------
+// 5) PATCH /member/profile 요청/응답
+// ------------------------------------
+data class ModifyUserProfileRequest(
+    @Json(name = "nickname") val nickname: String,
+    @Json(name = "islandName") val islandName: String,
+    @Json(name = "profileImageIndex") val profileImageIndex: Int
+)
+
+data class ModifyUserProfileResponse(
+    @Json(name = "memberId") val memberId: Int,
+    @Json(name = "nickname") val nickname: String,
+    @Json(name = "islandName") val islandName: String,
+    @Json(name = "profileImageIndex") val profileImageIndex: Int
+)
+
+/**
+ * Firebase FCM token
+ */
+data class FCMTokenRequest(
+    @Json(name = "fcmToken") val fcmToken: String,
+    @Json(name = "deviceType") val deviceType: String = "ANDROID",
+)
+
+

@@ -3,6 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <!--  Splash  -->
     <string name="Tium">Tium</string>
+    <string name="default_notification_channel_id">tium</string>
 
     <!--  Guide  -->
     <string name="guide_next">다음</string>

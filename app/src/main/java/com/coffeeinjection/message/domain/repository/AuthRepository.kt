@@ -20,7 +20,6 @@ interface AuthRepository {
     suspend fun exchangeGoogleCodeToJwt(code: String): LoginResponse
     suspend fun completeSignup(userinfo: UserInfo): SignupCompleteResponse
     suspend fun checkNicknameDuplicate(nickname: String): CheckNicknameDuplicateResponse
-    suspend fun modifyUserProfile(userInfo: UserInfo) : ModifyUserProfileResponse
     suspend fun saveAccessToken(token: String)
     suspend fun saveUserInfo(userinfo: UserInfo)
     suspend fun clearUserInfo()

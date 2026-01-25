@@ -2,6 +2,7 @@ package com.coffeeinjection.message.presentation.dialog
 
 import android.Manifest
 import android.app.Dialog
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -15,6 +16,10 @@ import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
 import com.coffeeinjection.message.databinding.DialogFragmentPermissionBinding
+import com.coffeeinjection.message.util.Logger
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
+import okhttp3.internal.concurrent.TaskRunner.Companion.logger
 
 class PermissionDialogFragment : DialogFragment() {
 
@@ -27,19 +32,13 @@ class PermissionDialogFragment : DialogFragment() {
             if (granted) {
                 dismiss()
             } else {
-                // todo dialog 띄우기
                 val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
                     putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
                 }
                 startActivity(intent)
                 dismiss()
             }
-
         }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

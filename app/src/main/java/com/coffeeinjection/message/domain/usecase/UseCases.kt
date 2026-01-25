@@ -7,6 +7,7 @@ import com.coffeeinjection.message.data.remote.dto.LoginUrlResponse
 import com.coffeeinjection.message.data.remote.dto.ModifyUserProfileResponse
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteResponse
 import com.coffeeinjection.message.domain.repository.AuthRepository
+import com.coffeeinjection.message.domain.repository.MessageRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -72,7 +73,6 @@ class ClearUserInfoUseCase @Inject constructor(
     }
 }
 
-
 class CompleteSignupUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
@@ -90,9 +90,25 @@ class CheckNicknameDuplicateUseCase @Inject constructor(
 }
 
 class ModifyUserProfileUseCase @Inject constructor(
-    private val authRepository: AuthRepository
+    private val messageRepository: MessageRepository
 ){
     suspend operator fun invoke(userInfo: UserInfo): ModifyUserProfileResponse {
-        return authRepository.modifyUserProfile(userInfo)
+        return messageRepository.modifyUserProfile(userInfo)
+    }
+}
+
+class RegisterFCMTokenUseCase @Inject constructor(
+    private val messageRepository: MessageRepository
+) {
+    suspend operator fun invoke(token: String) {
+        messageRepository.registrationFCMToken(token)
+    }
+}
+
+class DeleteFCMTokenUseCase @Inject constructor(
+    private val messageRepository: MessageRepository
+) {
+    suspend operator fun invoke(token: String) {
+        messageRepository.deleteFCMToken(token)
     }
 }
