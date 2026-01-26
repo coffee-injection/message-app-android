@@ -142,7 +142,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
                 launch {
                     sharedViewModel.userInfoUiState.collect { state ->
-                        Logger.i("데이터 들어옴 : $state")
                         binding.apply {
                             val resId = profileImages.getOrNull(state.profileImageIndex - 1) ?: R.drawable.ic_profile1
                             ivProfileImg.setImageResource(resId)

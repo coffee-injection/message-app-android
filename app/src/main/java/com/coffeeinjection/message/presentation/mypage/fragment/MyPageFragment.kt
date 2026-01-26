@@ -21,6 +21,7 @@ import com.coffeeinjection.message.presentation.BaseFragment
 import com.coffeeinjection.message.presentation.activity.SharedViewModel
 import com.coffeeinjection.message.presentation.message.WarningDialogFragment
 import com.coffeeinjection.message.presentation.mypage.viewmodel.MyPageViewModel
+import com.coffeeinjection.message.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -54,6 +55,12 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
     ) {
         viewModel.refreshState()
     }
+
+    private val profileImages = intArrayOf(
+        R.drawable.ic_profile1, R.drawable.ic_profile2, R.drawable.ic_profile3, R.drawable.ic_profile4,
+        R.drawable.ic_profile5, R.drawable.ic_profile6, R.drawable.ic_profile7, R.drawable.ic_profile8,
+        R.drawable.ic_profile9, R.drawable.ic_profile10, R.drawable.ic_profile11, R.drawable.ic_profile12
+    )
 
     override fun setupViews(savedInstanceState: Bundle?) {
         binding.apply {
@@ -169,6 +176,21 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
         // 행 전체 클릭 시에도 스위치 클릭과 동일한 동작(설정화면으로만 유도)
         layoutChildNotification.setOnClickListener {
             switchNotification.performClick()
+        }
+    }
+
+    override fun setupCollectors() {
+        super.setupCollectors()
+        viewLifecycleOwner.lifecycleScope.launch {
+            sharedViewModel.userInfoUiState.collect { state ->
+                binding.apply {
+                    val resId = profileImages.getOrNull(state.profileImageIndex - 1)
+                        ?: R.drawable.ic_profile1
+                    ivProfileImg.setImageResource(resId)
+                    tvUserName.text = state.nickName
+                    tvIslandName.text = state.islandName
+                }
+            }
         }
     }
 
