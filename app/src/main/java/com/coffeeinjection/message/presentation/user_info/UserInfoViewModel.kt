@@ -25,16 +25,19 @@ class UserInfoViewModel @Inject constructor(
     private val saveAccessToken : SaveAccessTokenUseCase,
     private val saveUserInfo : SaveUserInfoUseCase,
     private val checkDuplicate : CheckNicknameDuplicateUseCase,
-    private val modifyUserInfo: ModifyUserProfileUseCase
+    private val modifyInfo: ModifyUserProfileUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AuthUiState())
     val uiState: StateFlow<AuthUiState> = _uiState
 
+    private val _nickNameGuideUiState = MutableLiveData(NickNameGuideState.IDLE)
+    val nickNameGuideUiState get() = _nickNameGuideUiState
+
     private val _duplicateEnable = MutableLiveData<Boolean>(false)
     val duplicateEnable get() = _duplicateEnable
 
-    private var isNickNameChecked = false
+    private var isNickNameChecked = false // 중복 체크가 실행 됐는지
 
     fun updateIsChecked( isChecked: Boolean) { isNickNameChecked = isChecked }
     fun isChecked() = isNickNameChecked
@@ -43,15 +46,13 @@ class UserInfoViewModel @Inject constructor(
         _duplicateEnable.value = isEnable
     }
 
-    private var isAvailable =false
+    fun updateNickNameGuideUiState(state : NickNameGuideState){
+        _nickNameGuideUiState.value = state
+    }
 
-    fun modifyUserInfo(userInfo: UserInfo, needNicknameCheck : Boolean) = viewModelScope.launch {
-        if (needNicknameCheck) checkNickNameAvailable(userInfo.nickName)
-        else isAvailable = true
-
-        if(!isAvailable) return@launch
+    fun modifyUserInfo(userInfo: UserInfo) = viewModelScope.launch {
         _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
-        runCatching { modifyUserInfo(userInfo) }
+        runCatching { modifyInfo(userInfo) }
             .onSuccess { res ->
                 Logger.d("[kakao] modifyUserInfo success")
                 saveUserInfo(userInfo)
@@ -59,7 +60,7 @@ class UserInfoViewModel @Inject constructor(
             }
             .onFailure { e ->
                 printError(e, "completeSignup")
-                isAvailable = false
+                isNickNameChecked = false
                 _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "유저 정보 수정에 실패했습니다")
             }
 
@@ -67,13 +68,6 @@ class UserInfoViewModel @Inject constructor(
 
     /** 신규회원 닉네임 완료 */
     fun completeSignup(userInfo: UserInfo) = viewModelScope.launch {
-        checkNickNameAvailable(userInfo.nickName)
-        if (!isAvailable) {
-            Logger.d("[kakao] isNotAvailable")
-            return@launch
-        }
-
-        Logger.d("[kakao] isAvailable")
 
         _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
         runCatching { complete(userInfo) }
@@ -87,22 +81,25 @@ class UserInfoViewModel @Inject constructor(
             }
             .onFailure { e ->
                 printError(e, "completeSignup")
-                isAvailable = false
+                isNickNameChecked = false
                 _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "회원가입 완료 처리에 실패했습니다")
             }
     }
 
-    private suspend fun checkNickNameAvailable(nickname: String){
+     fun checkNickNameAvailable(nickname: String) = viewModelScope.launch {
         _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
         runCatching {
             checkDuplicate(nickname)
         }.onSuccess { res ->
             Logger.d("[kakao] checkDuplicate msg(${res.message})")
-            isAvailable = res.available
+            val isAvailable = res.available
             _uiState.value = _uiState.value.copy(isLoading = false, errorMessage =  if (isAvailable) null else "중복된 닉네임 입니다.")
+            updateIsChecked(isAvailable)
+            updateNickNameGuideUiState(if (isAvailable) NickNameGuideState.AVAILABLE else NickNameGuideState.DUPLICATE)
         }.onFailure { e ->
             printError(e, "checkNickname")
             _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "닉네임 중복 확인에 실패했습니다.")
+            updateNickNameGuideUiState( NickNameGuideState.CHECK_FAILED)
         }
     }
 

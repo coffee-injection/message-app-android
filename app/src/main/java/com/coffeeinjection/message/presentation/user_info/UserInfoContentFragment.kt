@@ -125,6 +125,8 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
 
         // 3) 유저 이름 입력 -> 미리보기 텍스트 반영 + visible/gone 갱신
         etUserName.doAfterTextChanged { editable ->
+            viewModel.updateNickNameGuideUiState(NickNameGuideState.IDLE)
+            viewModel.updateIsChecked(false)
             tvPreviewUserName.text = editable?.toString().orEmpty()
             if (mode == UserInfoModeEnum.MODIFY) { viewModel.updateDuplicateEnable((editable.toString() != sharedViewModel.userInfoUiState.value.nickName) && (editable?.length in 2..10)) }
             else viewModel.updateDuplicateEnable((editable?.length in 2..10))
@@ -132,13 +134,13 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
         }
 
         // 4) 도/섬 버튼: 라디오(둘 중 하나는 무조건 선택)
-        btnIsland1.setOnClickListener { selectDivision(isDo = true) }
-        btnIsland2.setOnClickListener { selectDivision(isDo = false) }
+        btnIsland1.setOnClickListener { selectDivision(isDo = true); updatePreviewVisibility()}
+        btnIsland2.setOnClickListener { selectDivision(isDo = false); updatePreviewVisibility() }
 
-        // (원하시면) 프로필 사진 선택 버튼 연결
-        // btnEditProfile.setOnClickListener {
-        //     pickPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        // }
+        btnCheckDuplicate.setOnClickListener {
+            if(!btnCheckDuplicate.isEnabled) return@setOnClickListener
+            viewModel.checkNickNameAvailable(nickname = etUserName.text.toString())
+        }
 
         btnStart.setOnClickListener {
             when {
@@ -152,9 +154,19 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
                 }
             }
 
-            if(etUserName.text.toString() != sharedViewModel.userInfoUiState.value.nickName && !viewModel.isChecked()){
-                // todo guide작성
-                //  tv_guide_nickname 빨간글씨로 중복 ~ 입력 및 해당 버튼으로 스크롤.
+            when (mode) {
+                UserInfoModeEnum.SIGNUP -> {
+                    if(!viewModel.isChecked()) {
+                        viewModel.updateNickNameGuideUiState(NickNameGuideState.NEED_DUPLICATE_CHECK)
+                        return@setOnClickListener
+                    }
+                }
+                UserInfoModeEnum.MODIFY -> {
+                    if(etUserName.text.toString() != sharedViewModel.userInfoUiState.value.nickName && !viewModel.isChecked()){
+                        viewModel.updateNickNameGuideUiState(NickNameGuideState.NEED_DUPLICATE_CHECK)
+                        return@setOnClickListener
+                    }
+                }
             }
 
             val userInfo = UserInfo(
@@ -165,11 +177,25 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
 
             when (mode) {
                 UserInfoModeEnum.SIGNUP -> viewModel.completeSignup(userInfo)
-                UserInfoModeEnum.MODIFY -> viewModel.modifyUserInfo(
-                    userInfo,
-                    (sharedViewModel.userInfoUiState.value.nickName != userInfo.nickName)
-                )
+                UserInfoModeEnum.MODIFY -> viewModel.modifyUserInfo(userInfo)
             }
+        }
+    }
+
+    private fun applyNickNameGuide(msgId : Int = 0, isInitialize : Boolean) = with(binding){
+        // todo : 사용 할 수 있는 닉네임 입니다.
+        // todo : 중복된 닉네임 이에요.
+        // todo 그냥 State로 빼기.
+        // 중복체크를 진행해주세요.
+        // 닉네임은 2~10자로 작성해주세요
+        if (isInitialize) {
+            tvGuideNickname.text = getString(msgId)
+            tvGuideNickname.setTextColor(resources.getColor(R.color.error_secondary))
+            etIslandName.setBackgroundResource(R.drawable.et_bg_selector)
+        } else {
+            tvGuideNickname.text = getString(msgId)
+            tvGuideNickname.setTextColor(resources.getColor(R.color.error_secondary))
+            etIslandName.setBackgroundResource(R.drawable.btn_normal_round_white_red_border)
         }
     }
 
@@ -199,6 +225,32 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
             }
             viewModel.duplicateEnable.observe(viewLifecycleOwner) { isEnable ->
                 btnCheckDuplicate.isEnabled = isEnable
+            }
+            viewModel.nickNameGuideUiState.observe(viewLifecycleOwner) { state ->
+                when(state){
+                    NickNameGuideState.IDLE -> {
+                        tvGuideNickname.text = getString(R.string.user_toast_nick_name)
+                        tvGuideNickname.setTextColor(resources.getColor(R.color.text_quaternary))
+                        etIslandName.setBackgroundResource(R.drawable.et_bg_selector)
+                    }
+                    NickNameGuideState.NEED_DUPLICATE_CHECK -> {
+                        tvGuideNickname.text = getString(R.string.user_guide_plz_check_nick_name)
+                        tvGuideNickname.setTextColor(resources.getColor(R.color.error_secondary))
+                    }
+                    NickNameGuideState.AVAILABLE -> {
+                        tvGuideNickname.text = getString(R.string.user_guide_nick_name_available)
+                        tvGuideNickname.setTextColor(resources.getColor(R.color.blue_500))
+                        etIslandName.setBackgroundResource(R.drawable.et_bg_selector)
+                    }
+                    NickNameGuideState.DUPLICATE -> {
+                        tvGuideNickname.text = getString(R.string.user_guide_nick_name_is_duplicate)
+                        tvGuideNickname.setTextColor(resources.getColor(R.color.error_secondary))
+                    }
+                    NickNameGuideState.CHECK_FAILED -> {
+                        tvGuideNickname.text = getString(R.string.user_guide_check_nick_name_fail)
+                        tvGuideNickname.setTextColor(resources.getColor(R.color.error_secondary))
+                    }
+                }
             }
         }
     }

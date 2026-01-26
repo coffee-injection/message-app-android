@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.initForTest()
+        //viewModel.initForTest()
     }
 
     override fun onStart() {
@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         Logger.d("onDestroy")
-        viewModel.clearForTest()
+        //viewModel.clearForTest()
         super.onDestroy()
     }
 }

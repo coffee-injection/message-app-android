@@ -118,6 +118,11 @@
     <string name="user_back">뒤로가기</string>
     <string name="user_toast_island_name">섬 이름은 1~7자로 작성 해주세요.</string>
     <string name="user_toast_nick_name">닉네임은 2~10자로 작성 해주세요.</string>
+    <string name="user_guide_plz_check_nick_name">중복 체크를 진행해 주세요.</string>
+    <string name="user_guide_nick_name_is_duplicate">중복된 닉네임 이에요.</string>
+    <string name="user_guide_nick_name_available">사용 가능한 닉네임 이에요.</string>
+    <string name="user_guide_check_nick_name_fail">중복 체크에 실패했어요.</string>
+
 
     <!-- Bookmarks -->
     <string name="bookmarks_title">북마크한 메시지가 없습니다</string>
