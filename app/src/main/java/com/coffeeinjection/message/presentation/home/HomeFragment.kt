@@ -9,6 +9,7 @@ import android.graphics.RectF
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ImageView
@@ -53,6 +54,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     // 최신 렌더만 반영하기 위한 시퀀스
     private var renderSeq: Int = 0
+
+    private val profileImages = intArrayOf(
+        R.drawable.ic_profile1, R.drawable.ic_profile2, R.drawable.ic_profile3, R.drawable.ic_profile4,
+        R.drawable.ic_profile5, R.drawable.ic_profile6, R.drawable.ic_profile7, R.drawable.ic_profile8,
+        R.drawable.ic_profile9, R.drawable.ic_profile10, R.drawable.ic_profile11, R.drawable.ic_profile12
+    )
 
     private val backCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -119,8 +126,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-
                 // 바다 위 메시지 아이콘 + current state(동시 갱신)
                 launch {
                     homeViewModel.seaMessages.collect { messages ->
@@ -132,6 +137,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 launch {
                     sharedViewModel.homeRefresh.collect {
                         homeViewModel.loadReceivedMessages()
+                    }
+                }
+
+                launch {
+                    sharedViewModel.userInfoUiState.collect { state ->
+                        Logger.i("데이터 들어옴 : $state")
+                        binding.apply {
+                            val resId = profileImages.getOrNull(state.profileImageIndex - 1) ?: R.drawable.ic_profile1
+                            ivProfileImg.setImageResource(resId)
+                            tvUserName.text = state.nickName
+                            tvIsland.text = state.islandName
+                        }
                     }
                 }
             }
