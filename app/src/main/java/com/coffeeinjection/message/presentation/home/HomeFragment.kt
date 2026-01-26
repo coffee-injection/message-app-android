@@ -120,12 +120,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
-                // 프로필 이미지
-                launch {
-                    sharedViewModel.profileUri.collect { uri ->
-                        uri?.let { loadIntoProfile(it) }
-                    }
-                }
 
                 // 바다 위 메시지 아이콘 + current state(동시 갱신)
                 launch {

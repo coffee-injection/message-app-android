@@ -63,22 +63,6 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
 
         viewModel.load()
 
-        // 프로필 공유 상태
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                sharedViewModel.profileUri.collect { uri ->
-                    uri?.let {
-                        Glide.with(binding.root)
-                            .load(it)
-                            .centerCrop()
-                            .placeholder(R.drawable.ic_profile_placeholder)
-                            .error(R.drawable.ic_profile_placeholder)
-                            .into(binding.ivProfileImg)
-                    }
-                }
-            }
-        }
-
         // 상태 수집 → 스위치 강제 동기화(표시만)
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -93,7 +77,7 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
             }
         }
 
-        // ✅ 로그아웃 이벤트 수집 → 로그인 화면으로 전환(백스택 정리)
+        // 로그아웃 이벤트 수집 → 로그인 화면으로 전환(백스택 정리)
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.logoutEvent.collect {
@@ -136,7 +120,7 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
             )
         }
 
-        // ✅ 로그아웃: 경고 다이얼로그로 확인 후 진행
+        // 로그아웃: 경고 다이얼로그로 확인 후 진행
         layoutLogout.setOnClickListener {
             showLogoutConfirm()
         }

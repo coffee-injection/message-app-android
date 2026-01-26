@@ -51,13 +51,6 @@ class SharedViewModel @Inject constructor(
         initialValue = UserInfoUiState("default", "default섬", 5)
     )
 
-    private val _profileUri = MutableStateFlow<Uri?>(null)
-    val profileUri : StateFlow<Uri?> = _profileUri
-
-    fun setPhoto(uri: Uri?) {
-        _profileUri.value = uri
-    }
-
     // -------------------------
     // 편지 상세(읽기) 상태
     // -------------------------
@@ -113,15 +106,6 @@ class SharedViewModel @Inject constructor(
 
             _isLoadingLetterDetail.value = false
         }
-    }
-
-    /**
-     * 필요하면 다이얼로그 닫을 때 초기화
-     */
-    fun clearLetterDetail() {
-        _letterDetail.value = null
-        _letterDetailError.value = null
-        _isLoadingLetterDetail.value = false
     }
 
     /**
