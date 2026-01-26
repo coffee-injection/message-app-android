@@ -114,6 +114,7 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
         emojiCards.forEach { (card, imageRes) ->
             card.setOnClickListener {
                 selectEmoji(card, imageRes)
+                updatePreviewVisibility()
             }
         }
 
