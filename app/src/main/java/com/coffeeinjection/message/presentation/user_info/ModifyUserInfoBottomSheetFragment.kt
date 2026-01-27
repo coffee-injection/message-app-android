@@ -56,9 +56,8 @@ class ModifyUserInfoBottomSheetFragment : BottomSheetDialogFragment() {
 
         // 높이 확장
         val screenHeight = resources.displayMetrics.heightPixels
-        val targetHeight = (screenHeight * 0.8f).toInt()
+        val targetHeight = (screenHeight * 0.9f).toInt()
         bottomSheet.layoutParams = bottomSheet.layoutParams.apply { height = targetHeight }
-
         BottomSheetBehavior.from(bottomSheet).apply {
             state = BottomSheetBehavior.STATE_EXPANDED
             skipCollapsed = true
