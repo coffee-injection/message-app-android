@@ -71,7 +71,6 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
     }
 
     override fun setupViews(savedInstanceState: Bundle?) = with(binding){
-        titleBar.setupDefault(getString(R.string.title_user_information))
         btnStart.isEnabled = false
         when (mode) {
             UserInfoModeEnum.SIGNUP -> {
@@ -82,7 +81,8 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
 
             UserInfoModeEnum.MODIFY -> {
                 root.setBackgroundResource(R.color.color_transparent)
-
+                btnCancel.visibility = View.VISIBLE
+                titleBar.visibility = View.GONE
                 // 카드뷰 리스트로 배경 적용
                 emojiCards.forEach { (card, _) ->
                     card.setBackgroundResource(R.drawable.emoji_bg_selector_grey)
@@ -91,8 +91,6 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
                 ivIsland.visibility = View.GONE
                 tvTitle.visibility = View.GONE
                 tvSub.visibility = View.GONE
-                titleBar.showBack(false)
-                titleBar.showClose(true)
                 btnStart.setText(R.string.user_modify)
                 sharedViewModel.userInfoUiState.value.apply {
                     etUserName.setText(nickName)
@@ -109,6 +107,10 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
 
     override fun setupListeners() = with(binding) {
         super.setupListeners()
+
+        btnCancel.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
         // 1) 이모지: 무조건 하나만 선택(다중선택 X) + 2) 선택된 이미지 -> iv_preview_img 반영
         emojiCards.forEach { (card, imageRes) ->
