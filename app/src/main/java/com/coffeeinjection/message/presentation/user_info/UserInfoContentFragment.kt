@@ -234,11 +234,12 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
                     NickNameGuideState.IDLE -> {
                         tvGuideNickname.text = getString(R.string.user_toast_nick_name)
                         tvGuideNickname.setTextColor(resources.getColor(R.color.text_quaternary))
-                        etIslandName.setBackgroundResource(R.drawable.et_bg_selector)
+                        etUserName.setBackgroundResource(R.drawable.et_bg_selector)
                     }
                     NickNameGuideState.NEED_DUPLICATE_CHECK -> {
                         tvGuideNickname.text = getString(R.string.user_guide_plz_check_nick_name)
                         tvGuideNickname.setTextColor(resources.getColor(R.color.error_secondary))
+                        etUserName.setBackgroundResource(R.drawable.btn_normal_round_white_red_border)
                     }
                     NickNameGuideState.AVAILABLE -> {
                         tvGuideNickname.text = getString(R.string.user_guide_nick_name_available)
@@ -248,10 +249,12 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
                     NickNameGuideState.DUPLICATE -> {
                         tvGuideNickname.text = getString(R.string.user_guide_nick_name_is_duplicate)
                         tvGuideNickname.setTextColor(resources.getColor(R.color.error_secondary))
+                        etUserName.setBackgroundResource(R.drawable.btn_normal_round_white_red_border)
                     }
                     NickNameGuideState.CHECK_FAILED -> {
                         tvGuideNickname.text = getString(R.string.user_guide_check_nick_name_fail)
                         tvGuideNickname.setTextColor(resources.getColor(R.color.error_secondary))
+                        etUserName.setBackgroundResource(R.drawable.btn_normal_round_white_red_border)
                     }
                 }
             }
