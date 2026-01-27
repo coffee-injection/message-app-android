@@ -39,7 +39,7 @@ android {
         }
         release {
             signingConfig = signingConfigs.getByName("release")
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles("proguard-rules.pro")
             buildConfigField("String", "BASE_URL", "\"http://15.164.112.136:8080/api/v1/\"")
         }

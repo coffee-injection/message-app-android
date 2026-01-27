@@ -255,6 +255,27 @@
         <item name="cornerSizeBottomRight">0dp</item>
         <item name="cornerSizeBottomLeft">0dp</item>
     </style>
-    출처: https://hayeon1549.tistory.com/18 [기억을 기록으로:티스토리]
+
+    <!-- 상단만 둥글게 만드는 바텀시트 테마 -->
+    <style name="AppBottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Widget.App.RoundedTopSheet</item>
+        <!-- 배경을 투명하게 해서 우리가 준 shape가 보이도록 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="Widget.App.RoundedTopSheet" parent="Widget.Material3.BottomSheet.Modal">
+        <!-- 상단만 24dp 라운드, 하단 0 -->
+        <item name="shapeAppearance">@style/ShapeAppearance.App.RoundedTop</item>
+        <item name="backgroundTint">@color/color_white</item>
+    </style>
+
+    <style name="ShapeAppearance.App.RoundedTop" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">24dp</item>
+        <item name="cornerSizeTopRight">24dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
 
 </resources>
