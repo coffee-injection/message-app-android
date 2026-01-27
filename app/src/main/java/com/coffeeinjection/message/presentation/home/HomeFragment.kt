@@ -155,18 +155,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     }
 
     /**
-     * 프로필 사진 불러오기
-     */
-    private fun loadIntoProfile(uri: Uri) = with(binding) {
-        Glide.with(root)
-            .load(uri)
-            .centerCrop()
-            .placeholder(R.drawable.ic_profile_placeholder)
-            .error(R.drawable.ic_profile_placeholder)
-            .into(ivProfileImg)
-    }
-
-    /**
      * 바다 위 떠 있는 메시지 아이콘 그리기
      * - 아이콘 렌더와 current state 텍스트 갱신을 "같은 타이밍"에 처리
      * - 연속 emit 시, 최신 렌더만 반영
