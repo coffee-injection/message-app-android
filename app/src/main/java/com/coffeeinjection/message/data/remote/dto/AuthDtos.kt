@@ -31,11 +31,16 @@ data class LoginRequest(
  */
 data class LoginResponse(
     @Json(name = "accessToken") val accessToken: String,
+    @Json(name = "refreshToken") val refreshToken: String?,
     @Json(name = "tokenType") val tokenType: String,
     @Json(name = "expiresIn") val expiresIn: Int,
+    @Json(name = "refreshExpiresIn") val refreshExpiresIn: Int?,
     @Json(name = "memberId") val memberId: Int?,
     @Json(name = "email") val email: String?,
-    @Json(name = "isNewMember") val isNewMember: Boolean
+    @Json(name = "isNewMember") val isNewMember: Boolean,
+    @Json(name = "nickname") val nickname: String?,
+    @Json(name = "islandName") val islandName: String?,
+    @Json(name = "profileImageIndex") val profileImageIndex: Int?,
 )
 
 
@@ -54,9 +59,11 @@ data class SignupCompleteRequest(
 
 data class SignupCompleteResponse(
     @Json(name = "accessToken") val accessToken: String,
+    @Json(name = "refreshToken") val refreshToken: String?,
     @Json(name = "tokenType") val tokenType: String,
     @Json(name = "expiresIn") val expiresIn: Int,
-    @Json(name = "memberId") val memberId: Int,
+    @Json(name = "refreshExpiresIn") val refreshExpiresIn: Int?,
+    @Json(name = "memberId") val memberId: Int?,
     @Json(name = "email") val email: String?,
     @Json(name = "isNewMember") val isNewMember: Boolean,
     @Json(name = "nickname") val nickname: String,
@@ -82,6 +89,23 @@ data class CheckNicknameDuplicateResponse(
 data class FCMTokenRequest(
     @Json(name = "fcmToken") val fcmToken: String,
     @Json(name = "deviceType") val deviceType: String = "ANDROID",
+)
+
+data class RefreshTokenRequest(
+    @Json(name = "refreshToken") val refreshToken: String
+)
+
+data class RefreshTokenResponse(
+    @Json(name = "accessToken") val accessToken: String,
+    @Json(name = "refreshToken") val refreshToken: String,
+    @Json(name = "tokenType") val tokenType: String,
+    @Json(name = "expiresIn") val expiresIn: Int,
+    @Json(name = "memberId") val memberId: Int,
+    @Json(name = "email") val email: String?,
+    @Json(name = "isNewMember") val isNewMember: Boolean,
+    @Json(name = "nickname") val nickname: String,
+    @Json(name = "islandName") val islandName: String,
+    @Json(name = "profileImageIndex") val profileImageIndex: Int
 )
 
 

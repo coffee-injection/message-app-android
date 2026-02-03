@@ -11,6 +11,7 @@ import com.coffeeinjection.message.domain.usecase.GetGoogleLoginUrlUseCase
 import com.coffeeinjection.message.domain.usecase.GetKakaoLoginUrlUseCase
 import com.coffeeinjection.message.domain.usecase.RegisterFCMTokenUseCase
 import com.coffeeinjection.message.domain.usecase.SaveAccessTokenUseCase
+import com.coffeeinjection.message.domain.usecase.SaveRefreshTokenUseCase
 import com.coffeeinjection.message.presentation.sign_in.model.AuthUiState
 import com.coffeeinjection.message.util.Logger
 import com.google.firebase.messaging.FirebaseMessaging
@@ -28,6 +29,7 @@ class SignInViewModel @Inject constructor(
     private val exchangeKakaoCodeToJwt : ExchangeKakaoCodeToJwtUseCase,
     private val exchangeGoogleCodeToJwt : ExchangeGoogleCodeToJwtUseCase,
     private val saveAccessToken : SaveAccessTokenUseCase,
+    private val saveRefreshToken : SaveRefreshTokenUseCase,
     private val registerFCMTokenUseCase: RegisterFCMTokenUseCase,
     private val authDataStore: AuthDataStore
 ) : ViewModel() {
@@ -87,6 +89,7 @@ class SignInViewModel @Inject constructor(
                 if (res.isNewMember && res.memberId == null) {
                     _uiState.value = _uiState.value.copy(isLoading = false, navigateToNickname = true)
                 } else {
+                    res.refreshToken?.let {saveRefreshToken (it) }
                     _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
                 }
             }
@@ -114,6 +117,7 @@ class SignInViewModel @Inject constructor(
                 if (res.isNewMember && res.memberId == null) {
                     _uiState.value = _uiState.value.copy(isLoading = false, navigateToNickname = true)
                 } else {
+                    res.refreshToken?.let { saveRefreshToken(it) }
                     _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
                 }
             }

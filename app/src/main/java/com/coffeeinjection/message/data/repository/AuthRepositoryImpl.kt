@@ -11,6 +11,7 @@ import com.coffeeinjection.message.data.remote.dto.FCMTokenRequest
 import com.coffeeinjection.message.data.remote.dto.LoginRequest
 import com.coffeeinjection.message.data.remote.dto.LoginResponse
 import com.coffeeinjection.message.data.remote.dto.LoginUrlResponse
+import com.coffeeinjection.message.data.remote.dto.RefreshTokenRequest
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteRequest
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteResponse
 import com.coffeeinjection.message.domain.repository.AuthRepository
@@ -64,6 +65,10 @@ class AuthRepositoryImpl @Inject constructor(
         authStore.saveAccessToken(token)
     }
 
+    override suspend fun saveRefreshToken(token: String) {
+        authStore.saveRefreshToken(token)
+    }
+
     override suspend fun saveUserInfo(userinfo: UserInfo) {
         authStore.saveUserInfo(userinfo)
     }
@@ -84,5 +89,9 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun withdraw(){
         api.withdraw().ensureSuccessOrThrow("auth/withdraw")
+    }
+
+    override suspend fun refreshToken(refreshToken : String){
+        api.refreshToken(RefreshTokenRequest(refreshToken))
     }
 }

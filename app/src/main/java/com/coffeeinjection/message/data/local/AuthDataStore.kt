@@ -46,6 +46,7 @@ class AuthDataStore @Inject constructor(
     companion object {
         // Access / User
         private val KEY_ACCESS_TOKEN      = stringPreferencesKey("access_token")
+        private val KEY_REFRESH_TOKEN      = stringPreferencesKey("refresh_token")
         private val KEY_USER_NICKNAME     = stringPreferencesKey("user_nickname")
         private val KEY_USER_ISLAND_NAME  = stringPreferencesKey("user_island_name")
         private val KEY_USER_IMG_IDX      = stringPreferencesKey("user_img_idx")
@@ -79,11 +80,23 @@ class AuthDataStore @Inject constructor(
         .map { it[KEY_ACCESS_TOKEN] }
         .distinctUntilChanged()
 
+    val refreshTokenFlow: Flow<String?> = dataFlow
+        .map { it[KEY_REFRESH_TOKEN] }
+        .distinctUntilChanged()
+
     /** 액세스 토큰 저장/갱신 */
     suspend fun saveAccessToken(token: String) {
         Logger.d("[AuthDataStore] saveAccessToken --> $token")
         context.authDataStore.edit { prefs ->
             prefs[KEY_ACCESS_TOKEN] = token
+        }
+    }
+
+    /** refresh 토큰 저장/갱신 */
+    suspend fun saveRefreshToken(token: String) {
+        Logger.d("[AuthDataStore] saveRefreshToken --> $token")
+        context.authDataStore.edit { prefs ->
+            prefs[KEY_REFRESH_TOKEN] = token
         }
     }
 

@@ -39,7 +39,8 @@ class AuthInterceptor @Inject constructor(
         } else {
             original
         }
-        Logger.d("[intercept] header : $newRequest")
+        Logger.d("[intercept] ${newRequest.method} ${newRequest.url} hasAuth=${newRequest.header("Authorization") != null}")
+        //Logger.d("[intercept] header : $newRequest")
 
         return chain.proceed(newRequest)
     }

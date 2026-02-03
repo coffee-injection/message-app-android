@@ -57,6 +57,14 @@ class SaveAccessTokenUseCase @Inject constructor(
     }
 }
 
+class SaveRefreshTokenUseCase @Inject constructor(
+    private val authRepository: AuthRepository
+) {
+    suspend operator fun invoke(token: String) {
+        authRepository.saveRefreshToken(token)
+    }
+}
+
 class SaveUserInfoUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {

@@ -8,6 +8,7 @@ import com.coffeeinjection.message.domain.usecase.CheckNicknameDuplicateUseCase
 import com.coffeeinjection.message.domain.usecase.CompleteSignupUseCase
 import com.coffeeinjection.message.domain.usecase.ModifyUserProfileUseCase
 import com.coffeeinjection.message.domain.usecase.SaveAccessTokenUseCase
+import com.coffeeinjection.message.domain.usecase.SaveRefreshTokenUseCase
 import com.coffeeinjection.message.domain.usecase.SaveUserInfoUseCase
 import com.coffeeinjection.message.presentation.sign_in.model.AuthUiState
 import com.coffeeinjection.message.util.Logger
@@ -23,6 +24,7 @@ import kotlin.jvm.Throws
 class UserInfoViewModel @Inject constructor(
     private val complete: CompleteSignupUseCase,
     private val saveAccessToken : SaveAccessTokenUseCase,
+    private val saveRefreshToken : SaveRefreshTokenUseCase,
     private val saveUserInfo : SaveUserInfoUseCase,
     private val checkDuplicate : CheckNicknameDuplicateUseCase,
     private val modifyInfo: ModifyUserProfileUseCase
@@ -75,6 +77,7 @@ class UserInfoViewModel @Inject constructor(
                 Logger.d("[kakao] completeSignup success")
                 // 서버가 최종 토큰을 내려줌
                 saveAccessToken(res.accessToken)
+                res.refreshToken?.let { saveRefreshToken(it) }
                 saveUserInfo(userInfo)
 
                 _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)

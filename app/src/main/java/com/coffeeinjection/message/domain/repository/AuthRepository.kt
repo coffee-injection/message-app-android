@@ -22,6 +22,7 @@ interface AuthRepository {
     suspend fun completeSignup(userinfo: UserInfo): SignupCompleteResponse
     suspend fun checkNicknameDuplicate(nickname: String): CheckNicknameDuplicateResponse
     suspend fun saveAccessToken(token: String)
+    suspend fun saveRefreshToken(token: String)
     suspend fun saveUserInfo(userinfo: UserInfo)
     suspend fun clearUserInfo()
     /** FCM 토큰 등록 */
@@ -30,5 +31,5 @@ interface AuthRepository {
     suspend fun deleteFCMToken(token: String)
     /** 회원 탈퇴 */
     suspend fun withdraw()
-
+    suspend fun refreshToken(refreshToken : String)
 }

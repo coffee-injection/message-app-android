@@ -4,6 +4,7 @@ import com.coffeeinjection.message.BuildConfig
 import com.coffeeinjection.message.data.remote.api.AuthApi
 import com.coffeeinjection.message.data.remote.api.MessageApi
 import com.coffeeinjection.message.data.remote.interceptor.AuthInterceptor
+import com.coffeeinjection.message.data.remote.interceptor.TokenAuthenticator
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -29,6 +30,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
+    private const val BASE_URL = BuildConfig.BASE_URL // 없으면 직접 넣으세요
+
     @Provides @Singleton
     fun provideMoshi(): Moshi =
         Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
@@ -41,43 +44,45 @@ object NetworkModule {
         }
 
     @Provides @Singleton @NoAuthClient
-    fun provideNoAuthOkHttp(logging: HttpLoggingInterceptor): OkHttpClient =
+    fun provideNoAuthOkHttp(
+        logging: HttpLoggingInterceptor,
+    ): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(logging)
             .build()
 
     @Provides @Singleton @AuthClient
     fun provideAuthOkHttp(
+        logging: HttpLoggingInterceptor,
         authInterceptor: AuthInterceptor,
-        logging: HttpLoggingInterceptor
+        tokenAuthenticator: TokenAuthenticator,
     ): OkHttpClient =
         OkHttpClient.Builder()
-            .addInterceptor(authInterceptor)
+            .addInterceptor(authInterceptor)      // Authorization 자동 부착
             .addInterceptor(logging)
+            .authenticator(tokenAuthenticator)    // 401 시 refresh + 재시도
             .build()
 
-    //중요: @NoAuthRetrofit는  토큰 없는 Retrofit로 생성
     @Provides @Singleton @NoAuthRetrofit
     fun provideNoAuthRetrofit(
         moshi: Moshi,
-        @NoAuthClient client: OkHttpClient
+        @NoAuthClient client: OkHttpClient,
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .baseUrl(BASE_URL)
             .client(client)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
-    //중요: @NoAuthRetrofit는  토큰 없는 Retrofit로 생성
     @Provides @Singleton @AuthRetrofit
     fun provideAuthRetrofit(
         moshi: Moshi,
-        @AuthClient client: OkHttpClient
+        @AuthClient client: OkHttpClient,
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .baseUrl(BASE_URL)
             .client(client)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
     // Bearer 토큰 있는 Retrofit로 생성

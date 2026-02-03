@@ -7,6 +7,9 @@ import com.coffeeinjection.message.data.remote.dto.FCMTokenRequest
 import com.coffeeinjection.message.data.remote.dto.LoginRequest
 import com.coffeeinjection.message.data.remote.dto.LoginResponse
 import com.coffeeinjection.message.data.remote.dto.LoginUrlResponse
+import com.coffeeinjection.message.data.remote.dto.RefreshTokenRequest
+import com.coffeeinjection.message.data.remote.dto.RefreshTokenResponse
+import com.coffeeinjection.message.data.remote.dto.SendLetterResponse
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteRequest
 import com.coffeeinjection.message.data.remote.dto.SignupCompleteResponse
 import retrofit2.http.Body
@@ -21,24 +24,20 @@ import retrofit2.http.Query
  */
 interface AuthApi {
     /** kakao 로그인 URL 받기 (토큰 필요 없음) */
-    @Headers("No-Auth: true")
     @GET("auth/kakao/login-url")
     suspend fun getKakaoLoginUrl(): ApiEnvelope<LoginUrlResponse>
 
     /** google 로그인 URL 받기 (토큰 필요 없음) */
-    @Headers("No-Auth: true")
     @GET("auth/google/login-url")
     suspend fun getGoogleLoginUrl(): ApiEnvelope<LoginUrlResponse>
 
     /** kakao 인가 코드 → JWT 교환 (토큰 필요 없음) */
-    @Headers("No-Auth: true")
     @POST("auth/login")
     suspend fun kakaoLogin(
         @Body req: LoginRequest
     ): ApiEnvelope<LoginResponse>
 
     /** google 인가 코드 → JWT 교환 (토큰 필요 없음) */
-    @Headers("No-Auth: true")
     @POST("auth/google/login")
     suspend fun googleLogin(
         @Body req: LoginRequest
@@ -51,7 +50,6 @@ interface AuthApi {
     ): ApiEnvelope<SignupCompleteResponse>
 
     /** 4) 닉네임 중복 체크 */
-    @Headers("No-Auth: true")
     @POST("member/check-nickname")
     suspend fun checkNicknameDuplicate(
         @Body req: CheckNicknameDuplicateRequest
@@ -72,4 +70,10 @@ interface AuthApi {
     /** 회원 탈퇴 */
     @DELETE("auth/withdraw")
     suspend fun withdraw(): ApiEnvelope<Any?>
+
+    @Headers("No-Auth:true")
+    @POST("auth/refresh")
+    suspend fun refreshToken(
+        @Body body: RefreshTokenRequest
+    ): ApiEnvelope<RefreshTokenResponse>
 }
