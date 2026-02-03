@@ -29,7 +29,7 @@ class UserInfoFragment : Fragment(R.layout.fragment_user_info) {
         ) { _, bundle ->
             val userInfo = bundle.getParcelable<UserInfo>(UserInfoContentFragment.RES_KEY)!!
             findNavController().navigate(
-                SignInFragmentDirections.actionSignInFragmentToHomeFragment()
+                UserInfoFragmentDirections.actionUserInfoFragmentToHomeFragment()
             )
         }
     }
