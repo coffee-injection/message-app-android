@@ -17,6 +17,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.coffeeinjection.message.BuildConfig
 import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.FragmentSignInBinding
 import com.coffeeinjection.message.presentation.BaseFragment
@@ -37,8 +38,9 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
         "kakao.com", "google.com", "gstatic.com", "15.164.112.136"
     )
 
-    private val kakaoCallbackPrefix = "http://15.164.112.136/auth/kakao/callback"
-    private val googleCallbackPrefix = "http://15.164.112.136/auth/google/callback"
+
+    private val kakaoCallbackPrefix = BuildConfig.API_SEVER_BASE_URL + "auth/kakao/callback"
+    private val googleCallbackPrefix = BuildConfig.API_SEVER_BASE_URL + "auth/google/callback"
 
     /** 공용 로딩 표시/숨김 */
     private fun showLoading() { binding.progressBar?.visibility = View.VISIBLE }

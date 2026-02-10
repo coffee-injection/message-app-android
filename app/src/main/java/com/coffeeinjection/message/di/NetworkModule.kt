@@ -30,8 +30,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = BuildConfig.BASE_URL // 없으면 직접 넣으세요
-
     @Provides @Singleton
     fun provideMoshi(): Moshi =
         Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
@@ -69,7 +67,7 @@ object NetworkModule {
         @NoAuthClient client: OkHttpClient,
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(client)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
@@ -80,7 +78,7 @@ object NetworkModule {
         @AuthClient client: OkHttpClient,
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(client)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()

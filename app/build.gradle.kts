@@ -34,14 +34,18 @@ android {
     buildTypes {
         debug {
             // 난독화/리소스 축소 비활성화(기본값이지만 명시해두면 좋습니다)
-            isMinifyEnabled = false
-            buildConfigField("String", "BASE_URL", "\"http://15.164.112.136:8080/api/v1/\"")
+            buildConfigField("String", "BASE_URL", "\"https://tium.online/api/v1/\"")
+            //            buildConfigField("String", "BASE_URL", "\"http://15.164.112.136:8080/api/v1/\"")
+            buildConfigField("String", "API_SEVER_BASE_URL", "\"https://tium.online/\"")
         }
         release {
             signingConfig = signingConfigs.getByName("release")
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles("proguard-rules.pro")
-            buildConfigField("String", "BASE_URL", "\"http://15.164.112.136:8080/api/v1/\"")
+            buildConfigField("String", "BASE_URL", "\"https://tium.online/api/v1/\"")
+//            buildConfigField("String", "BASE_URL", "\"http://15.164.112.136:8080/api/v1/\"")
+            buildConfigField("String", "API_SEVER_BASE_URL", "\"https://tium.online/\"")
+
         }
     }
     compileOptions {
@@ -51,7 +55,7 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
         buildConfig = true
     }
@@ -93,10 +97,10 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment:$nav_version")
     implementation("androidx.navigation:navigation-ui:$nav_version")
 
-    implementation ("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
     // Glide
-    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 
     // Retrofit/OkHttp
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
