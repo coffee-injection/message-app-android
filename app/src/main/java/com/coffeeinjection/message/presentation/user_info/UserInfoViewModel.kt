@@ -3,6 +3,7 @@ package com.coffeeinjection.message.presentation.user_info
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.coffeeinjection.message.data.local.AuthDataStore
 import com.coffeeinjection.message.data.local.UserInfo
 import com.coffeeinjection.message.domain.usecase.CheckNicknameDuplicateUseCase
 import com.coffeeinjection.message.domain.usecase.CompleteSignupUseCase
@@ -27,7 +28,9 @@ class UserInfoViewModel @Inject constructor(
     private val saveRefreshToken : SaveRefreshTokenUseCase,
     private val saveUserInfo : SaveUserInfoUseCase,
     private val checkDuplicate : CheckNicknameDuplicateUseCase,
-    private val modifyInfo: ModifyUserProfileUseCase
+    private val modifyInfo: ModifyUserProfileUseCase,
+    private val authDataStore: AuthDataStore
+
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AuthUiState())
@@ -79,6 +82,8 @@ class UserInfoViewModel @Inject constructor(
                 saveAccessToken(res.accessToken)
                 res.refreshToken?.let { saveRefreshToken(it) }
                 saveUserInfo(userInfo)
+
+                authDataStore.saveAutoLogin(true)
 
                 _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
             }

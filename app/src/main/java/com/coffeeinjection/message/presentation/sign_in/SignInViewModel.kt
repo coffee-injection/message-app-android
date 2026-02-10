@@ -24,12 +24,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    private val getKakaoLoginUrl : GetKakaoLoginUrlUseCase,
-    private val getGoogleLoginUrl : GetGoogleLoginUrlUseCase,
-    private val exchangeKakaoCodeToJwt : ExchangeKakaoCodeToJwtUseCase,
-    private val exchangeGoogleCodeToJwt : ExchangeGoogleCodeToJwtUseCase,
-    private val saveAccessToken : SaveAccessTokenUseCase,
-    private val saveRefreshToken : SaveRefreshTokenUseCase,
+    private val getKakaoLoginUrl: GetKakaoLoginUrlUseCase,
+    private val getGoogleLoginUrl: GetGoogleLoginUrlUseCase,
+    private val exchangeKakaoCodeToJwt: ExchangeKakaoCodeToJwtUseCase,
+    private val exchangeGoogleCodeToJwt: ExchangeGoogleCodeToJwtUseCase,
+    private val saveAccessToken: SaveAccessTokenUseCase,
+    private val saveRefreshToken: SaveRefreshTokenUseCase,
     private val registerFCMTokenUseCase: RegisterFCMTokenUseCase,
     private val authDataStore: AuthDataStore
 ) : ViewModel() {
@@ -44,13 +44,21 @@ class SignInViewModel @Inject constructor(
             .onSuccess { res ->
                 val url = res.loginUrl
                 if (url.isBlank()) {
-                    _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "로그인 URL을 불러오지 못했습니다.", loginUrl = null)
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        errorMessage = "로그인 URL을 불러오지 못했습니다.",
+                        loginUrl = null
+                    )
                 } else {
                     _uiState.value = _uiState.value.copy(isLoading = false, loginUrl = url)
                 }
             }
             .onFailure {
-                _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "로그인 URL을 불러오지 못했습니다.", loginUrl = null)
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = "로그인 URL을 불러오지 못했습니다.",
+                    loginUrl = null
+                )
             }
     }
 
@@ -60,19 +68,30 @@ class SignInViewModel @Inject constructor(
             .onSuccess { res ->
                 val url = res.loginUrl
                 if (url.isBlank()) {
-                    _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "로그인 URL을 불러오지 못했습니다.", loginUrl = null)
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        errorMessage = "로그인 URL을 불러오지 못했습니다.",
+                        loginUrl = null
+                    )
                 } else {
                     _uiState.value = _uiState.value.copy(isLoading = false, loginUrl = url)
                 }
             }
             .onFailure {
-                _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "로그인 URL을 불러오지 못했습니다.", loginUrl = null)
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = "로그인 URL을 불러오지 못했습니다.",
+                    loginUrl = null
+                )
             }
     }
 
     // --- Code → JWT (DataStore 저장 중심) ---
     fun exchangeKakaoCode(code: String) = viewModelScope.launch {
         _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+
+        // 로그인 절차 시작 시 기본 false로 내려두기(이전 값 남는 것 방지)
+        runCatching { authDataStore.saveAutoLogin(false) }
 
         runCatching { exchangeKakaoCodeToJwt(code) }
             .onSuccess { res ->
@@ -87,20 +106,29 @@ class SignInViewModel @Inject constructor(
 
                 // 4) 네비게이션
                 if (res.isNewMember && res.memberId == null) {
-                    _uiState.value = _uiState.value.copy(isLoading = false, navigateToNickname = true)
+                    // 신규회원: 가입 완료 전까지 자동로그인 금지
+                    runCatching { authDataStore.saveAutoLogin(false) }
+                    _uiState.value =
+                        _uiState.value.copy(isLoading = false, navigateToNickname = true)
                 } else {
-                    res.refreshToken?.let {saveRefreshToken (it) }
+                    res.refreshToken?.let { saveRefreshToken(it) }
+                    // 기존회원: 바로 자동로그인 허용
+                    runCatching { authDataStore.saveAutoLogin(true) }
                     _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
                 }
+
             }
             .onFailure { e ->
                 Logger.error("[kakao] exchange fail ${e.message}")
-                _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "카카오 로그인 처리 중 오류가 발생했습니다")
+                _uiState.value =
+                    _uiState.value.copy(isLoading = false, errorMessage = "카카오 로그인 처리 중 오류가 발생했습니다")
             }
     }
 
     fun exchangeGoogleCode(code: String) = viewModelScope.launch {
         _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+
+        runCatching { authDataStore.saveAutoLogin(false) }
 
         runCatching { exchangeGoogleCodeToJwt(code) }
             .onSuccess { res ->
@@ -115,15 +143,19 @@ class SignInViewModel @Inject constructor(
 
                 // 4) 네비게이션
                 if (res.isNewMember && res.memberId == null) {
-                    _uiState.value = _uiState.value.copy(isLoading = false, navigateToNickname = true)
+                    runCatching { authDataStore.saveAutoLogin(false) }
+                    _uiState.value =
+                        _uiState.value.copy(isLoading = false, navigateToNickname = true)
                 } else {
                     res.refreshToken?.let { saveRefreshToken(it) }
+                    runCatching { authDataStore.saveAutoLogin(true) }
                     _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
                 }
             }
             .onFailure { e ->
                 Logger.error("[google] exchange fail ${e.message}")
-                _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "구글 로그인 처리 중 오류가 발생했습니다")
+                _uiState.value =
+                    _uiState.value.copy(isLoading = false, errorMessage = "구글 로그인 처리 중 오류가 발생했습니다")
             }
     }
 

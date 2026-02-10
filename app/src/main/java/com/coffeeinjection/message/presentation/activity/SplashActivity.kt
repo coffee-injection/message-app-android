@@ -26,24 +26,36 @@ class SplashActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_splash)
 
-        // 스플래시에서 자동로그인 분기
         lifecycleScope.launch {
-            // 1초
             delay(1000)
 
-            val token = authDataStore.accessTokenFlow.firstOrNull()
-            Logger.d("[Splash] accessToken = ${token?.let { "***" } ?: "null"}")
+            val token = authDataStore.getAccessToken()
+            val canAutoLogin = authDataStore.getAutoLogin()
+
+            Logger.d("[Splash] token=${token?.let{"***"} ?: "null"}, auto=$canAutoLogin")
 
             val intent = Intent(this@SplashActivity, MainActivity::class.java).apply {
-                if (!token.isNullOrBlank()) {
-                    // 자동로그인: 홈으로 시작
-                    putExtra("startDestination", "home")
+                when {
+                    !token.isNullOrBlank() && canAutoLogin -> {
+                        // 가입 완료된 사용자만 홈으로 자동 진입
+                        putExtra("startDestination", "home")
+                    }
+                    !token.isNullOrBlank() && !canAutoLogin -> {
+                        // 토큰은 있지만 가입 미완료(닉네임/회원정보 입력 중 종료) -> 가입 이어가기 화면으로
+                        // 네비 이름은 프로젝트에 맞게 변경하세요.
+                        putExtra("startDestination", "nickname")
+                    }
+                    else -> {
+                        // 토큰 없음 -> 기본(로그인)
+                        // putExtra("startDestination", "signIn") 필요하면 추가
+                    }
                 }
-                // 딥링크/푸시 전달이 필요하면 여기서 putExtra로 함께 넘기면 됩니다.
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             }
+
             startActivity(intent)
             finish()
         }
     }
 }
+

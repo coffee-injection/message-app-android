@@ -12,8 +12,10 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -21,6 +23,7 @@ import com.coffeeinjection.message.BuildConfig
 import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.FragmentSignInBinding
 import com.coffeeinjection.message.presentation.BaseFragment
+import com.coffeeinjection.message.presentation.sign_in.AuthDeepLinkViewModel
 import com.coffeeinjection.message.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -30,17 +33,20 @@ import kotlinx.coroutines.launch
 class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding::inflate) {
 
     private val viewModel: SignInViewModel by viewModels()
+    private val authDeepLinkViewModel: AuthDeepLinkViewModel by activityViewModels()
+
     private var backPressedTime: Long = 0L
     private var lastLoadedLoginUrl: String? = null
 
-    // 허용 도메인(루트 기준)
+    // 허용 도메인(루트 기준) - 카카오 WebView용
     private val allowedSuffixes = setOf(
         "kakao.com", "google.com", "gstatic.com", "15.164.112.136"
     )
 
+    private enum class LoginType { GOOGLE, KAKAO }
+    private var pendingLoginType: LoginType? = null
 
     private val kakaoCallbackPrefix = BuildConfig.API_SEVER_BASE_URL + "auth/kakao/callback"
-    private val googleCallbackPrefix = BuildConfig.API_SEVER_BASE_URL + "auth/google/callback"
 
     /** 공용 로딩 표시/숨김 */
     private fun showLoading() { binding.progressBar?.visibility = View.VISIBLE }
@@ -78,7 +84,6 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
             setAcceptThirdPartyCookies(webView, true)
         }
 
-        // 초기엔 보이지 않게 시작 (첫 픽셀 커밋될 때 노출)
         webView.visibility = View.GONE
 
         webView.webViewClient = object : WebViewClient() {
@@ -96,11 +101,10 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
                 Logger.d("[signIn] onPageStarted url=$url")
-                webView.visibility = View.GONE      // 잔상 방지
-                showLoading()                       // 로딩 시작
+                webView.visibility = View.GONE
+                showLoading()
             }
 
-            // 실제 픽셀이 커밋되는 순간만 노출
             override fun onPageCommitVisible(view: WebView?, url: String?) {
                 super.onPageCommitVisible(view, url)
                 if (!url.isNullOrBlank() && url != "about:blank") {
@@ -112,7 +116,7 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
             private fun handleNavigation(url: String?): Boolean {
                 if (url.isNullOrBlank()) return false
 
-                // 콜백: 즉시 교환 + WebView 정리
+                // 카카오 콜백은 WebView에서 가로채서 code 추출
                 if (url.startsWith(kakaoCallbackPrefix)) {
                     Uri.parse(url).getQueryParameter("code")?.let {
                         clearWebView()
@@ -120,15 +124,8 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
                     }
                     return true
                 }
-                if (url.startsWith(googleCallbackPrefix)) {
-                    Uri.parse(url).getQueryParameter("code")?.let {
-                        clearWebView()
-                        viewModel.exchangeGoogleCode(it)
-                    }
-                    return true
-                }
 
-                // 허용 도메인만 WebView 로드 허용
+                // 허용 도메인만 WebView 로드 허용 (카카오용)
                 if (!isAllowedHost(url)) {
                     Logger.d("[signIn] blocked external url=$url")
                     return true
@@ -147,8 +144,9 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
         btnGoogle.setCenterIconWithText(true)
         btnGoogle.setOnClickListener {
             Logger.d("[구글 로그인] Btn Click")
-            clearWebView()              // 기존 화면/히스토리 가림
-            lastLoadedLoginUrl = null   // 강제 재로딩 유도
+            pendingLoginType = LoginType.GOOGLE
+            clearWebView()
+            lastLoadedLoginUrl = null
             showLoading()
             viewModel.loadGoogleLoginUrl()
         }
@@ -156,6 +154,7 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
         btnKakao.setStartIcon(context?.let { ContextCompat.getDrawable(it, R.drawable.ic_kakao) }, 30f)
         btnKakao.setOnClickListener {
             Logger.d("[카카오 로그인] Btn Click")
+            pendingLoginType = LoginType.KAKAO
             clearWebView()
             lastLoadedLoginUrl = null
             showLoading()
@@ -165,36 +164,63 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
 
     override fun setupCollectors() {
         super.setupCollectors()
-        with(binding) {
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.uiState.collectLatest { state ->
-                    Logger.d("[uistate check!!] : $state")
 
-                    state.errorMessage?.let {
-                        Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-                        viewModel.clearError()
-                    }
+        // 1) 기존 uiState collect
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.uiState.collectLatest { state ->
+                Logger.d("[uistate check!!] : $state")
 
-                    // URL이 들어오면 중복 로드 방지 후 로드
-                    val nextUrl = state.loginUrl
-                    if (!nextUrl.isNullOrBlank() && lastLoadedLoginUrl != nextUrl) {
-                        webView.loadUrl(nextUrl)   // 가시성은 WebViewClient가 제어
-                        lastLoadedLoginUrl = nextUrl
-                    }
+                state.errorMessage?.let {
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                    viewModel.clearError()
+                }
 
-                    if (state.navigateToNickname) {
-                        clearWebView()
-                        findNavController().navigate(
-                            SignInFragmentDirections.actionSignInFragmentToUserInfoFragment()
-                        )
-                    }
-                    if (state.navigateToMain) {
-                        clearWebView()
-                        findNavController().navigate(
-                            SignInFragmentDirections.actionSignInFragmentToHomeFragment()
-                        )
+                val nextUrl = state.loginUrl
+                if (!nextUrl.isNullOrBlank() && lastLoadedLoginUrl != nextUrl) {
+                    when (pendingLoginType) {
+                        LoginType.GOOGLE -> {
+                            // 구글은 WebView 금지 -> CustomTab
+                            openCustomTab(nextUrl)
+                            lastLoadedLoginUrl = nextUrl
+                            hideLoading()
+                        }
+                        LoginType.KAKAO, null -> {
+                            binding.webView.loadUrl(nextUrl)
+                            lastLoadedLoginUrl = nextUrl
+                        }
                     }
                 }
+
+                if (state.navigateToNickname) {
+                    clearWebView()
+                    findNavController().navigate(
+                        SignInFragmentDirections.actionSignInFragmentToUserInfoFragment()
+                    )
+                }
+
+                if (state.navigateToMain) {
+                    clearWebView()
+                    findNavController().navigate(
+                        SignInFragmentDirections.actionSignInFragmentToHomeFragment()
+                    )
+                }
+            }
+        }
+
+        // 2) 딥링크로 돌아온 Google code 수신 -> exchange 호출
+        viewLifecycleOwner.lifecycleScope.launch {
+            authDeepLinkViewModel.googleCode.collectLatest { code ->
+                if (code.isNullOrBlank()) return@collectLatest
+
+                Logger.d("[SignIn] received google code = ***")
+
+                // 재처리 방지
+                authDeepLinkViewModel.consumeGoogleCode()
+
+                // 구글 로그인 처리 시작
+                clearWebView()
+                pendingLoginType = null
+                viewModel.exchangeGoogleCode(code)
             }
         }
     }
@@ -226,7 +252,6 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
         try { binding.webView.saveState(outState) } catch (_: Throwable) {}
     }
 
-    /** 화면/스토리지/쿠키 정리(뒤로가기 시 사용) */
     private fun clearWebViewAndCookies() {
         try {
             CookieManager.getInstance().apply {
@@ -257,5 +282,17 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
         } catch (_: Throwable) {}
         viewModel.clearUiState()
         super.onDestroyView()
+    }
+
+    /** 구글 로그인 403(disallowed_useragent) 회피: Custom Tab */
+    private fun openCustomTab(url: String) {
+        runCatching {
+            val intent = CustomTabsIntent.Builder()
+                .setShowTitle(true)
+                .build()
+            intent.launchUrl(requireContext(), Uri.parse(url))
+        }.onFailure {
+            Toast.makeText(requireContext(), "브라우저를 열 수 없습니다.", Toast.LENGTH_SHORT).show()
+        }
     }
 }

@@ -17,18 +17,38 @@
         android:theme="@style/Theme.MessageApp"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
         <activity
             android:name=".presentation.activity.SplashActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".presentation.activity.MainActivity"
-            android:exported="false">
+            android:exported="false" />
+
+        <!-- 구글 OAuth 콜백(서버가 302로 보내는 딥링크)을 수신하는 Activity -->
+        <activity
+            android:name=".presentation.activity.AuthCallbackActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- coffeeinjection://auth/google/callback?code=... -->
+                <data
+                    android:scheme="coffeeinjection"
+                    android:host="auth"
+                    android:pathPrefix="/google/callback" />
+            </intent-filter>
         </activity>
 
         <service
@@ -38,6 +58,7 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_bottle" />

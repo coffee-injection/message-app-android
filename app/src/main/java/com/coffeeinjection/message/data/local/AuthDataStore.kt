@@ -2,6 +2,7 @@ package com.coffeeinjection.message.data.local
 
 import android.content.Context
 import android.os.Parcelable
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -46,10 +47,11 @@ class AuthDataStore @Inject constructor(
     companion object {
         // Access / User
         private val KEY_ACCESS_TOKEN      = stringPreferencesKey("access_token")
-        private val KEY_REFRESH_TOKEN      = stringPreferencesKey("refresh_token")
+        private val KEY_REFRESH_TOKEN     = stringPreferencesKey("refresh_token")
         private val KEY_USER_NICKNAME     = stringPreferencesKey("user_nickname")
         private val KEY_USER_ISLAND_NAME  = stringPreferencesKey("user_island_name")
         private val KEY_USER_IMG_IDX      = stringPreferencesKey("user_img_idx")
+        private val KEY_AUTO_LOGIN        = booleanPreferencesKey("auto_login")
 
         // FCM
         private val KEY_FCM_TOKEN             = stringPreferencesKey("fcm_token_current")
@@ -97,6 +99,26 @@ class AuthDataStore @Inject constructor(
         Logger.d("[AuthDataStore] saveRefreshToken --> $token")
         context.authDataStore.edit { prefs ->
             prefs[KEY_REFRESH_TOKEN] = token
+        }
+    }
+
+    /** 자동로그인(=회원가입 완료) Flow */
+    val autoLoginFlow: Flow<Boolean> = dataFlow
+        .map { prefs -> prefs[KEY_AUTO_LOGIN] ?: false }
+        .distinctUntilChanged()
+
+    /** 자동로그인(=회원가입 완료) 단발 조회 */
+    suspend fun getAutoLogin(): Boolean = autoLoginFlow.firstOrNull() ?: false
+
+    /**
+     * 자동 로그인(=회원가입 완료 플래그)
+     * - 신규회원이면 가입 완료 화면에서 true로 세팅
+     * - 가입 도중 종료되면 false 유지되어 스플래시에서 홈 진입 방지
+     */
+    suspend fun saveAutoLogin(auto: Boolean) {
+        Logger.d("[AuthDataStore] saveAutoLogin --> $auto")
+        context.authDataStore.edit { prefs ->
+            prefs[KEY_AUTO_LOGIN] = auto
         }
     }
 
@@ -211,12 +233,13 @@ class AuthDataStore @Inject constructor(
         Logger.i("[AuthDataStore] clearAll")
         context.authDataStore.edit { prefs ->
             prefs.remove(KEY_ACCESS_TOKEN)
+            prefs.remove(KEY_REFRESH_TOKEN)
+            prefs.remove(KEY_AUTO_LOGIN)
             prefs.remove(KEY_USER_NICKNAME)
             prefs.remove(KEY_USER_ISLAND_NAME)
             prefs.remove(KEY_USER_IMG_IDX)
             prefs.remove(KEY_LOGIN_PROVIDER)
             prefs.remove(KEY_FCM_LAST_REGISTERED)
-            // prefs.remove(KEY_FCM_TOKEN) // 기기 토큰까지 제거하려면 주석 해제
         }
     }
 }

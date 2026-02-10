@@ -74,8 +74,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
     implementation(libs.timber)
+    implementation("androidx.browser:browser:1.8.0")
 
     // by viewmodel
     implementation("androidx.activity:activity-ktx:1.9.2")

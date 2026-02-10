@@ -1,5 +1,6 @@
 package com.coffeeinjection.message.presentation.activity
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -9,6 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.navigation.fragment.NavHostFragment
 import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.ActivityMainBinding
+import com.coffeeinjection.message.presentation.sign_in.AuthDeepLinkViewModel
 import com.coffeeinjection.message.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,6 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val viewModel: SharedViewModel by viewModels()
+    private val authDeepLinkViewModel: AuthDeepLinkViewModel by viewModels()
 
     companion object {
         private const val TAG = "MainActivity"
@@ -27,6 +30,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Logger.d("onCreate")
         setContentView(binding.root)
+
+        handleAuthIntent(intent)
 
         // NavHost / 그래프 로드
         val navHost =
@@ -81,5 +86,22 @@ class MainActivity : AppCompatActivity() {
         Logger.d("onDestroy")
         //viewModel.clearForTest()
         super.onDestroy()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleAuthIntent(intent)
+    }
+
+    private fun handleAuthIntent(intent: Intent?) {
+        val code = intent?.getStringExtra(AuthCallbackActivity.EXTRA_GOOGLE_CODE)
+        if (!code.isNullOrBlank()) {
+            Logger.d("[MainActivity] received google code = ***")
+            authDeepLinkViewModel.setGoogleCode(code)
+
+            // 재처리 방지
+            intent.removeExtra(AuthCallbackActivity.EXTRA_GOOGLE_CODE)
+        }
     }
 }
