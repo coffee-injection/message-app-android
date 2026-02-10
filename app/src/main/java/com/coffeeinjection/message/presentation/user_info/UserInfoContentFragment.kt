@@ -77,6 +77,9 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
                 root.setBackgroundResource(R.drawable.bg_second_gradient)
                 // 초기 상태 세팅(디폴트 선택)
                 setupDefaultState()
+                emojiCards.forEach { (card, _) ->
+                    card.setBackgroundResource(R.drawable.emoji_bg_selector)
+                }
             }
 
             UserInfoModeEnum.MODIFY -> {
