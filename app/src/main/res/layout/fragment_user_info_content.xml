@@ -83,7 +83,8 @@
                 app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toStartOf="@+id/tv_profile_emoji"
-                app:layout_constraintTop_toBottomOf="@id/tv_profile_emoji">
+                app:layout_constraintTop_toBottomOf="@id/tv_profile_emoji"
+                android:background="@drawable/emoji_bg_selector">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_emoji_bg1"
@@ -113,7 +114,8 @@
                 app:layout_constraintEnd_toStartOf="@id/layout_parent_emoji3"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@id/layout_parent_emoji1"
-                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji1">
+                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji1"
+                android:background="@drawable/emoji_bg_selector">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_emoji_bg2"
@@ -143,7 +145,8 @@
                 app:layout_constraintEnd_toStartOf="@id/layout_parent_emoji4"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@id/layout_parent_emoji2"
-                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji1">
+                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji1"
+                android:background="@drawable/emoji_bg_selector">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_emoji_bg3"
@@ -173,7 +176,8 @@
                 app:layout_constraintEnd_toStartOf="@id/layout_parent_emoji5"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@id/layout_parent_emoji3"
-                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji1">
+                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji1"
+                android:background="@drawable/emoji_bg_selector">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_emoji_bg4"
@@ -203,7 +207,8 @@
                 app:layout_constraintEnd_toStartOf="@id/layout_parent_emoji6"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@id/layout_parent_emoji4"
-                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji1">
+                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji1"
+                android:background="@drawable/emoji_bg_selector">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_emoji_bg5"
@@ -234,7 +239,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@id/layout_parent_emoji5"
-                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji1">
+                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji1"
+                android:background="@drawable/emoji_bg_selector">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_emoji_bg6"
@@ -265,7 +271,8 @@
                 app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toStartOf="@+id/layout_parent_emoji1"
-                app:layout_constraintTop_toBottomOf="@id/layout_parent_emoji1">
+                app:layout_constraintTop_toBottomOf="@id/layout_parent_emoji1"
+                android:background="@drawable/emoji_bg_selector">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_emoji_bg7"
@@ -295,7 +302,8 @@
                 app:layout_constraintEnd_toStartOf="@id/layout_parent_emoji9"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@id/layout_parent_emoji7"
-                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji7">
+                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji7"
+                android:background="@drawable/emoji_bg_selector">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_emoji_bg8"
@@ -325,7 +333,8 @@
                 app:layout_constraintEnd_toStartOf="@id/layout_parent_emoji10"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@id/layout_parent_emoji8"
-                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji7">
+                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji7"
+                android:background="@drawable/emoji_bg_selector">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_emoji_bg9"
@@ -355,7 +364,8 @@
                 app:layout_constraintEnd_toStartOf="@id/layout_parent_emoji11"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@id/layout_parent_emoji9"
-                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji7">
+                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji7"
+                android:background="@drawable/emoji_bg_selector">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_emoji_bg10"
@@ -385,7 +395,8 @@
                 app:layout_constraintEnd_toStartOf="@id/layout_parent_emoji12"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@id/layout_parent_emoji10"
-                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji7">
+                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji7"
+                android:background="@drawable/emoji_bg_selector">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_emoji_bg11"
@@ -415,7 +426,8 @@
                 app:layout_constraintEnd_toEndOf="@+id/layout_parent_emoji6"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@id/layout_parent_emoji11"
-                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji7">
+                app:layout_constraintTop_toTopOf="@id/layout_parent_emoji7"
+                android:background="@drawable/emoji_bg_selector">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_emoji_bg12"

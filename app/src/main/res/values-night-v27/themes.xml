@@ -1,11 +1,6 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
 
-    <!-- Base application theme. -->
-    <style name="Base.Theme.MessageApp" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowIsTranslucent">true</item>
-    </style>
-    
-    <!-- Base application theme. -->
     <style name="Theme.MessageApp" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">@color/color_white</item>
         <item name="colorPrimaryDark">@color/color_black</item>
@@ -19,5 +14,4 @@
         <item name="android:navigationBarColor">@color/color_black</item>
         <item name="android:windowLightNavigationBar">false</item>
     </style>
-    <!-- 앱 실제 테마 -->
 </resources>

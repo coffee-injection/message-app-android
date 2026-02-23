@@ -6,12 +6,13 @@
         <item name="colorPrimaryDark">@color/color_black</item>
         <item name="colorAccent">@color/color_navy_primary</item>
 
+
         <!-- Status bar (상단) -->
-<!--        <item name="android:statusBarColor">@color/color_white</item>-->
+        <item name="android:statusBarColor">@color/color_white</item>
         <item name="android:windowLightStatusBar">true</item> <!-- 아이콘 어두운색 -->
 
         <!-- Navigation bar (하단, 제스처/버튼 영역) -->
-<!--        <item name="android:navigationBarColor">@color/color_white</item>-->
-        <item name="android:windowLightNavigationBar">true</item> <!-- 아이콘 어두운색 -->
+        <item name="android:navigationBarColor">@color/color_white</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
 </resources>

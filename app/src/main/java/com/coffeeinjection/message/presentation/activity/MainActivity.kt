@@ -1,6 +1,7 @@
 package com.coffeeinjection.message.presentation.activity
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -30,6 +31,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Logger.d("onCreate")
         setContentView(binding.root)
+
+        // Android35 이상 엣지투엣지 대응  다크모드 시스템바 색상 설정
+        applyMainBackgroundByTheme()
 
         handleAuthIntent(intent)
 
@@ -103,5 +107,15 @@ class MainActivity : AppCompatActivity() {
             // 재처리 방지
             intent.removeExtra(AuthCallbackActivity.EXTRA_GOOGLE_CODE)
         }
+    }
+
+    private fun applyMainBackgroundByTheme() {
+        val isNight =
+            (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
+                    Configuration.UI_MODE_NIGHT_YES
+
+        binding.main.setBackgroundColor(
+            if (isNight) 0xFF000000.toInt() else 0xFFFFFFFF.toInt()
+        )
     }
 }

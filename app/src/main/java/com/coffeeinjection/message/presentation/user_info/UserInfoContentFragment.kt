@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -29,6 +30,9 @@ import kotlinx.coroutines.launch
 import kotlin.getValue
 import kotlin.ranges.contains
 
+/**
+ * 회원가입 이후 프로필 설정화면
+ */
 @AndroidEntryPoint
 class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
     FragmentUserInfoContentBinding::inflate) {
@@ -70,13 +74,38 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
         )
     }
 
+    private val emojiBgLayouts: List<ConstraintLayout> by lazy {
+        listOf(
+            binding.layoutEmojiBg1,
+            binding.layoutEmojiBg2,
+            binding.layoutEmojiBg3,
+            binding.layoutEmojiBg4,
+            binding.layoutEmojiBg5,
+            binding.layoutEmojiBg6,
+            binding.layoutEmojiBg7,
+            binding.layoutEmojiBg8,
+            binding.layoutEmojiBg9,
+            binding.layoutEmojiBg10,
+            binding.layoutEmojiBg11,
+            binding.layoutEmojiBg12
+        )
+    }
+
     override fun setupViews(savedInstanceState: Bundle?) = with(binding){
+        // Title bar 기본 세팅
+        titleBar.setupDefault(getString(R.string.title_user_information))
+
         btnStart.isEnabled = false
         when (mode) {
             UserInfoModeEnum.SIGNUP -> {
                 root.setBackgroundResource(R.drawable.bg_second_gradient)
                 // 초기 상태 세팅(디폴트 선택)
                 setupDefaultState()
+
+                // 1) 자식(layout_emoji_bg1~12) 배경 selector 적용
+                emojiBgLayouts.forEach { bg ->
+                    bg.setBackgroundResource(R.drawable.emoji_bg_selector)
+                }
             }
 
             UserInfoModeEnum.MODIFY -> {
@@ -100,6 +129,7 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
                     tvPreviewIslandName.text = islandName.dropLast(1)
                     selectEmoji(emojiCards[profileImageIndex-1].first, emojiCards[profileImageIndex-1].second)
                 }
+
             }
         }
         return@with

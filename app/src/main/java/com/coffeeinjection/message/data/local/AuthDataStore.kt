@@ -224,7 +224,7 @@ class AuthDataStore @Inject constructor(
     // Clear / Logout
     // -------------------------
     /**
-     * 로그아웃 등 전체 정리 정책
+     * 회원 탈퇴 등 전체 정리 정책
      * - access / user / provider 삭제
      * - 마지막 등록 FCM 토큰 삭제 → 다음 로그인 시 재등록 유도
      * - 현재 FCM 토큰은 기본 유지 (완전 초기화가 필요하면 주석 해제)
