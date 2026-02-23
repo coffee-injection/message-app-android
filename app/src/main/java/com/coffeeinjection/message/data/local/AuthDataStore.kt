@@ -224,7 +224,7 @@ class AuthDataStore @Inject constructor(
     // Clear / Logout
     // -------------------------
     /**
-     * 회원 탈퇴 등 전체 정리 정책
+     * 회원탈퇴 등 전체 정리 정책
      * - access / user / provider 삭제
      * - 마지막 등록 FCM 토큰 삭제 → 다음 로그인 시 재등록 유도
      * - 현재 FCM 토큰은 기본 유지 (완전 초기화가 필요하면 주석 해제)
@@ -242,4 +242,34 @@ class AuthDataStore @Inject constructor(
             prefs.remove(KEY_FCM_LAST_REGISTERED)
         }
     }
+
+    /**
+     * 로그아웃
+     */
+    suspend fun clearForLogout(clearCurrentFcmToken: Boolean = true) {
+        Logger.i("[AuthDataStore] clearForLogout(clearCurrentFcmToken=$clearCurrentFcmToken)")
+        context.authDataStore.edit { prefs ->
+            // 인증/세션
+            prefs.remove(KEY_ACCESS_TOKEN)
+            prefs.remove(KEY_REFRESH_TOKEN)
+
+            // 로그인 플래그/유저 정보
+            prefs.remove(KEY_AUTO_LOGIN)
+            prefs.remove(KEY_USER_NICKNAME)
+            prefs.remove(KEY_USER_ISLAND_NAME)
+            prefs.remove(KEY_USER_IMG_IDX)
+
+            // 로그인 프로바이더(선택: 보통 삭제)
+            prefs.remove(KEY_LOGIN_PROVIDER)
+
+            // FCM: 서버 등록 상태 초기화 → 다음 로그인 시 재등록 유도
+            prefs.remove(KEY_FCM_LAST_REGISTERED)
+
+            // FCM: 디바이스 토큰까지 deleteToken() 했으면 로컬도 삭제(권장)
+            if (clearCurrentFcmToken) {
+                prefs.remove(KEY_FCM_TOKEN)
+            }
+        }
+    }
+
 }
