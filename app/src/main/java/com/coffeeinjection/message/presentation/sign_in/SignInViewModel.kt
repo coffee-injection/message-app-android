@@ -12,6 +12,7 @@ import com.coffeeinjection.message.domain.usecase.GetKakaoLoginUrlUseCase
 import com.coffeeinjection.message.domain.usecase.RegisterFCMTokenUseCase
 import com.coffeeinjection.message.domain.usecase.SaveAccessTokenUseCase
 import com.coffeeinjection.message.domain.usecase.SaveRefreshTokenUseCase
+import com.coffeeinjection.message.domain.usecase.SaveUserInfoUseCase
 import com.coffeeinjection.message.presentation.sign_in.model.AuthUiState
 import com.coffeeinjection.message.util.Logger
 import com.google.firebase.messaging.FirebaseMessaging
@@ -30,6 +31,7 @@ class SignInViewModel @Inject constructor(
     private val exchangeGoogleCodeToJwt: ExchangeGoogleCodeToJwtUseCase,
     private val saveAccessToken: SaveAccessTokenUseCase,
     private val saveRefreshToken: SaveRefreshTokenUseCase,
+    private val saveUserInfo : SaveUserInfoUseCase,
     private val registerFCMTokenUseCase: RegisterFCMTokenUseCase,
     private val authDataStore: AuthDataStore
 ) : ViewModel() {
@@ -113,7 +115,16 @@ class SignInViewModel @Inject constructor(
                 } else {
                     res.refreshToken?.let { saveRefreshToken(it) }
                     // 기존회원: 바로 자동로그인 허용
-                    runCatching { authDataStore.saveAutoLogin(true) }
+                    runCatching {
+                        authDataStore.saveAutoLogin(true)
+                        saveUserInfo(
+                            UserInfo(
+                                nickName = res.nickname ?: "default",
+                                islandName = res.islandName ?: "default",
+                                profileImageIndex = res.profileImageIndex ?: 1
+                            )
+                        )
+                    }
                     _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
                 }
 
