@@ -104,6 +104,8 @@ class MyPageViewModel @Inject constructor(
             // 2) 디바이스 FCM 토큰 삭제(다음 로그인 시 새 토큰 발급 유도)
             runCatching { FirebaseMessaging.getInstance().deleteToken().await() }
 
+            authDataStore.clearForLogout()
+
         }.also {
             // 4) 화면 전환(프래그먼트에서 수집하여 SignIn으로 네비게이션)
             _logoutEvent.trySend(Unit)
