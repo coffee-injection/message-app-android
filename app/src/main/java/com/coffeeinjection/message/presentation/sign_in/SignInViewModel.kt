@@ -158,7 +158,16 @@ class SignInViewModel @Inject constructor(
                     _uiState.value =
                         _uiState.value.copy(isLoading = false, navigateToNickname = true)
                 } else {
-                    res.refreshToken?.let { saveRefreshToken(it) }
+                    res.refreshToken?.let {
+                        saveRefreshToken(it)
+                        saveUserInfo(
+                            UserInfo(
+                                nickName = res.nickname ?: "default",
+                                islandName = res.islandName ?: "default",
+                                profileImageIndex = res.profileImageIndex ?: 1
+                            )
+                        )
+                    }
                     runCatching { authDataStore.saveAutoLogin(true) }
                     _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
                 }
