@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.coffeeinjection.message.BuildConfig
 import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.FragmentBookmarkBinding
 import com.coffeeinjection.message.presentation.BaseFragment
@@ -92,7 +93,7 @@ class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>(FragmentBookmarkB
 
                 launch {
                     viewModel.error.collect { msg ->
-                        if (!msg.isNullOrBlank()) {
+                        if (!msg.isNullOrBlank() && BuildConfig.DEBUG) {
                             Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
                         }
                     }
