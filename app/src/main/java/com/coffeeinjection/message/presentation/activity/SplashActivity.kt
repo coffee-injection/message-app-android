@@ -11,7 +11,6 @@ import com.coffeeinjection.message.data.local.AuthDataStore
 import com.coffeeinjection.message.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,7 +31,7 @@ class SplashActivity : AppCompatActivity() {
             val token = authDataStore.getAccessToken()
             val canAutoLogin = authDataStore.getAutoLogin()
 
-            Logger.d("[Splash] token=${token?.let{"***"} ?: "null"}, auto=$canAutoLogin")
+            Logger.d("[Splash] token=${token?.let { "***" } ?: "null"}, auto=$canAutoLogin")
 
             val intent = Intent(this@SplashActivity, MainActivity::class.java).apply {
                 when {
@@ -46,8 +45,8 @@ class SplashActivity : AppCompatActivity() {
                         putExtra("startDestination", "nickname")
                     }
                     else -> {
-                        // 토큰 없음 -> 기본(로그인)
-                        // putExtra("startDestination", "signIn") 필요하면 추가
+                        // 토큰 없음 -> 로그인
+                        putExtra("startDestination", "sign_in")
                     }
                 }
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -58,4 +57,3 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 }
-

@@ -94,7 +94,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val uniId = (System.currentTimeMillis() / 1000).toInt()
 
         val intent = Intent(this, MainActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+
+            // 푸시 탭 시 홈으로 시작하도록 강제
+            putExtra("startDestination", "home")
+
             if (!url.isNullOrBlank()) putExtra("fcmLink", url)
         }
 

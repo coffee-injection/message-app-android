@@ -94,3 +94,7 @@
 # (선택) androidx / lifecycle 관련 경고 억제
 ############################################
 -dontwarn androidx.**
+
+# Moshi가 쓰는 DTO들은 난독화/최적화에서 제외(필드/생성자 이름 유지)
+-keep class com.coffeeinjection.message.data.remote.dto.** { *; }
+-keepclassmembers class com.coffeeinjection.message.data.remote.dto.** { *; }

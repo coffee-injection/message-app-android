@@ -16,8 +16,8 @@ android {
         applicationId = "com.coffeeinjection.message"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 3
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -33,19 +33,28 @@ android {
 
     buildTypes {
         debug {
-            // 난독화/리소스 축소 비활성화(기본값이지만 명시해두면 좋습니다)
-            buildConfigField("String", "BASE_URL", "\"https://tium.online/api/v1/\"")
+            // 난독화 / 최적화 / 리소스 축소 OFF
+            isMinifyEnabled = false
+            isShrinkResources = false
             //            buildConfigField("String", "BASE_URL", "\"http://15.164.112.136:8080/api/v1/\"")
+            buildConfigField("String", "BASE_URL", "\"https://tium.online/api/v1/\"")
             buildConfigField("String", "API_SEVER_BASE_URL", "\"https://tium.online/\"")
         }
         release {
             signingConfig = signingConfigs.getByName("release")
-            isMinifyEnabled = false
-            proguardFiles("proguard-rules.pro")
-            buildConfigField("String", "BASE_URL", "\"https://tium.online/api/v1/\"")
-//            buildConfigField("String", "BASE_URL", "\"http://15.164.112.136:8080/api/v1/\"")
-            buildConfigField("String", "API_SEVER_BASE_URL", "\"https://tium.online/\"")
 
+            // 난독화 / 최적화 / 리소스 축소 ON
+            isMinifyEnabled = true
+            isShrinkResources = true
+
+            // Proguard(R8) 룰 파일 연결
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+
+            buildConfigField("String", "BASE_URL", "\"https://tium.online/api/v1/\"")
+            buildConfigField("String", "API_SEVER_BASE_URL", "\"https://tium.online/\"")
         }
     }
 

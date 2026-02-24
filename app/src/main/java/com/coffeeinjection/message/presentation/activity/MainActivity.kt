@@ -44,14 +44,14 @@ class MainActivity : AppCompatActivity() {
         val inflater = navController.navInflater
         val graph = inflater.inflate(R.navigation.nav_main)
 
-        // Splash에서 전달한 시작 목적지: "home" | "sign_in" | (기본) null
+        // Splash에서 전달한 시작 목적지: "home" | "sign_in" | "signIn" | (기본) null
         when (intent.getStringExtra("startDestination")) {
             "home" -> {
                 graph.setStartDestination(R.id.homeFragment)
                 navController.setGraph(graph, bundleOf(/* 필요 시 초기 인자 */))
                 Logger.d(TAG, "startDestination = homeFragment")
             }
-            "sign_in" -> {
+            "sign_in", "signIn" -> {
                 graph.setStartDestination(R.id.signInFragment)
                 navController.setGraph(graph, bundleOf())
                 Logger.d(TAG, "startDestination = signInFragment")
