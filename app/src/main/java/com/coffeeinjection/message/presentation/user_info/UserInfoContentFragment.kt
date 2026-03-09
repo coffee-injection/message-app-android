@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.cardview.widget.CardView
@@ -295,6 +296,21 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
             }
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+
+        requireActivity().window.setSoftInputMode(
+            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+        )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // 원래 기본값(Unspecified)으로 복구하거나 이전 설정으로 환원
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED)
+    }
+
 
     /**
      * Priview 숨김처리
