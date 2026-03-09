@@ -1,13 +1,16 @@
 package com.coffeeinjection.message.presentation.user_info
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -173,6 +176,8 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
         btnCheckDuplicate.setOnClickListener {
             if(!btnCheckDuplicate.isEnabled) return@setOnClickListener
             viewModel.checkNickNameAvailable(nickname = etUserName.text.toString())
+            val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(it.windowToken, 0)
         }
 
         btnStart.setOnClickListener {
