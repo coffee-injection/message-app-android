@@ -14,6 +14,8 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -241,6 +243,26 @@ class MessageDialogFragment : DialogFragment() {
         etMessage.filters = arrayOf(InputFilter.LengthFilter(MAX_LENGTH))
         tvCharCount.text = "0/$MAX_LENGTH"
 
+        val originPaddingLeft = root.paddingLeft
+        val originPaddingTop = root.paddingTop
+        val originPaddingRight = root.paddingRight
+        val originPaddingBottom = root.paddingBottom
+
+        // 에딧 텍스트가 키보드에 가려지지 않고 작성되는 글에 포커싱 되도록 수정
+        ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
+            val imeBottom = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+            val systemBottom = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
+            val bottom = maxOf(imeBottom, systemBottom)
+
+            v.setPadding(
+                originPaddingLeft,
+                originPaddingTop,
+                originPaddingRight,
+                originPaddingBottom + bottom
+            )
+            insets
+        }
+
         // 글자수 카운트 업데이트
         etMessage.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
@@ -303,18 +325,17 @@ class MessageDialogFragment : DialogFragment() {
             val metrics = resources.displayMetrics
             val width = (metrics.widthPixels * 0.9f).toInt()
 
-            // 다이얼로그 크기
-            window.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+            window.setLayout(width, ViewGroup.LayoutParams.MATCH_PARENT)
 
-            // 투명 배경 + 딤
             window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             window.attributes = window.attributes.apply {
                 gravity = Gravity.CENTER
                 dimAmount = 0.6f
             }
 
-            // 쓰기모드에서 키보드 올라올 때 레이아웃이 잘 보이도록
-            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+            window.setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+            )
         }
     }
 

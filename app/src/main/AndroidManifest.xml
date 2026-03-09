@@ -29,6 +29,7 @@
 
         <activity
             android:name=".presentation.activity.MainActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:exported="false" />
 
         <!-- 구글 OAuth 콜백(서버가 302로 보내는 딥링크)을 수신하는 Activity -->
