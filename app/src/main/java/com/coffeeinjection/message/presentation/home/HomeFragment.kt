@@ -111,6 +111,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             )
         }
 
+        ivMenu.setOnClickListener {
+            this@HomeFragment.findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragmentToMyPageFragment()
+            )
+        }
+
         // MessageDialogFragment
         btnSendMsg.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToMessageDialogFragment(
