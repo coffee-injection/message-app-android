@@ -1,6 +1,5 @@
 package com.coffeeinjection.message.presentation.activity
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.coffeeinjection.message.data.local.UserInfo
@@ -16,9 +15,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,7 +25,7 @@ import javax.inject.Inject
 class SharedViewModel @Inject constructor(
     private val repo: MessageRepository,
     private val saveUserInfo: SaveUserInfoUseCase,
-    private val clearUserInfo : ClearUserInfoUseCase,
+    private val clearUserInfo: ClearUserInfoUseCase,
     observeUserInfoUseCase: ObserveUserInfoUseCase
 ) : ViewModel() {
 
@@ -44,16 +43,17 @@ class SharedViewModel @Inject constructor(
     }
 
     val userInfoUiState: StateFlow<UserInfoUiState> = observeUserInfoUseCase().map { userInfo ->
-        userInfo?.toUiState() ?: UserInfoUiState(nickName = "default", islandName = "default섬", profileImageIndex = 5)
+        userInfo?.toUiState() ?: UserInfoUiState(
+            nickName = "default",
+            islandName = "default섬",
+            profileImageIndex = 5
+        )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = UserInfoUiState("default", "default섬", 5)
     )
 
-    // -------------------------
-    // 편지 상세(읽기) 상태
-    // -------------------------
     private val _letterDetail = MutableStateFlow<Letter?>(null)
     val letterDetail: StateFlow<Letter?> = _letterDetail
 
@@ -65,6 +65,10 @@ class SharedViewModel @Inject constructor(
 
     private val _homeRefresh = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
     val homeRefresh = _homeRefresh.asSharedFlow()
+
+    // Toast / Snackbar / 단발성 UI 이벤트용
+    private val _toastEvent = MutableSharedFlow<String>(extraBufferCapacity = 1)
+    val toastEvent = _toastEvent.asSharedFlow()
 
     fun requestHomeRefresh() {
         _homeRefresh.tryEmit(Unit)
@@ -79,8 +83,10 @@ class SharedViewModel @Inject constructor(
                 repo.sendLetter(content)
             }.onSuccess { res ->
                 Logger.d("[letter/send] success, id=${res.letterId}")
+                _toastEvent.tryEmit("편지를 띄웠어요")
             }.onFailure { e ->
                 Logger.error("[letter/send] fail msg=${e.message} cause=${e.cause}")
+                _toastEvent.tryEmit(e.message ?: "편지 전송에 실패했어요")
             }
         }
     }
@@ -102,6 +108,7 @@ class SharedViewModel @Inject constructor(
                     _letterDetail.value = null
                     _letterDetailError.value = e.message ?: "편지 조회에 실패했습니다."
                     Logger.error("[letter/{id}] fail msg=${e.message} cause=${e.cause}")
+                    _toastEvent.tryEmit(_letterDetailError.value ?: "편지 조회에 실패했습니다.")
                 }
 
             _isLoadingLetterDetail.value = false
@@ -117,8 +124,10 @@ class SharedViewModel @Inject constructor(
                 repo.addBookmark(letterId)
             }.onSuccess {
                 Logger.d("[add bookmark] success, letterId=$letterId")
+                _toastEvent.tryEmit("북마크에 저장 했어요")
             }.onFailure { e ->
                 Logger.error("[add bookmark] fail letterId=$letterId msg=${e.message} cause=${e.cause}")
+                _toastEvent.tryEmit(e.message ?: "북마크 저장에 실패했어요")
             }
         }
     }
@@ -132,8 +141,10 @@ class SharedViewModel @Inject constructor(
                 repo.deleteBookmark(letterId)
             }.onSuccess {
                 Logger.d("[deleteBookmark] success, letterId=$letterId")
+                _toastEvent.tryEmit("북마크를 삭제 했어요")
             }.onFailure { e ->
                 Logger.error("[deleteBookmark] fail letterId=$letterId msg=${e.message} cause=${e.cause}")
+                _toastEvent.tryEmit(e.message ?: "북마크 삭제에 실패했어요")
             }
         }
     }
@@ -148,13 +159,15 @@ class SharedViewModel @Inject constructor(
                 repo.reportLetter(letterId = letterId, reason = reason)
             }.onSuccess {
                 Logger.d("[report] success, letterId=$letterId, reason=$reason")
+                _toastEvent.tryEmit("신고가 접수 되었어요")
             }.onFailure { e ->
                 Logger.error("[report] fail letterId=$letterId msg=${e.message} cause=${e.cause}")
+                _toastEvent.tryEmit(e.message ?: "편지 신고에 실패했어요.  잠시 후 다시 시도해주세요")
             }
         }
     }
 
-    fun UserInfo.toUiState(): UserInfoUiState = UserInfoUiState(
+    private fun UserInfo.toUiState(): UserInfoUiState = UserInfoUiState(
         nickName = nickName,
         islandName = islandName,
         profileImageIndex = profileImageIndex

@@ -4,16 +4,21 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
 import com.coffeeinjection.message.R
 import com.coffeeinjection.message.databinding.ActivityMainBinding
 import com.coffeeinjection.message.presentation.sign_in.AuthDeepLinkViewModel
 import com.coffeeinjection.message.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -32,6 +37,8 @@ class MainActivity : AppCompatActivity() {
         Logger.d("onCreate")
         setContentView(binding.root)
 
+        observeToastEvent()
+
         // Android35 이상 엣지투엣지 대응  다크모드 시스템바 색상 설정
         applyMainBackgroundByTheme()
 
@@ -44,11 +51,10 @@ class MainActivity : AppCompatActivity() {
         val inflater = navController.navInflater
         val graph = inflater.inflate(R.navigation.nav_main)
 
-        // Splash에서 전달한 시작 목적지: "home" | "sign_in" | "signIn" | (기본) null
         when (intent.getStringExtra("startDestination")) {
             "home" -> {
                 graph.setStartDestination(R.id.homeFragment)
-                navController.setGraph(graph, bundleOf(/* 필요 시 초기 인자 */))
+                navController.setGraph(graph, bundleOf())
                 Logger.d(TAG, "startDestination = homeFragment")
             }
             "sign_in", "signIn" -> {
@@ -57,13 +63,20 @@ class MainActivity : AppCompatActivity() {
                 Logger.d(TAG, "startDestination = signInFragment")
             }
             else -> {
-                // XML 기본값(guideFragment) 사용
                 navController.setGraph(graph, bundleOf())
                 Logger.d(TAG, "startDestination = default(nav XML)")
             }
         }
+    }
 
-        //viewModel.initForTest()
+    private fun observeToastEvent() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.toastEvent.collect { message ->
+                    Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     override fun onStart() {
