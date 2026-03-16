@@ -1,14 +1,20 @@
 package com.coffeeinjection.message.presentation.activity
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.coffeeinjection.message.data.local.AuthDataStore
 import com.coffeeinjection.message.data.local.UserInfo
 import com.coffeeinjection.message.data.remote.dto.Letter
+import com.coffeeinjection.message.data.remote.interceptor.SessionManager
+import com.coffeeinjection.message.data.remote.interceptor.SessionRefreshState
 import com.coffeeinjection.message.domain.repository.MessageRepository
 import com.coffeeinjection.message.domain.usecase.ClearUserInfoUseCase
 import com.coffeeinjection.message.domain.usecase.ObserveUserInfoUseCase
 import com.coffeeinjection.message.domain.usecase.SaveUserInfoUseCase
 import com.coffeeinjection.message.util.Logger
+import com.coffeeinjection.message.util.TokenStateEnum
 import com.coffeeinjection.message.util.UserInfoUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -16,6 +22,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -26,8 +33,37 @@ class SharedViewModel @Inject constructor(
     private val repo: MessageRepository,
     private val saveUserInfo: SaveUserInfoUseCase,
     private val clearUserInfo: ClearUserInfoUseCase,
-    observeUserInfoUseCase: ObserveUserInfoUseCase
+    observeUserInfoUseCase: ObserveUserInfoUseCase,
+    private val sessionManager: SessionManager,
+    private val authDataStore: AuthDataStore
 ) : ViewModel() {
+
+    private val _tokenState = MutableLiveData(TokenStateEnum.NONE)
+    val tokenState: LiveData<TokenStateEnum> get() = _tokenState
+
+    fun checkTokenValidation() {
+        viewModelScope.launch {
+            sessionManager.reset()
+
+            runCatching { repo.fetchLetterList() }
+                .onSuccess { res ->
+                    Logger.d("[SharedViewModel] checkTokenValidation success : $res")
+
+                    _tokenState.value = when (sessionManager.getState()) {
+                        SessionRefreshState.REFRESHED -> TokenStateEnum.REFRESHED
+                        else -> TokenStateEnum.VALID
+                    }
+                }
+                .onFailure { e ->
+                    Logger.d("[SharedViewModel] checkTokenValidation fail : $e")
+
+                    _tokenState.value = when (sessionManager.getState()) {
+                        SessionRefreshState.EXPIRED -> TokenStateEnum.EXPIRED
+                        else -> TokenStateEnum.ERROR
+                    }
+                }
+        }
+    }
 
     fun initForTest() {
         viewModelScope.launch {
