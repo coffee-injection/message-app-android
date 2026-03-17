@@ -299,12 +299,12 @@ class MessageDialogFragment : DialogFragment() {
     private fun updateBookmarkUi(isOn: Boolean) = with(readBinding) {
         btnSave.isSelected = isOn
         btnSave.refreshDrawableState()
-
         btnSave.text = if (isOn) {
             getString(R.string.dialog_fragment_message_cancel)
         } else {
             getString(R.string.dialog_fragment_message_save)
         }
+        btnSave.updateCompoundCentering()
 
         btnReport.visibility = if (isOn) View.GONE else View.VISIBLE
     }

@@ -101,7 +101,7 @@ class GradientTextButton @JvmOverloads constructor(
         if (centerIconWithText) updateCompoundCentering()
     }
 
-    private fun updateCompoundCentering() {
+     fun updateCompoundCentering() {
         val d = compoundDrawablesRelative[0] ?: run {
             // 아이콘 없으면 원래 패딩 복구
             if (paddingStart != basePaddingStartPx || paddingEnd != basePaddingEndPx) {
