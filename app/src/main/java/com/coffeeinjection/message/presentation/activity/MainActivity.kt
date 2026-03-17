@@ -12,13 +12,16 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import com.coffeeinjection.message.R
+import com.coffeeinjection.message.data.remote.interceptor.SessionManager
 import com.coffeeinjection.message.databinding.ActivityMainBinding
 import com.coffeeinjection.message.presentation.sign_in.AuthDeepLinkViewModel
 import com.coffeeinjection.message.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -26,6 +29,8 @@ class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val viewModel: SharedViewModel by viewModels()
     private val authDeepLinkViewModel: AuthDeepLinkViewModel by viewModels()
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     companion object {
         private const val TAG = "MainActivity"
@@ -38,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         observeToastEvent()
+        observeLogoutEvent()
 
         // Android35 이상 엣지투엣지 대응  다크모드 시스템바 색상 설정
         applyMainBackgroundByTheme()
@@ -78,6 +84,29 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun observeLogoutEvent() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sessionManager.logoutEvent.collect {
+                    moveToSignInBySessionExpired()
+                }
+            }
+        }
+    }
+
+    private fun moveToSignInBySessionExpired() {
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host) as? NavHostFragment ?: return
+        val navController = navHostFragment.navController
+        if (navController.currentDestination?.id == R.id.signInFragment) return
+        val options = NavOptions.Builder()
+            .setPopUpTo(R.id.homeFragment, true)
+            .setLaunchSingleTop(true)
+            .build()
+        navController.navigate(R.id.signInFragment, null, options)
+        Toast.makeText(this@MainActivity,getString(R.string.toast_token_is_expired), Toast.LENGTH_SHORT).show()
+    }
+
 
     override fun onStart() {
         super.onStart()

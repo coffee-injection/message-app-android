@@ -73,6 +73,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     }
 
     override fun setupViews(savedInstanceState: Bundle?) {
+        sharedViewModel.clearLogoutEventState()
         // FCM TOKEN
         getFCMToken()
 

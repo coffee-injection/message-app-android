@@ -32,14 +32,13 @@ class TokenAuthenticator @Inject constructor(
         Logger.error("call refreshToken api 1")
 
         if (response.request.url.encodedPath.endsWith("/auth/refresh")) {
-            sessionManager.markExpired()
-            runBlocking { authDataStore.clearForLogout() }
+            handleLogout()
             return null
         }
 
         // 2) 같은 요청을 계속 재시도하지 않도록 제한(2회)
         if (responseCount(response) >= 2) {
-            sessionManager.markExpired()
+            handleLogout()
             return null
         }
         Logger.error("call refreshToken api 2")
@@ -66,8 +65,7 @@ class TokenAuthenticator @Inject constructor(
 
                 val refreshToken = authDataStore.refreshTokenFlow.firstOrNull()
                 if (refreshToken.isNullOrBlank()) {
-                    sessionManager.markExpired()
-                    authDataStore.clearForLogout()
+                    handleLogout()
                     // refreshToken 없으면 갱신 불가 -> 로그인 만료 처리 쪽으로
                     // authDataStore.clear() 같은 정리 로직이 있으면 여기서 호출 권장
                     return@withLock null
@@ -81,8 +79,7 @@ class TokenAuthenticator @Inject constructor(
                     Logger.error("call refreshToken api HttpException : ${e.code()} / $e")
                     // refresh token 자체가 만료된 경우
                     if (e.code() == 401 || e.code() == 403) {
-                        sessionManager.markExpired()
-                        authDataStore.clearForLogout()
+                        handleLogout()
                     } else {
                         // 서버 오류 등
                         sessionManager.markFailed()
@@ -100,8 +97,7 @@ class TokenAuthenticator @Inject constructor(
                 val newRefresh = envelope.data?.refreshToken
 
                 if (newAccess.isNullOrBlank() || newRefresh.isNullOrBlank()) {
-                    sessionManager.markExpired()
-                    authDataStore.clearForLogout()
+                    handleLogout()
                     return@withLock null
                 }
 
@@ -126,5 +122,11 @@ class TokenAuthenticator @Inject constructor(
             prior = prior.priorResponse
         }
         return count
+    }
+
+    private fun handleLogout() {
+        sessionManager.markExpired()
+        runBlocking { authDataStore.clearForLogout() }
+        sessionManager.emitLogoutIfNeeded()
     }
 }

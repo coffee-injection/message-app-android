@@ -5,6 +5,9 @@
     <string name="Tium">Tium</string>
     <string name="default_notification_channel_id">tium</string>
 
+    <!--  Toast  -->
+    <string name="toast_token_is_expired">"로그인 정보가 만료됐어요. 다시 로그인 해주세요."</string>
+
     <!--  Guide  -->
     <string name="guide_next">다음</string>
     <string name="guide_start">시작하기</string>

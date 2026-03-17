@@ -11,6 +11,7 @@ import androidx.appcompat.widget.AppCompatButton
 import kotlin.math.max
 import android.content.res.TypedArray
 import android.graphics.drawable.Drawable
+import android.text.TextUtils
 import androidx.core.graphics.drawable.DrawableCompat
 
 class GradientTextButton @JvmOverloads constructor(
@@ -35,6 +36,10 @@ class GradientTextButton @JvmOverloads constructor(
     init {
         isAllCaps = false
         gravity = Gravity.CENTER
+
+        maxLines = 1
+        isSingleLine = true
+        ellipsize = TextUtils.TruncateAt.END
 
         // XML에 android:textColor가 없으면 기본 흰색
         if (!hasAndroidAttribute(attrs, android.R.attr.textColor)) {

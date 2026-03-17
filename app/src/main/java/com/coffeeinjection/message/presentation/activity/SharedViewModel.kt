@@ -41,6 +41,9 @@ class SharedViewModel @Inject constructor(
     private val _tokenState = MutableLiveData(TokenStateEnum.NONE)
     val tokenState: LiveData<TokenStateEnum> get() = _tokenState
 
+    fun clearLogoutEventState(){
+        sessionManager.clearLogoutEventState()
+    }
     fun checkTokenValidation() {
         viewModelScope.launch {
             sessionManager.reset()
