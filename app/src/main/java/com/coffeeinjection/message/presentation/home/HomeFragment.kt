@@ -179,20 +179,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         val seq = ++renderSeq
 
         container.post {
-            // 최신 요청만 반영
             if (seq != renderSeq) return@post
             if (!isAdded || view == null) return@post
 
-            // 1) 기존 아이콘/애니메이션 정리
             for (i in 0 until container.childCount) {
                 container.getChildAt(i).stopFloatUpDown()
             }
             container.removeAllViews()
 
-            // 2) current state 갱신 (아이콘 업데이트와 같은 runnable에서 수행)
             binding.tvCurrentState.text = buildCurrentStateText(messages.size)
 
-            // 3) 아이콘 렌더
             if (messages.isEmpty()) return@post
 
             val width = container.width
@@ -205,21 +201,46 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
             val spacing = dpToPx(6)
             val placedRects = mutableListOf<RectF>()
-            val maxTriesPerIcon = 60
 
-            fun findNonOverlappingPosition(): Pair<Int, Int>? {
-                if (maxX == 0 && maxY == 0) return 0 to 0
+            val maxTriesNoOverlap = 80
+            val maxTriesFallback = 40
 
-                repeat(maxTriesPerIcon) {
-                    val x = if (maxX == 0) 0 else Random.nextInt(0, maxX + 1)
-                    val y = if (maxY == 0) 0 else Random.nextInt(0, maxY + 1)
+            fun overlapArea(a: RectF, b: RectF): Float {
+                val left = maxOf(a.left, b.left)
+                val top = maxOf(a.top, b.top)
+                val right = minOf(a.right, b.right)
+                val bottom = minOf(a.bottom, b.bottom)
 
-                    val candidate = RectF(
-                        (x - spacing).toFloat(),
-                        (y - spacing).toFloat(),
-                        (x + iconSize + spacing).toFloat(),
-                        (y + iconSize + spacing).toFloat()
-                    )
+                val w = (right - left).coerceAtLeast(0f)
+                val h = (bottom - top).coerceAtLeast(0f)
+                return w * h
+            }
+
+            fun buildCandidateRect(x: Int, y: Int): RectF {
+                return RectF(
+                    (x - spacing).toFloat(),
+                    (y - spacing).toFloat(),
+                    (x + iconSize + spacing).toFloat(),
+                    (y + iconSize + spacing).toFloat()
+                )
+            }
+
+            fun randomPosition(): Pair<Int, Int> {
+                val x = if (maxX == 0) 0 else Random.nextInt(0, maxX + 1)
+                val y = if (maxY == 0) 0 else Random.nextInt(0, maxY + 1)
+                return x to y
+            }
+
+            fun findBestPosition(): Pair<Int, Int> {
+                if (maxX == 0 && maxY == 0) {
+                    val rect = buildCandidateRect(0, 0)
+                    placedRects.add(rect)
+                    return 0 to 0
+                }
+
+                repeat(maxTriesNoOverlap) {
+                    val (x, y) = randomPosition()
+                    val candidate = buildCandidateRect(x, y)
 
                     val overlapped = placedRects.any { RectF.intersects(it, candidate) }
                     if (!overlapped) {
@@ -227,17 +248,52 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                         return x to y
                     }
                 }
-                return null
+
+                var bestX = 0
+                var bestY = 0
+                var bestRect: RectF? = null
+                var minOverlapCount = Int.MAX_VALUE
+                var minOverlapArea = Float.MAX_VALUE
+
+                repeat(maxTriesFallback) {
+                    val (x, y) = randomPosition()
+                    val candidate = buildCandidateRect(x, y)
+
+                    var overlapCount = 0
+                    var totalOverlapArea = 0f
+
+                    placedRects.forEach { placed ->
+                        if (RectF.intersects(placed, candidate)) {
+                            overlapCount++
+                            totalOverlapArea += overlapArea(placed, candidate)
+                        }
+                    }
+
+                    val isBetter =
+                        overlapCount < minOverlapCount ||
+                                (overlapCount == minOverlapCount && totalOverlapArea < minOverlapArea)
+
+                    if (isBetter) {
+                        bestX = x
+                        bestY = y
+                        bestRect = candidate
+                        minOverlapCount = overlapCount
+                        minOverlapArea = totalOverlapArea
+                    }
+                }
+
+                val finalRect = bestRect ?: buildCandidateRect(0, 0)
+                placedRects.add(finalRect)
+
+                Logger.d(
+                    "[sea] fallback overlap placement. overlapCount=$minOverlapCount, overlapArea=$minOverlapArea"
+                )
+
+                return bestX to bestY
             }
 
             messages.forEach { msg ->
-                val pos = findNonOverlappingPosition()
-                if (pos == null) {
-                    Logger.d("[sea] no space to place more icons. messages=${messages.size}, placed=${placedRects.size}")
-                    return@forEach
-                }
-
-                val (x, y) = pos
+                val (x, y) = findBestPosition()
 
                 val lp = ConstraintLayout.LayoutParams(iconSize, iconSize).apply {
                     startToStart = ConstraintLayout.LayoutParams.PARENT_ID
