@@ -25,6 +25,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.coffeeinjection.message.R
+import com.coffeeinjection.message.data.model.PushBus
 import com.coffeeinjection.message.databinding.FragmentHomeBinding
 import com.coffeeinjection.message.presentation.BaseFragment
 import com.coffeeinjection.message.presentation.activity.SharedViewModel
@@ -130,6 +131,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     override fun setupCollectors() {
         super.setupCollectors()
+        // LiveData observe는 바깥에서 한 번만
+        PushBus.message.observe(viewLifecycleOwner) { event ->
+            event ?: return@observe
+
+            // 화면 새로고침
+             homeViewModel.loadReceivedMessages()
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {

@@ -127,5 +127,6 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.com.google.firebase.firebase.messaging.ktx)
 
-
+    implementation ("androidx.lifecycle:lifecycle-process:2.8.7")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
 }

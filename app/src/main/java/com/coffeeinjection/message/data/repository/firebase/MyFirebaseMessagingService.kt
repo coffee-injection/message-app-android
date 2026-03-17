@@ -11,7 +11,10 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.coffeeinjection.message.R
 import com.coffeeinjection.message.data.local.AuthDataStore
+import com.coffeeinjection.message.data.model.PushBus
+import com.coffeeinjection.message.data.model.PushEvent
 import com.coffeeinjection.message.presentation.activity.MainActivity
+import com.coffeeinjection.message.util.AppState
 import com.coffeeinjection.message.util.Logger
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -74,7 +77,18 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         Logger.d(TAG, "Notification data: title=$title, body=$body, link=$link")
 
-        sendNotification(title, body, link?.toString())
+        val event = PushEvent(
+            title = remoteMessage.data["title"],
+            body = remoteMessage.data["body"]
+        )
+
+        if (AppState.isForeground) {
+            PushBus.message.postValue(event)
+            sendNotification(title, body, link?.toString())
+
+        } else {
+            sendNotification(title, body, link?.toString())
+        }
     }
 
     // body에서 URL 추출 (http/https 모두)

@@ -2,6 +2,7 @@ package com.coffeeinjection.presentation
 
 import android.app.Application
 import com.coffeeinjection.message.BuildConfig
+import com.coffeeinjection.message.util.AppState
 import com.coffeeinjection.message.util.ReleaseTree
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
@@ -20,6 +21,8 @@ import timber.log.Timber
 class MessageApp: Application() {
     override fun onCreate() {
         super.onCreate()
+        AppState.init()
+
         if (BuildConfig.DEBUG) {
             // 디버그 빌드: 보기 좋은 태그(파일/라인/메서드)
             Timber.Forest.plant(object : Timber.DebugTree() {
