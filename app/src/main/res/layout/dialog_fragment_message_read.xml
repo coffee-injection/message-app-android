@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp">
@@ -158,38 +159,36 @@
         app:layout_constraintStart_toStartOf="@id/card_container"
         app:layout_constraintEnd_toEndOf="@id/card_container" />
 
-    <!-- 답장 버튼 -->
-    <com.coffeeinjection.message.util.GradientTextButton
-        android:id="@+id/btn_reply"
-        android:layout_width="0dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="5dp"
-        android:drawableStart="@drawable/ic_reply"
-        android:text="@string/dialog_fragment_message_reply"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/btn_save"
-        app:layout_constraintBottom_toTopOf="@id/btn_report"
-        app:layout_constraintStart_toStartOf="@id/btn_save"
-        app:layout_constraintEnd_toEndOf="@id/btn_save" />
-
     <!-- 신고 버튼 -->
+
+    <!-- 답장 버튼 -->
+
     <com.coffeeinjection.message.util.GradientTextButton
         android:id="@+id/btn_report"
         android:layout_width="0dp"
         android:layout_height="55dp"
-        android:layout_marginStart="5dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="5dp"
         android:background="@drawable/bg_white_round12"
         android:drawableStart="@drawable/ic_report"
         android:text="@string/dialog_fragment_message_report"
         android:textColor="@color/stroke_dark"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="@id/btn_save"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/btn_save"
+        app:layout_constraintTop_toBottomOf="@id/btn_save" />
+
+    <com.coffeeinjection.message.util.GradientTextButton
+        android:id="@+id/btn_reply"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="8dp"
+        android:drawableStart="@drawable/ic_reply"
+        android:text="@string/dialog_fragment_message_reply"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/btn_reply"
+        app:layout_constraintTop_toBottomOf="@id/btn_report"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/btn_reply"
-        app:layout_constraintEnd_toEndOf="@id/btn_reply" />
+        app:layout_constraintStart_toStartOf="@id/btn_save"
+        app:layout_constraintEnd_toEndOf="@id/btn_save" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

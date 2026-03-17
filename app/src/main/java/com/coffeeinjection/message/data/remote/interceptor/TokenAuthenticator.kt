@@ -4,7 +4,6 @@ import com.coffeeinjection.message.data.local.AuthDataStore
 import com.coffeeinjection.message.data.remote.api.AuthApi
 import com.coffeeinjection.message.data.remote.dto.RefreshTokenRequest
 import com.coffeeinjection.message.util.Logger
-import com.coffeeinjection.message.util.SessionManager
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
