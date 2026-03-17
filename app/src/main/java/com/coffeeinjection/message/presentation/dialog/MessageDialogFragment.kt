@@ -128,12 +128,6 @@ class MessageDialogFragment : DialogFragment() {
         btnSave.isSelected = isBookmarked
         btnSave.refreshDrawableState()
 
-        if (isBookmarked) {
-            btnReport.visibility = View.GONE
-        } else {
-            btnReport.visibility = View.VISIBLE
-        }
-
         // 닫기(X)
         ivClose.setOnClickListener {
             if (isBookmarked) {
@@ -302,16 +296,17 @@ class MessageDialogFragment : DialogFragment() {
     /**
      * 북마크 버튼 토글 text settings
      */
-    private fun updateBookmarkUi(isOn: Boolean) = with(readBinding.btnSave) {
-        isSelected = isOn
-        refreshDrawableState()
+    private fun updateBookmarkUi(isOn: Boolean) = with(readBinding) {
+        btnSave.isSelected = isOn
+        btnSave.refreshDrawableState()
 
-        // 텍스트도 토글에 따라 변경
-        text = if (isOn) {
+        btnSave.text = if (isOn) {
             getString(R.string.dialog_fragment_message_cancel)
         } else {
             getString(R.string.dialog_fragment_message_save)
         }
+
+        btnReport.visibility = if (isOn) View.GONE else View.VISIBLE
     }
 
 
