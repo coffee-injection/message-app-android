@@ -712,6 +712,54 @@
                     app:layout_constraintVertical_bias="1.0" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_terms"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/btn_bg_selector"
+                android:visibility="visible"
+                android:padding="@dimen/text_size_16"
+                app:layout_constraintBottom_toTopOf="@+id/btn_start"
+                app:layout_constraintEnd_toEndOf="@+id/layout_preview_description"
+                app:layout_constraintStart_toStartOf="@+id/layout_preview_description"
+                app:layout_constraintTop_toBottomOf="@+id/layout_preview_description" >
+
+                <CheckBox
+                    android:id="@+id/cb_report_block"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:buttonTint="@color/divider_grey200"
+                    android:checked="false"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_terms1"
+                    style="@style/blue600_body_normal14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/terms1"
+                    app:layout_constraintBottom_toBottomOf="@+id/cb_report_block"
+                    app:layout_constraintStart_toEndOf="@+id/cb_report_block"
+                    app:layout_constraintTop_toTopOf="@+id/cb_report_block" />
+
+                <TextView
+                    android:id="@+id/tv_terms2"
+                    style="@style/blue600_body_normal14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/terms2"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_terms1"
+                    app:layout_constraintStart_toEndOf="@+id/tv_terms1"
+                    app:layout_constraintTop_toTopOf="@+id/tv_terms1" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
             <com.coffeeinjection.message.util.GradientTextButton
                 android:id="@+id/btn_start"
                 android:layout_width="0dp"
@@ -722,7 +770,7 @@
                 android:textColor="@color/color_white"
                 app:layout_constraintEnd_toEndOf="@+id/layout_preview_description"
                 app:layout_constraintStart_toEndOf="@+id/btn_cancel"
-                app:layout_constraintTop_toBottomOf="@+id/layout_preview_description" />
+                app:layout_constraintTop_toBottomOf="@+id/layout_terms" />
 
             <com.coffeeinjection.message.util.GradientTextButton
                 android:id="@+id/btn_cancel"

@@ -136,7 +136,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             event ?: return@observe
 
             // 화면 새로고침
-             homeViewModel.loadReceivedMessages()
+            homeViewModel.loadReceivedMessages()
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
