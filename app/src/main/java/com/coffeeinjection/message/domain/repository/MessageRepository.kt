@@ -37,6 +37,10 @@ interface MessageRepository {
         letterId: Long,
         reason: String?
     )
+
+    /** 발신자 차단 */
+    suspend fun blockUser(letterId: Long)
+
     /** 프로필 수정 */
     suspend fun modifyUserProfile(userInfo: UserInfo) : ModifyUserProfileResponse
 }

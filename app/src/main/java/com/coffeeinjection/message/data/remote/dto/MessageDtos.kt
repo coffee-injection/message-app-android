@@ -90,6 +90,25 @@ data class ReportLetterRequest(
     @Json(name = "reason") val reason: String?
 )
 
+/**
+ * 발신자 차단 Request
+ */
+@JsonClass(generateAdapter = true)
+data class BlockUserRequest(
+    @Json(name = "letterId") val letterId: Long
+)
+
+/**
+ * 발신자 차단 Response
+ */
+@JsonClass(generateAdapter = true)
+data class BlockUserResponse(
+    @Json(name = "blockId") val blockId: Long,
+    @Json(name = "blockedMemberId") val blockedMemberId: Long,
+    @Json(name = "blockedMemberName") val blockedMemberName: String,
+    @Json(name = "blockedAt") val blockedAt: String
+)
+
 // ------------------------------------
 // 5) PATCH /member/profile 요청/응답
 // ------------------------------------

@@ -66,8 +66,7 @@
     <string name="dialog_fragment_message_title2">메시지를 닫으시겠어요?</string>
     <string name="dialog_fragment_message_sub2">북마크되지 않은 메시지는 바다로 떠내려가요</string>
     <string name="dialog_fragment_message_title3">정말 신고하시겠어요?</string>
-    <string name="dialog_fragment_message_sub3">신고가 접수되면 해당 이용자는 차단 처리되며,
-\n이후 편지를 주고받을 수 없어요</string>
+    <string name="dialog_fragment_message_sub3">신고가 접수되면 해당 이용자는 차단 처리되며,\n이후 편지를 주고받을 수 없어요</string>
     <string name="dialog_fragment_message_title4">정말 바다에 띄울까요?</string>
     <string name="dialog_fragment_message_sub4">메세지 보틀이 다른 섬으로 떠내려 가요</string>
     <string name="dialog_fragment_message_title5">정말 로그아웃 하시겠어요?</string>
@@ -163,7 +162,7 @@
     <string name="settings_terms_title6">제6조 (저작권)</string>
     <string name="settings_terms_contact_title">✉️ 문의하기</string>
     <string name="settings_terms_contact_email">✉️ coffeeinjectionstudio@gmail.com</string>
-    <string name="settings_terms_contact_description">서비스 이용 중 궁금한 사항이나 문의사항이 있으시면\n아래 이메일로 연락주세요.\n빠른 시 일 내에 답변 드리겠습니다.</string>
+    <string name="settings_terms_contact_description">서비스 이용 중 궁금한 사항이나 문의사항이 있으시면 아래 이메일로 연락해 주세요.\n빠른 시일 내에 답변드리겠습니다.</string>
     <string name="settings_terms_body6">서비스 내 모든 콘텐츠에 대한 저작권은 회원 또는 회사에 귀속되며, 무단 사용 시 법적 조치를 받을 수 있습니다.</string>
 
     <string name="settings_date">시행일: 2025년 1월 1일\n최종 수정일: 2025년 1월 1일</string>

@@ -12,6 +12,7 @@ import com.coffeeinjection.message.data.remote.dto.LetterSummary
 import com.coffeeinjection.message.data.remote.dto.LoadBookmarkResponse
 import com.coffeeinjection.message.data.remote.dto.ModifyUserProfileRequest
 import com.coffeeinjection.message.data.remote.dto.ModifyUserProfileResponse
+import com.coffeeinjection.message.data.remote.dto.BlockUserRequest
 import com.coffeeinjection.message.data.remote.dto.ReportLetterRequest
 import com.coffeeinjection.message.data.remote.dto.SendLetterRequest
 import com.coffeeinjection.message.data.remote.dto.SendLetterResponse
@@ -50,6 +51,11 @@ class MessageRepositoryImpl @Inject constructor(
     override suspend fun reportLetter(letterId: Long, reason: String?) {
         api.reportLetter(ReportLetterRequest(letterId, reason))
             .ensureSuccessOrThrow("report")
+    }
+
+    override suspend fun blockUser(letterId: Long) {
+        api.blockUser(BlockUserRequest(letterId))
+            .ensureSuccessOrThrow("block")
     }
 
     override suspend fun modifyUserProfile(userInfo: UserInfo) : ModifyUserProfileResponse {

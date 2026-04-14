@@ -9,6 +9,8 @@ import com.coffeeinjection.message.data.remote.dto.LetterSummary
 import com.coffeeinjection.message.data.remote.dto.LoadBookmarkResponse
 import com.coffeeinjection.message.data.remote.dto.ModifyUserProfileRequest
 import com.coffeeinjection.message.data.remote.dto.ModifyUserProfileResponse
+import com.coffeeinjection.message.data.remote.dto.BlockUserRequest
+import com.coffeeinjection.message.data.remote.dto.BlockUserResponse
 import com.coffeeinjection.message.data.remote.dto.ReportLetterRequest
 import com.coffeeinjection.message.data.remote.dto.SendLetterRequest
 import com.coffeeinjection.message.data.remote.dto.SendLetterResponse
@@ -67,5 +69,10 @@ interface MessageApi {
         @Body req: ModifyUserProfileRequest
     ): ApiEnvelope<ModifyUserProfileResponse>
 
+    /** 9) 발신자 차단 */
+    @POST("block")
+    suspend fun blockUser(
+        @Body body: BlockUserRequest
+    ): ApiEnvelope<BlockUserResponse>
 
 }

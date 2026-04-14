@@ -206,6 +206,21 @@ class SharedViewModel @Inject constructor(
         }
     }
 
+    /**
+     * 발신자 차단
+     */
+    fun blockUser(letterId: Long) {
+        viewModelScope.launch {
+            runCatching {
+                repo.blockUser(letterId = letterId)
+            }.onSuccess {
+                Logger.d("[block] success, letterId=$letterId")
+            }.onFailure { e ->
+                Logger.error("[block] fail letterId=$letterId msg=${e.message} cause=${e.cause}")
+            }
+        }
+    }
+
     private fun UserInfo.toUiState(): UserInfoUiState = UserInfoUiState(
         nickName = nickName,
         islandName = islandName,
