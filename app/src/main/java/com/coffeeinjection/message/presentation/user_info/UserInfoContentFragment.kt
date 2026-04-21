@@ -2,6 +2,9 @@ package com.coffeeinjection.message.presentation.user_info
 
 import android.content.Context
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +14,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -25,6 +29,7 @@ import com.coffeeinjection.message.data.local.UserInfo
 import com.coffeeinjection.message.databinding.FragmentUserInfoContentBinding
 import com.coffeeinjection.message.presentation.BaseFragment
 import com.coffeeinjection.message.presentation.activity.SharedViewModel
+import com.coffeeinjection.message.presentation.setting.SettingFragmentArgs
 import com.coffeeinjection.message.util.Logger
 import com.coffeeinjection.message.util.UserInfoModeEnum
 import com.coffeeinjection.presentation.sign_in.SignInFragmentDirections
@@ -103,19 +108,28 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
         when (mode) {
             UserInfoModeEnum.SIGNUP -> {
                 root.setBackgroundResource(R.drawable.bg_second_gradient)
-                // 초기 상태 세팅(디폴트 선택)
                 setupDefaultState()
-
-                // 1) 자식(layout_emoji_bg1~12) 배경 selector 적용
                 emojiBgLayouts.forEach { bg ->
                     bg.setBackgroundResource(R.drawable.emoji_bg_selector)
                 }
+
+                val fullText = getString(R.string.user_essential)
+                val tag = "[필수]"
+                val spannable = SpannableString(fullText)
+                spannable.setSpan(
+                    ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.blue_600)),
+                    0,
+                    tag.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                tvEssential.text = spannable
             }
 
             UserInfoModeEnum.MODIFY -> {
                 root.setBackgroundResource(R.color.color_transparent)
                 btnCancel.visibility = View.VISIBLE
                 titleBar.visibility = View.GONE
+                layoutPermission.visibility = View.GONE
                 // 카드뷰 리스트로 배경 적용
                 emojiCards.forEach { (card, _) ->
                     card.setBackgroundResource(R.drawable.emoji_bg_selector_grey)
@@ -179,6 +193,17 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
             viewModel.checkNickNameAvailable(nickname = etUserName.text.toString())
             val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(it.windowToken, 0)
+        }
+
+        checkbox.setOnCheckedChangeListener { _, _ ->
+            updatePreviewVisibility()
+        }
+
+        btnTermsDetail.setOnClickListener {
+            requireParentFragment().findNavController().navigate(
+                R.id.action_userInfoFragment_to_settingFragment,
+                SettingFragmentArgs(docType = "TERMS").toBundle()
+            )
         }
 
         btnStart.setOnClickListener {
@@ -299,16 +324,18 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
 
     override fun onStart() {
         super.onStart()
-
-        requireActivity().window.setSoftInputMode(
-            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
-        )
+        if (mode == UserInfoModeEnum.SIGNUP) {
+            requireActivity().window.setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+            )
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        // 원래 기본값(Unspecified)으로 복구하거나 이전 설정으로 환원
-        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED)
+        if (mode == UserInfoModeEnum.SIGNUP) {
+            requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED)
+        }
     }
 
 
@@ -318,12 +345,10 @@ class UserInfoContentFragment : BaseFragment<FragmentUserInfoContentBinding>(
     private fun updatePreviewVisibility() = with(binding) {
         val hasIsland = etIslandName.text?.toString()?.trim().orEmpty().isNotEmpty()
         val hasUser = etUserName.text?.toString()?.trim().orEmpty().isNotEmpty() && etUserName.length() >= 2
+        val isFormFilled = hasIsland && hasUser
 
-        // preview만 숨김/표시
-        (hasIsland && hasUser).let {
-            layoutPreview.isVisible = it
-            btnStart.isEnabled = it
-        }
+        layoutPreview.isVisible = isFormFilled
+        btnStart.isEnabled = isFormFilled && (mode == UserInfoModeEnum.MODIFY || checkbox.isChecked)
     }
 
     /**

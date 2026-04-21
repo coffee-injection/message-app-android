@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
+import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -50,6 +51,10 @@ class ModifyUserInfoBottomSheetFragment : BottomSheetDialogFragment() {
         super.onStart()
 
         val dialog = dialog as? BottomSheetDialog ?: return
+
+        // 키보드 출현 시 바텀시트가 위로 슬라이드(흰 배경 노출)되는 현상 방지
+        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+
         val bottomSheet =
             dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
                 ?: return

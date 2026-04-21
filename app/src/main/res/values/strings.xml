@@ -62,11 +62,11 @@
     <string name="dialog_fragment_warning_close">닫기</string>
     <string name="dialog_fragment_warning_logout">로그아웃</string>
     <string name="dialog_fragment_warning_cancel">취소</string>
-    <string name="dialog_fragment_warning_report">신고하기</string>
+    <string name="dialog_fragment_warning_report">신고 / 차단 </string>
     <string name="dialog_fragment_message_title2">메시지를 닫으시겠어요?</string>
     <string name="dialog_fragment_message_sub2">북마크되지 않은 메시지는 바다로 떠내려가요</string>
-    <string name="dialog_fragment_message_title3">정말 신고하시겠어요?</string>
-    <string name="dialog_fragment_message_sub3">신고가 접수되면 취소하거나 되돌릴 수 없어요</string>
+    <string name="dialog_fragment_message_title3">정말 신고 / 차단 하시겠어요?</string>
+    <string name="dialog_fragment_message_sub3">해당 이용자는 차단 처리되며,\n이후 편지를 주고받을 수 없어요</string>
     <string name="dialog_fragment_message_title4">정말 바다에 띄울까요?</string>
     <string name="dialog_fragment_message_sub4">메세지 보틀이 다른 섬으로 떠내려 가요</string>
     <string name="dialog_fragment_message_title5">정말 로그아웃 하시겠어요?</string>

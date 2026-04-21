@@ -198,10 +198,10 @@ class SharedViewModel @Inject constructor(
                 repo.reportLetter(letterId = letterId, reason = reason)
             }.onSuccess {
                 Logger.d("[report] success, letterId=$letterId, reason=$reason")
-                _toastEvent.tryEmit("신고가 접수 되었어요")
+                _toastEvent.tryEmit("신고/차단이 되었어요")
             }.onFailure { e ->
                 Logger.error("[report] fail letterId=$letterId msg=${e.message} cause=${e.cause}")
-                _toastEvent.tryEmit(e.message ?: "편지 신고에 실패했어요.  잠시 후 다시 시도해주세요")
+                _toastEvent.tryEmit(e.message ?: "편지 신고/차단에 실패했어요.  잠시 후 다시 시도해주세요")
             }
         }
     }

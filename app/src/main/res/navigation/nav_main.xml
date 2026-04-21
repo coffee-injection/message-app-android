@@ -95,6 +95,9 @@
         <action
             android:id="@+id/action_userInfoFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_userInfoFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
     </fragment>
     <dialog
         android:id="@+id/modifyUserInfoFragment"

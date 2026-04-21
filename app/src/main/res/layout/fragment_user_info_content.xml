@@ -726,8 +726,8 @@
 
                 <CheckBox
                     android:id="@+id/checkbox"
-                    android:layout_width="@dimen/text_size_24"
-                    android:layout_height="@dimen/text_size_24"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:buttonTint="@color/text_quaternary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -745,6 +745,7 @@
                     app:layout_constraintTop_toTopOf="@id/checkbox" />
 
                 <TextView
+                    android:id="@+id/btn_terms_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/tv_essential"

@@ -219,7 +219,7 @@ class MessageDialogFragment : DialogFragment() {
                 sharedViewModel.reportLetter(args.letterId, reason = "Bad Request")
                 // 북마크 화면 갱신 필요 플래그
                 notifyBookmarkRefresh()
-                Toast.makeText(requireContext(), "신고가 접수되었습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "신고 / 차단이 되었어요", Toast.LENGTH_SHORT).show()
                 dismiss()
             }
         }
