@@ -120,6 +120,8 @@
     <string name="user_check_modify">중복체크</string>
     <string name="user_modify">저장</string>
     <string name="user_cancel">취소</string>
+    <string name="user_essential">[필수] 이용약관 및 개인정보 처리방침에 동의합니다.</string>
+    <string name="user_show_description">이용약관 자세히 보기 ></string>
     <string name="user_back">뒤로가기</string>
     <string name="user_toast_island_name">섬 이름은 1~7자로 작성 해주세요.</string>
     <string name="user_toast_nick_name">닉네임은 2~10자로 작성 해주세요.</string>

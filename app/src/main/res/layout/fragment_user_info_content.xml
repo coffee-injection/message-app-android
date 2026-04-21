@@ -712,6 +712,50 @@
                     app:layout_constraintVertical_bias="1.0" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_permission"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginHorizontal="24dp"
+                app:layout_constraintTop_toBottomOf="@id/layout_preview_description"
+                app:layout_constraintStart_toStartOf="@id/layout_preview_description"
+                app:layout_constraintEnd_toEndOf="@id/layout_preview_description"
+                android:padding="15dp"
+                android:background="@drawable/bg_permission">
+
+                <CheckBox
+                    android:id="@+id/checkbox"
+                    android:layout_width="@dimen/text_size_24"
+                    android:layout_height="@dimen/text_size_24"
+                    android:buttonTint="@color/text_quaternary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_essential"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_16"
+                    android:layout_marginStart="@dimen/text_size_10"
+                    android:text="@string/user_essential"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:textColor="@color/text_secondary"
+                    app:layout_constraintStart_toEndOf="@+id/checkbox"
+                    app:layout_constraintTop_toTopOf="@id/checkbox" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/tv_essential"
+                    app:layout_constraintStart_toStartOf="@id/tv_essential"
+                    android:layout_marginTop="@dimen/text_size_20"
+                    android:textSize="@dimen/text_size_14"
+                    android:text="@string/user_show_description"
+                    android:textColor="@color/text_quaternary"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <com.coffeeinjection.message.util.GradientTextButton
                 android:id="@+id/btn_start"
                 android:layout_width="0dp"
@@ -722,7 +766,7 @@
                 android:textColor="@color/color_white"
                 app:layout_constraintEnd_toEndOf="@+id/layout_preview_description"
                 app:layout_constraintStart_toEndOf="@+id/btn_cancel"
-                app:layout_constraintTop_toBottomOf="@+id/layout_preview_description" />
+                app:layout_constraintTop_toBottomOf="@+id/layout_permission" />
 
             <com.coffeeinjection.message.util.GradientTextButton
                 android:id="@+id/btn_cancel"
