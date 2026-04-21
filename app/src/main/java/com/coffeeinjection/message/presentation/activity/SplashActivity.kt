@@ -45,9 +45,9 @@ class SplashActivity : AppCompatActivity() {
                     viewModel.checkTokenValidation()
                 }
                 !token.isNullOrBlank() && !canAutoLogin -> {
-                    // 토큰은 있지만 가입 미완료(닉네임/회원정보 입력 중 종료) -> 가입 이어가기 화면으로
-                    // 네비 이름은 프로젝트에 맞게 변경하세요.
-                    startActivity("nickname")
+                    // 토큰은 있지만 가입 미완료(닉네임/회원정보 입력 중 종료) -> 스테일 토큰 제거 후 재로그인
+                    runCatching { authDataStore.clearAll() }
+                    startActivity("sign_in")
                     finish()
                 }
                 else -> {

@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         if (navController.currentDestination?.id == R.id.signInFragment) return
         val options = NavOptions.Builder()
-            .setPopUpTo(R.id.homeFragment, true)
+            .setPopUpTo(navController.graph.id, true)
             .setLaunchSingleTop(true)
             .build()
         navController.navigate(R.id.signInFragment, null, options)

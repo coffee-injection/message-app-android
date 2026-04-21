@@ -14,6 +14,7 @@ import com.coffeeinjection.message.domain.usecase.SaveAccessTokenUseCase
 import com.coffeeinjection.message.domain.usecase.SaveRefreshTokenUseCase
 import com.coffeeinjection.message.domain.usecase.SaveUserInfoUseCase
 import com.coffeeinjection.message.presentation.sign_in.model.AuthUiState
+import com.coffeeinjection.message.data.remote.interceptor.SessionManager
 import com.coffeeinjection.message.util.Logger
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,7 +34,8 @@ class SignInViewModel @Inject constructor(
     private val saveRefreshToken: SaveRefreshTokenUseCase,
     private val saveUserInfo : SaveUserInfoUseCase,
     private val registerFCMTokenUseCase: RegisterFCMTokenUseCase,
-    private val authDataStore: AuthDataStore
+    private val authDataStore: AuthDataStore,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AuthUiState())
@@ -97,24 +99,22 @@ class SignInViewModel @Inject constructor(
 
         runCatching { exchangeKakaoCodeToJwt(code) }
             .onSuccess { res ->
+                sessionManager.clearLogoutEventState()
                 // 1) 토큰 저장(자동로그인 핵심)
                 saveAccessToken(res.accessToken)
 
                 // 2) 최근 로그인 프로바이더를 DataStore에 저장
                 runCatching { authDataStore.saveLoginProvider(LoginProvider.KAKAO) }
 
-                // 3) FCM 등록 시도(중복 방지 포함)
-                tryRegisterFcmAfterLogin()
-
-                // 4) 네비게이션
+                // 3) 네비게이션
                 if (res.isNewMember && res.memberId == null) {
-                    // 신규회원: 가입 완료 전까지 자동로그인 금지
+                    // 신규회원: FCM 등록은 completeSignup 후에 처리
                     runCatching { authDataStore.saveAutoLogin(false) }
                     _uiState.value =
                         _uiState.value.copy(isLoading = false, navigateToNickname = true)
                 } else {
                     res.refreshToken?.let { saveRefreshToken(it) }
-                    // 기존회원: 바로 자동로그인 허용
+                    // 기존회원: refreshToken 저장 후 FCM 등록
                     runCatching {
                         authDataStore.saveAutoLogin(true)
                         saveUserInfo(
@@ -125,6 +125,7 @@ class SignInViewModel @Inject constructor(
                             )
                         )
                     }
+                    tryRegisterFcmAfterLogin()
                     _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
                 }
 
@@ -143,17 +144,16 @@ class SignInViewModel @Inject constructor(
 
         runCatching { exchangeGoogleCodeToJwt(code) }
             .onSuccess { res ->
+                sessionManager.clearLogoutEventState()
                 // 1) 토큰 저장
                 saveAccessToken(res.accessToken)
 
                 // 2) 최근 로그인 프로바이더(DataStore)
                 runCatching { authDataStore.saveLoginProvider(LoginProvider.GOOGLE) }
 
-                // 3) FCM 등록 시도
-                tryRegisterFcmAfterLogin()
-
-                // 4) 네비게이션
+                // 3) 네비게이션
                 if (res.isNewMember && res.memberId == null) {
+                    // 신규회원: FCM 등록은 completeSignup 후에 처리
                     runCatching { authDataStore.saveAutoLogin(false) }
                     _uiState.value =
                         _uiState.value.copy(isLoading = false, navigateToNickname = true)
@@ -168,7 +168,9 @@ class SignInViewModel @Inject constructor(
                             )
                         )
                     }
+                    // 기존회원: refreshToken 저장 후 FCM 등록
                     runCatching { authDataStore.saveAutoLogin(true) }
+                    tryRegisterFcmAfterLogin()
                     _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
                 }
             }
@@ -179,7 +181,7 @@ class SignInViewModel @Inject constructor(
             }
     }
 
-    /** 로그인 직후 FCM 등록 (중복/401 방지) */
+    /** 기존 회원 로그인 직후 FCM 등록 (refreshToken 저장 완료 후 호출) */
     private fun tryRegisterFcmAfterLogin() = viewModelScope.launch {
         var current = authDataStore.getFcmToken()
         val last = authDataStore.getLastRegisteredFcmToken()

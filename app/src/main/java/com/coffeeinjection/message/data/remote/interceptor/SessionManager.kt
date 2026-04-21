@@ -19,7 +19,7 @@ class SessionManager @Inject constructor() {
 
     private val refreshState = AtomicReference(SessionRefreshState.NONE)
 
-    private val _logoutEvent = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    private val _logoutEvent = MutableSharedFlow<Unit>(extraBufferCapacity = 0)
     val logoutEvent: SharedFlow<Unit> = _logoutEvent
 
     // 중복 로그아웃 이벤트 방지

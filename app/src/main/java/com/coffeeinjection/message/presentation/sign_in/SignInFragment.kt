@@ -145,8 +145,8 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
         btnGoogle.setOnClickListener {
             Logger.d("[구글 로그인] Btn Click")
             pendingLoginType = LoginType.GOOGLE
-            clearWebView()
-            lastLoadedLoginUrl = null
+            clearWebViewAndCookies()
+            viewModel.consumedNavigation()
             showLoading()
             viewModel.loadGoogleLoginUrl()
         }
@@ -155,8 +155,8 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
         btnKakao.setOnClickListener {
             Logger.d("[카카오 로그인] Btn Click")
             pendingLoginType = LoginType.KAKAO
-            clearWebView()
-            lastLoadedLoginUrl = null
+            clearWebViewAndCookies()
+            viewModel.consumedNavigation()
             showLoading()
             viewModel.loadKakaoLoginUrl()
         }

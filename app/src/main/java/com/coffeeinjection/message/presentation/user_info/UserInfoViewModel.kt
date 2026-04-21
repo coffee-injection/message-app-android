@@ -8,9 +8,13 @@ import com.coffeeinjection.message.data.local.UserInfo
 import com.coffeeinjection.message.domain.usecase.CheckNicknameDuplicateUseCase
 import com.coffeeinjection.message.domain.usecase.CompleteSignupUseCase
 import com.coffeeinjection.message.domain.usecase.ModifyUserProfileUseCase
+import com.coffeeinjection.message.domain.usecase.RegisterFCMTokenUseCase
 import com.coffeeinjection.message.domain.usecase.SaveAccessTokenUseCase
 import com.coffeeinjection.message.domain.usecase.SaveRefreshTokenUseCase
 import com.coffeeinjection.message.domain.usecase.SaveUserInfoUseCase
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.tasks.await
 import com.coffeeinjection.message.presentation.sign_in.model.AuthUiState
 import com.coffeeinjection.message.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,6 +33,7 @@ class UserInfoViewModel @Inject constructor(
     private val saveUserInfo : SaveUserInfoUseCase,
     private val checkDuplicate : CheckNicknameDuplicateUseCase,
     private val modifyInfo: ModifyUserProfileUseCase,
+    private val registerFCMToken: RegisterFCMTokenUseCase,
     private val authDataStore: AuthDataStore
 
 ) : ViewModel() {
@@ -85,6 +90,8 @@ class UserInfoViewModel @Inject constructor(
 
                 authDataStore.saveAutoLogin(true)
 
+                tryRegisterFcmAfterSignup()
+
                 _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
             }
             .onFailure { e ->
@@ -109,6 +116,20 @@ class UserInfoViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "닉네임 중복 확인에 실패했습니다.")
             updateNickNameGuideUiState( NickNameGuideState.CHECK_FAILED)
         }
+    }
+
+    private fun tryRegisterFcmAfterSignup() = viewModelScope.launch {
+        var current = authDataStore.getFcmToken()
+        if (current.isNullOrBlank()) {
+            val fetched = runCatching { FirebaseMessaging.getInstance().token.await() }.getOrNull()
+            if (fetched.isNullOrBlank()) return@launch
+            runCatching { authDataStore.saveFcmToken(fetched) }
+            current = fetched
+        }
+        val last = authDataStore.getLastRegisteredFcmToken()
+        if (current == last) return@launch
+        runCatching { registerFCMToken(current!!) }
+            .onSuccess { runCatching { authDataStore.saveLastRegisteredFcmToken(current!!) } }
     }
 
     /** 에러 확인 후 리셋 */
